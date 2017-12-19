@@ -92,6 +92,7 @@ qplot(xax, graafi$power) +
     scale_x_continuous(breaks = seq(0, 1, .1), minor_breaks = seq(0 , 1, .1), limits = c(0, 1))+
     theme_bw()
 ```
+Analysis regarding statistical power is presented in Figure above, holding alpha constant at 0.05 and sample size at achieved levels. As seen from the figure, we had 90% power to discover an effect of size d=0.39, 80% to detect d=0.3, 60% to detect d=0.27 and 40% to discover an effect of d=0.21. Thus, type 2 error probabilities were small for effects near our defined minimal effect size of interest, but high for small effects. 
 
 ### Type S and Type M errors
 
@@ -269,7 +270,7 @@ table.readbf <- table(data.frame(lmi$SMS_read, lmi$SMSg2))
 # Bayes factor for the contingency tables with default prior concentration:
 
 readbf <- contingencyTableBF(table.readbf, sampleType = "poisson")
-extractBF(readbf)$bf
+cat(c("Bayes Factor BF10:", round(extractBF(readbf)$bf, 5)))
 
 # Create a vector of different prior concentrations:
 priorWidths <- c(seq(1, 1.25, by = 0.001), seq(1.25, 2, by = 0.01))
@@ -342,7 +343,8 @@ table.contambf <- table(data.frame(lmi$SMS_contam, lmi$SMSg2))
 # Bayes factor for the contingency tables with default prior concentration:
 
 contambf <- contingencyTableBF(table.contambf, sampleType = "poisson")
-extractBF(contambf)$bf
+
+cat(c("Bayes Factor BF10:", round(extractBF(contambf)$bf, 5)))
 
 # Create a vector of different prior concentrations:
 priorWidths <- c(seq(1, 1.25, by = 0.001), seq(1.25, 2, by = 0.01))
@@ -410,7 +412,8 @@ table.satisfbf <- table(data.frame(lmi$SMS_satisf, lmi$SMSg2))
 # Bayes factor for the contingency tables with default prior concentration:
 
 satisfbf <- contingencyTableBF(table.satisfbf, sampleType = "poisson")
-extractBF(satisfbf)$bf
+
+cat(c("Bayes Factor BF10:", round(extractBF(satisfbf)$bf, 5)))
 
 # Create a vector of different prior concentrations:
 priorWidths <- c(seq(1, 1.25, by = 0.001), seq(1.25, 2, by = 0.01))
@@ -902,7 +905,7 @@ sm.density.compare2(lmi.tracks4$H_Weartime.SUM, lmi.tracks4$track.grp, xlab="Min
 
 (NOTE: prior graphs from now on with BF01 instead of BF10):
 
-```{r bayesanova}
+```{r bayesanova1, eval = FALSE}
 summary(aov(lmi$H_Weartime.SUM ~ lmi$SMSg3))
 
 weartime.fullobs <- data.frame(lmi$H_Weartime.SUM, lmi$SMSg3)
@@ -914,9 +917,57 @@ weartime.fullobs <- weartime.fullobs[complete.cases(weartime.fullobs), ]
 weartimeBf <- anovaBF(lmi.H_Weartime.SUM ~ lmi.SMSg3, data = weartime.fullobs, rscaleFixed = 0.3)
 
 #BF10:
-extractBF(weartimeBf)$bf
+cat(c("BF10", extractBF(weartimeBf)$bf %>% round(5)))
+
 #BF01:
-extractBF(1/weartimeBf)$bf
+cat(c("BF01", extractBF(1/weartimeBf)$bf %>% round(5)))
+
+# Create a vector of different prior concentrations:
+priorWidths <- c(seq(0.01, 2, by = 0.01))
+
+# Save the BFs calculated w/ each concentration:
+bayesFactors <- sapply(priorWidths, function(ownprior) {
+    extractBF(weartimeBf <- anovaBF(lmi.H_Weartime.SUM ~ lmi.SMSg3, data = weartime.fullobs, rscaleFixed = ownprior))$bf
+})
+
+bayesFactors2 <- 1/bayesFactors
+
+# Make a data frame for ggplot
+plotdf <- data.frame(priorWidths, bayesFactors2)
+
+# Plot results with different priors:
+plot1 <- ggplot(data = plotdf, aes(x = priorWidths, y = bayesFactors2, group = 1)) + 
+    ylim(0, max(bayesFactors2)) +
+    xlim(min(priorWidths), max(priorWidths)) +
+    geom_line() +
+    geom_hline(yintercept = 0, colour = "azure4") +
+    xlab("Prior Width") +
+    ylab("BF01") +
+    theme_bw()
+
+# Dashed line for BF10 = 1/10, indicating strong evidence for null.
+plot2 <- plot1 + geom_hline(yintercept = 1/10, linetype = "dashed", colour = "darkgrey") 
+
+plot2 + geom_hline(yintercept = 10, linetype = "dashed", colour = "darkgrey") 
+
+```
+
+```{r bayesanova2, include = FALSE}
+summary(aov(lmi$H_Weartime.SUM ~ lmi$SMSg3))
+
+weartime.fullobs <- data.frame(lmi$H_Weartime.SUM, lmi$SMSg3)
+weartime.fullobs <- weartime.fullobs[complete.cases(weartime.fullobs), ]
+
+#These are equivalent:
+# weartimeBf <- anovaBF(lmi.H_Weartime.SUM ~ lmi.SMSg3, data = weartime.fullobs, whichRandom = weartime.fullobs$lmi.H_Weartime.SUM)
+
+weartimeBf <- anovaBF(lmi.H_Weartime.SUM ~ lmi.SMSg3, data = weartime.fullobs, rscaleFixed = 0.3)
+
+#BF10:
+cat(c("BF10", extractBF(weartimeBf)$bf %>% round(5)))
+
+#BF01:
+cat(c("BF01", extractBF(1/weartimeBf)$bf %>% round(5)))
 
 # Create a vector of different prior concentrations:
 priorWidths <- c(seq(0.01, 2, by = 0.01))
@@ -967,9 +1018,7 @@ consistent <- (samples[, "lmi.SMSg3-Reason (n=133)"] > samples[, "lmi.SMSg3-Succ
   (samples[, "lmi.SMSg3-Succinct (n=135)"] > samples[, "lmi.SMSg3-Opt out (n=83)"])
 N_consistent <- sum(consistent)
 
-# posterior probability of the order reason > succinct > opt out:
-
-N_consistent / 10000
+cat(c("Posterior probability of the order reason > succinct > opt out:", N_consistent / 10000))
 ```
 
 Now, the posterior restriction for the *full* (all means unequal) model is `r N_consistent / 10000` divided by 1. Bayes factor is:
@@ -987,18 +1036,19 @@ The data are not sensitive enough to say anything about the specified order agai
 ## Convert bf1 to a number so that we can multiply it
 bf_full_against_null <- as.vector(weartimeBf)
 bf_full_against_null
+
 ## Use transitivity to compute desired Bayes factor
 bf_restriction_against_null <- bf_restriction_against_full * bf_full_against_null
 bf_restriction_against_null
 ```
 
-So, the BF10 of the order against null is `r bf_restriction_against_null` and the BF01 is `r 1/bf_restriction_against_null`.
+So, the BF10 of the order against null is `r bf_restriction_against_null %>% round(4)` and the BF01 is `r 1/bf_restriction_against_null %>% round(4)`.
 
 ***
 
-Measurement days of >10 hours of valid data gathered by group. Horizontal lines represent means, boxes Bayesian 95% Highest Density Intervals (with flat priors).
-
 ## Weardays {.tabset}
+
+Measurement days of >10 hours of valid data gathered by group. Horizontal lines represent means, boxes Bayesian 95% Highest Density Intervals (with flat priors).
 
 ```{r weardays.reasonsucc}
 pirateplot(formula = H_DaysWornN_over10h ~ SMSg3,
@@ -1067,7 +1117,8 @@ table.dayswornbf <- table(data.frame(lmi$H_DaysWornN_over10h, lmi$SMS_group_rece
 
 # Bayes factor for the contingency tables with default prior concentration:
 dayswornbf <- contingencyTableBF(table.dayswornbf, sampleType = "poisson")
-extractBF(dayswornbf)$bf
+
+cat(c("BF10:", extractBF(dayswornbf)$bf %>% round(4)))
 
 1/dayswornbf
 
@@ -1117,6 +1168,8 @@ table.dayswornbf <- table(data.frame(lmi$H_DaysWornN_over10h, lmi$SMSg2))
 # Bayes factor for the contingency tables with default prior concentration:
 dayswornbf <- contingencyTableBF(table.dayswornbf, sampleType = "poisson")
 extractBF(dayswornbf)$bf
+
+cat(c("BF10:", extractBF(dayswornbf)$bf %>% round(4)))
 
 1/dayswornbf
 
@@ -1220,7 +1273,7 @@ points(x = 1:5, y = medians, type = "b", pch = 1, lty = "dashed", cex = 0.8)
 
 # Additional analyses
 
-## Extra: Chi^2 and BF Weardays; Opt in v. opt out
+Chi^2 and BF Weardays; Opt in v. opt out
 
 (Note: this is basically the same analysis as the one comparing participants for whom the messages were sent vs. for whom they were not.)  
 
@@ -1232,7 +1285,8 @@ table.dayswornbf <- table(data.frame(lmi$H_DaysWornN_over10h, lmi$SMSg4))
 
 # Bayes factor for the contingency tables with default prior concentration:
 dayswornbf <- contingencyTableBF(table.dayswornbf, sampleType = "poisson")
-extractBF(dayswornbf)$bf
+
+cat(c("BF10:", extractBF(dayswornbf)$bf %>% round(4)))
 
 1/dayswornbf
 
