@@ -161,7 +161,7 @@ qplot(xax, retroExg) +
     theme_bw()
 ```
 
-This figure shows how, given a detected nonzero true effect, we are expected to observe a grossly exaggerated estimate for very small (d ??? 0.1) effects. Even for the effects of interest to us, a threefold exaggeration in size would be expected.
+This figure shows how, given a detected nonzero true effect, we are expected to observe a grossly exaggerated estimate for very small ($d = 0.1$) effects. Even for the effects of interest to us, a threefold exaggeration in size would be expected.
 
 ### Probability of wrong sign (type S error)
 
