@@ -2,6 +2,8 @@ Welcome to the supplementary file!
   
 Open code blocks by clicking the "code"-buttons on the right hand side.
 
+Github repository for this site can be found [here](https://github.com/heinonmatti/sms-persuasion/), the index page for this small site is [here](https://heinonmatti.github.io/sms-persuasion/index.html).
+
 ```{r global_options, include=FALSE}
 .libPaths("C:/rlibs/3.4.2")
 
@@ -92,7 +94,8 @@ qplot(xax, graafi$power) +
     scale_x_continuous(breaks = seq(0, 1, .1), minor_breaks = seq(0 , 1, .1), limits = c(0, 1))+
     theme_bw()
 ```
-Analysis regarding statistical power is presented in Figure above, holding alpha constant at 0.05 and sample size at achieved levels. As seen from the figure, we had 90% power to discover an effect of size d=0.39, 80% to detect d=0.3, 60% to detect d=0.27 and 40% to discover an effect of d=0.21. Thus, type 2 error probabilities were small for effects near our defined minimal effect size of interest, but high for small effects. 
+
+fAnalysis regarding statistical power is presented in Figure above, holding alpha constant at 0.05 and sample size at achieved levels. As seen from the figure, we had 90% power to discover an effect of size d=0.39, 80% to detect d=0.3, 60% to detect d=0.27 and 40% to discover an effect of d=0.21. Thus, type 2 error probabilities were small for effects near our defined minimal effect size of interest, but high for small effects. 
 
 ### Type S and Type M errors
 
@@ -1005,12 +1008,20 @@ Note that this could be considered not the end of the analysis. The null model c
 
 The number of possible orderings in this case is 3!/(3-2)! = 6. Thus, prior odds are 1/6. 
 
-Sampling from the posterior: 
-```{r}
+Start by sampling from the posterior. 
+
+```{r sampling-post2, eval = FALSE}
 weartimeBf <- anovaBF(lmi.H_Weartime.SUM ~ lmi.SMSg3, data = weartime.fullobs)
 samples <- posterior(weartimeBf, iterations = 10000)
 head(samples)
 ```
+
+```{r sampling-post1, include = FALSE}
+weartimeBf <- anovaBF(lmi.H_Weartime.SUM ~ lmi.SMSg3, data = weartime.fullobs)
+samples <- posterior(weartimeBf, iterations = 10000)
+head(samples)
+```
+
 
 Check the proportion of samples where Reason > Succinct > Opt out.
 ```{r}
@@ -1035,14 +1046,13 @@ The data are not sensitive enough to say anything about the specified order agai
 ```{r}
 ## Convert bf1 to a number so that we can multiply it
 bf_full_against_null <- as.vector(weartimeBf)
-bf_full_against_null
 
 ## Use transitivity to compute desired Bayes factor
 bf_restriction_against_null <- bf_restriction_against_full * bf_full_against_null
-bf_restriction_against_null
-```
 
-So, the BF10 of the order against null is `r bf_restriction_against_null %>% round(4)` and the BF01 is `r 1/bf_restriction_against_null %>% round(4)`.
+cat(c("The BF10 of the order against null is", round(bf_restriction_against_null, 4), "and the BF01 is", round(1/bf_restriction_against_null, 4)))
+
+```
 
 ***
 
@@ -1104,7 +1114,7 @@ lmi$SMS_group_receiveornot[lmi$SMS_group==1] <- "1"
 lmi$SMS_group_receiveornot[lmi$SMS_group==2] <- "1"
 lmi$SMS_group_receiveornot[lmi$SMS_group==3] <- "2"
 lmi$SMS_group_receiveornot[lmi$SMS_group==4] <- "2"
-table(lmi$SMS_group_receiveornot)
+cat(c("group sizes:", table(lmi$SMS_group_receiveornot)[[1]], "received,", table(lmi$SMS_group_receiveornot)[[2]], "did not."))
 
 chisq.test(lmi$H_DaysWornN_over10h, lmi$SMS_group_receiveornot)
 ```

@@ -319,6 +319,7 @@ div.tocify {
 
 <p>Welcome to the supplementary file!</p>
 <p>Open code blocks by clicking the “code”-buttons on the right hand side.</p>
+<p>Github repository for this site can be found <a href="https://github.com/heinonmatti/sms-persuasion/">here</a>, the index page for this small site is <a href="https://heinonmatti.github.io/sms-persuasion/index.html">here</a>.</p>
 <div id="load-packages" class="section level1">
 <h1>Load packages</h1>
 <p>The code block shows all installed packages and the session information of the computer this was run on.</p>
@@ -701,7 +702,8 @@ qplot(xax, graafi$power) +
     theme(axis.text=element_text(size=12), axis.title=element_text(size=14,face=&quot;bold&quot;)) +
     scale_x_continuous(breaks = seq(0, 1, .1), minor_breaks = seq(0 , 1, .1), limits = c(0, 1))+
     theme_bw()</code></pre>
-<p><img src="sms-persuasion-supplement_files/figure-html/unnamed-chunk-1-1.png" width="672" /> Analysis regarding statistical power is presented in Figure above, holding alpha constant at 0.05 and sample size at achieved levels. As seen from the figure, we had 90% power to discover an effect of size d=0.39, 80% to detect d=0.3, 60% to detect d=0.27 and 40% to discover an effect of d=0.21. Thus, type 2 error probabilities were small for effects near our defined minimal effect size of interest, but high for small effects.</p>
+<p><img src="sms-persuasion-supplement_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p>fAnalysis regarding statistical power is presented in Figure above, holding alpha constant at 0.05 and sample size at achieved levels. As seen from the figure, we had 90% power to discover an effect of size d=0.39, 80% to detect d=0.3, 60% to detect d=0.27 and 40% to discover an effect of d=0.21. Thus, type 2 error probabilities were small for effects near our defined minimal effect size of interest, but high for small effects.</p>
 </div>
 <div id="type-s-and-type-m-errors" class="section level3">
 <h3>Type S and Type M errors</h3>
@@ -1684,35 +1686,10 @@ plot2 + geom_hline(yintercept = 10, linetype = &quot;dashed&quot;, colour = &quo
 <h3>Grouping order: reason &gt; succinct &gt; opt out</h3>
 <p>Note that this could be considered not the end of the analysis. The null model can be false in ways not consistent with H1 (see <a href="https://web.archive.org/web/20170226172405/http://bayesfactor.blogspot.fi/2015/01/multiple-comparisons-with-bayesfactor-2.html">here</a>). The code that follows is also adapted from the link.</p>
 <p>The number of possible orderings in this case is 3!/(3-2)! = 6. Thus, prior odds are 1/6.</p>
-<p>Sampling from the posterior:</p>
-<pre class="r"><code>weartimeBf &lt;- anovaBF(lmi.H_Weartime.SUM ~ lmi.SMSg3, data = weartime.fullobs)</code></pre>
-<pre><code>## 
-  |                                                                       
-  |                                                                 |   0%
-  |                                                                       
-  |=================================================================| 100%</code></pre>
-<pre class="r"><code>samples &lt;- posterior(weartimeBf, iterations = 10000)
+<p>Start by sampling from the posterior.</p>
+<pre class="r"><code>weartimeBf &lt;- anovaBF(lmi.H_Weartime.SUM ~ lmi.SMSg3, data = weartime.fullobs)
+samples &lt;- posterior(weartimeBf, iterations = 10000)
 head(samples)</code></pre>
-<pre><code>## Markov Chain Monte Carlo (MCMC) output:
-## Start = 1 
-## End = 7 
-## Thinning interval = 1 
-##            mu lmi.SMSg3-Reason (n=133) lmi.SMSg3-Succinct (n=135)
-## [1,] 4514.094                 35.17353                  -34.22440
-## [2,] 4537.058               -106.86205                  177.80482
-## [3,] 4492.272                -24.08825                 -174.07755
-## [4,] 4539.221                188.42423                  -12.51438
-## [5,] 4418.490                165.10658                  -74.17637
-## [6,] 4388.473                -89.60789                  178.68862
-## [7,] 4600.031                137.48098                 -155.61824
-##      lmi.SMSg3-Opt out (n=83)    sig2 g_lmi.SMSg3
-## [1,]               -0.9491288 2181005  0.07363933
-## [2,]              -70.9427617 2568488  0.11679025
-## [3,]              198.1657981 2467137  0.15676857
-## [4,]             -175.9098503 3159836  0.13681377
-## [5,]              -90.9302139 2430578  0.05789996
-## [6,]              -89.0807239 2922014  0.09344006
-## [7,]               18.1372554 2923905  0.24005259</code></pre>
 <p>Check the proportion of samples where Reason &gt; Succinct &gt; Opt out.</p>
 <pre class="r"><code>consistent &lt;- (samples[, &quot;lmi.SMSg3-Reason (n=133)&quot;] &gt; samples[, &quot;lmi.SMSg3-Succinct (n=135)&quot;]) &amp;
   (samples[, &quot;lmi.SMSg3-Succinct (n=135)&quot;] &gt; samples[, &quot;lmi.SMSg3-Opt out (n=83)&quot;])
@@ -1727,15 +1704,12 @@ bf_restriction_against_full</code></pre>
 <p>The data are not sensitive enough to say anything about the specified order against the full (all means unequal) model. The evidence doesn’t give a boost to order prediction, because p(prediction is true) is low and/or riskiness of prediction is low.</p>
 <pre class="r"><code>## Convert bf1 to a number so that we can multiply it
 bf_full_against_null &lt;- as.vector(weartimeBf)
-bf_full_against_null</code></pre>
-<pre><code>##  lmi.SMSg3 
-## 0.03444662</code></pre>
-<pre class="r"><code>## Use transitivity to compute desired Bayes factor
+
+## Use transitivity to compute desired Bayes factor
 bf_restriction_against_null &lt;- bf_restriction_against_full * bf_full_against_null
-bf_restriction_against_null</code></pre>
-<pre><code>##  lmi.SMSg3 
-## 0.04274137</code></pre>
-<p>So, the BF10 of the order against null is 0.0427 and the BF01 is 23.4192037.</p>
+
+cat(c(&quot;The BF10 of the order against null is&quot;, round(bf_restriction_against_null, 4), &quot;and the BF01 is&quot;, round(1/bf_restriction_against_null, 4)))</code></pre>
+<pre><code>## The BF10 of the order against null is 0.0427 and the BF01 is 23.3965</code></pre>
 <hr />
 </div>
 </div>
@@ -1786,10 +1760,8 @@ lmi$SMS_group_receiveornot[lmi$SMS_group==1] &lt;- &quot;1&quot;
 lmi$SMS_group_receiveornot[lmi$SMS_group==2] &lt;- &quot;1&quot;
 lmi$SMS_group_receiveornot[lmi$SMS_group==3] &lt;- &quot;2&quot;
 lmi$SMS_group_receiveornot[lmi$SMS_group==4] &lt;- &quot;2&quot;
-table(lmi$SMS_group_receiveornot)</code></pre>
-<pre><code>## 
-##   1   2 
-## 273 102</code></pre>
+cat(c(&quot;group sizes:&quot;, table(lmi$SMS_group_receiveornot)[[1]], &quot;received,&quot;, table(lmi$SMS_group_receiveornot)[[2]], &quot;did not.&quot;))</code></pre>
+<pre><code>## group sizes: 273 received, 102 did not.</code></pre>
 <pre class="r"><code>chisq.test(lmi$H_DaysWornN_over10h, lmi$SMS_group_receiveornot)</code></pre>
 <pre><code>## 
 ##  Pearson&#39;s Chi-squared test
