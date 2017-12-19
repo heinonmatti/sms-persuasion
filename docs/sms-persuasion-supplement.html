@@ -320,8 +320,8 @@ div.tocify {
 <p>Welcome to the supplementary file!</p>
 <p>Open code blocks by clicking the “code”-buttons on the right hand side.</p>
 <p>Github repository for this site can be found <a href="https://github.com/heinonmatti/sms-persuasion/">here</a>, the index page for this small site is <a href="https://heinonmatti.github.io/sms-persuasion/index.html">here</a>.</p>
-<div id="load-packages" class="section level1">
-<h1>Load packages</h1>
+<div id="session-information" class="section level1">
+<h1>Session information</h1>
 <p>The code block shows all installed packages and the session information of the computer this was run on.</p>
 <pre class="r"><code>if(!require(&quot;pacman&quot;)) install.packages(&quot;pacman&quot;)
 library(&quot;pacman&quot;)
@@ -688,7 +688,7 @@ lmi$SMSgall &lt;- factor(lmi$SMS_group, levels=c(1,2,3,4), labels=c(&quot;Reason
 <h3>Statistical Power</h3>
 <p>Our final sample size was unknown, as well as (in the absence of similar studies) the true effect size, so sample size planning according to the expected effect was out of the question. Our aim was to collect as many participants as possible during the available time during the two recruitment waves. We defined a clinically significant effect size by calculating, how big an effect would bring a person from 9.5 hours of daily data to reach the cutoff of 10 hours. This was defined as <span class="math display">\[d=\frac{M1 - M2} {\sqrt{\frac {s_1^2+s_2^2} {2}} }\]</span> <span class="math inline">\(^{(1)}\)</span> with standard deviations estimated from feasibility study<span class="math inline">\(^{(2)}\)</span> data to be 72 minutes for both groups, resulting in a d=0.42. For our purposes, we decided to consider effect sizes between -0.3 and 0.3 as equivalent to zero.</p>
 <p><span class="math inline">\(^{(1)}\)</span> Cohen J. A power primer. Psychol Bull. 1992 Jul;112(1):155-9.<br />
-<span class="math inline">\(^{(2)}\)</span> Hankonen N, Heino MTJ, Hynynen S-T, Laine H, Ara?jo-Soares V, Sniehotta FF, et al. Randomised controlled feasibility study of a school-based multi-level intervention to increase physical activity and decrease sedentary behaviour among vocational school students. Int J Behav Nutr Phys Act. Available from: <a href="http://ijbnpa.biomedcentral.com/articles/10.1186/s12966-017-0484-0" class="uri">http://ijbnpa.biomedcentral.com/articles/10.1186/s12966-017-0484-0</a></p>
+<span class="math inline">\(^{(2)}\)</span> Hankonen N, Heino MTJ, Hynynen S-T, Laine H, Araujo-Soares V, Sniehotta FF, et al. Randomised controlled feasibility study of a school-based multi-level intervention to increase physical activity and decrease sedentary behaviour among vocational school students. Int J Behav Nutr Phys Act. Available from: <a href="http://ijbnpa.biomedcentral.com/articles/10.1186/s12966-017-0484-0" class="uri">http://ijbnpa.biomedcentral.com/articles/10.1186/s12966-017-0484-0</a></p>
 <pre class="r"><code>xax &lt;- seq(from = 0.01, to = 1, by = 0.01)
 
 graafi &lt;- pwr.t.test(n = (133 + 129)/2, d = xax, sig.level = 0.05, power = NULL, type = &quot;two.sample&quot;, alternative = &quot;two.sided&quot;)

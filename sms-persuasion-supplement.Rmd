@@ -1,3 +1,5 @@
+
+
 Welcome to the supplementary file!  
   
 Open code blocks by clicking the "code"-buttons on the right hand side.
@@ -13,7 +15,7 @@ knitr::opts_chunk$set(warning=FALSE, message=FALSE, cache = TRUE)
 options(scipen=999)
 ```
 
-# Load packages
+# Session information
 
 The code block shows all installed packages and the session information of the computer this was run on.
 
@@ -76,7 +78,7 @@ Although considered sufficient in some contexts (e.g. FMRI-studies, where data c
 Our final sample size was unknown, as well as (in the absence of similar studies) the true effect size, so sample size planning according to the expected effect was out of the question. Our aim was to collect as many participants as possible during the available time during the two recruitment waves. We defined a clinically significant effect size by calculating, how big an effect would bring a person from 9.5 hours of daily data to reach the cutoff of 10 hours. This was defined as $$d=\frac{M1 - M2} {\sqrt{\frac {s_1^2+s_2^2} {2}} }$$ $^{(1)}$ with standard deviations estimated from feasibility study$^{(2)}$ data to be 72 minutes for both groups, resulting in a d=0.42. For our purposes, we decided to consider effect sizes between -0.3 and 0.3 as equivalent to zero.  
   
 $^{(1)}$ Cohen J. A power primer. Psychol Bull. 1992 Jul;112(1):155-9.  
-$^{(2)}$ Hankonen N, Heino MTJ, Hynynen S-T, Laine H, Ara?jo-Soares V, Sniehotta FF, et al. Randomised controlled feasibility study of a school-based multi-level intervention to increase physical activity and decrease sedentary behaviour among vocational school students. Int J Behav Nutr Phys Act. Available from: http://ijbnpa.biomedcentral.com/articles/10.1186/s12966-017-0484-0
+$^{(2)}$ Hankonen N, Heino MTJ, Hynynen S-T, Laine H, Araujo-Soares V, Sniehotta FF, et al. Randomised controlled feasibility study of a school-based multi-level intervention to increase physical activity and decrease sedentary behaviour among vocational school students. Int J Behav Nutr Phys Act. Available from: http://ijbnpa.biomedcentral.com/articles/10.1186/s12966-017-0484-0
 
 ```{r}
 
