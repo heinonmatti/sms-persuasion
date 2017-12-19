@@ -17,6 +17,6 @@ navbar:
     - text: "About"
       href: index.html
     - text: "Manuscript"
-      href: manuscript/baseline-manuscript.pdf
+      href: manuscript/sms-persuasion-manuscript.pdf
     - text: "Supplement"
       href: sms-persuasion-supplement.html
