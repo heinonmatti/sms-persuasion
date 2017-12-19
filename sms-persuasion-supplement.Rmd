@@ -1,0 +1,1270 @@
+Welcome to the supplementary file!  
+  
+Open code blocks by clicking the "code"-buttons on the right hand side.
+
+```{r global_options, include=FALSE}
+.libPaths("C:/rlibs/3.4.2")
+
+knitr::opts_chunk$set(warning=FALSE, message=FALSE, cache = TRUE)
+
+# Turn off scientific notation
+options(scipen=999)
+```
+
+# Load packages
+
+The code block shows all installed packages and the session information of the computer this was run on.
+
+```{r preliminaries, warning = FALSE, message = FALSE, cache = FALSE}
+if(!require("pacman")) install.packages("pacman")
+library("pacman")
+
+p_load(viridis, tidyverse, userfriendlyscience, MASS, BayesFactor, car, mvtnorm, Rcpp, TOSTER, devtools, yarrr, dplyr, RColorBrewer, sm, hypergeo, nlme, pwr, lme4, broom, papaja)
+
+# library(tidyverse)
+devtools::session_info()
+
+```
+
+# Data wrangling
+
+The code block loads data and creates the relevant variables.
+
+```{r vars}
+lmi <- read_csv("./sms-persuasion-data.csv")
+
+# Recruitment wave
+names(lmi)[1] <- "id"
+lmi <- lmi %>% dplyr::mutate(batch = factor(ifelse(id < 1000, "1", 
+                                            ifelse (id > 1000 & id < 2000, "2", 
+                                            ifelse (id >=9000 & id  <= 9026, "1",
+                                                    "2")))))
+    
+lmi$gender <- factor(lmi$q0005, levels=c(1,2), labels=c("Boy","Girl"))
+
+lmi <- lmi %>% dplyr::mutate(girl = factor(ifelse(gender == "Girl", "1",
+                                           ifelse(gender == "Boy", "0", NA))))
+
+# SMS-group as a FACTOR:
+lmi$SMSg <- factor(lmi$SMS_group, levels=c(1,2,3,4), labels=c("Reason","Succinct","No SMS","Failed to send"))
+
+lmi$SMSg2 <- factor(lmi$SMS_group, levels=c(1,2), labels=c("Reason","Succinct"))
+
+lmi$SMSg3 <- factor(lmi$SMS_group, levels=c(1,2,3), labels=c("Reason (n=133)","Succinct (n=135)","Opt out (n=83)"))
+
+lmi$SMSg4 <- factor(lmi$SMS_group_optinvsoptout, levels=c(1,2), labels=c("Opt in","Opt out"))
+
+lmi$SMSgall <- factor(lmi$SMS_group, levels=c(1,2,3,4), labels=c("Reason", "Succinct", "Opt out", "Send failed"))
+```
+
+# Methods  
+
+## Interpreting Bayes Factors
+
+In Bayesian philosophy, probabilities are conceived as quantified beliefs, instead of hypothetical long-run frequencies. A Bayes Factor BF10 (BF01) indicates how much prior odds should be shifted towards the alternative (null) hypothesis, in the light of the data: BF10 = $\frac {p(data, given H1)} {p(data, given H0)}$. When prior odds $\frac {p(H1)} {p(H0)}$  are multiplied by the BF, it results as the posterior odds. As an example, take a modestly skeptical scientist, who holds 1:3 odds against the alternative hypothesis, corresponding to a 25% posterior probability. After observing data that indicate a BF10 of 15 (or a BF01 of 1/15), the scientist should shift his or her prior odds to become $\frac {1} {3} * \frac {15} {1}$ = 15:3 or 5:1, now  favoring the alternative hypothesis with a posterior probability of $\frac {5} {6}$ = 83%.   
+
+Although considered sufficient in some contexts (e.g. FMRI-studies, where data collection is extremely costly), we share Etz and Vandekerckhove's* concern about a BF of 3 not indicating much evidence. A BF10 of three would lead a scientist from 1:1 odds (or 50% probability) to 3:1 odds (or 75% probability); still with the same probability of erring as drawing a heart from a deck of cards. 
+
+* Etz A, Vandekerckhove J. A Bayesian Perspective on the Reproducibility Project: Psychology. PLOS ONE. 2016 Feb 26;11(2):e0149794. 
+
+## Study design
+
+### Statistical Power
+
+Our final sample size was unknown, as well as (in the absence of similar studies) the true effect size, so sample size planning according to the expected effect was out of the question. Our aim was to collect as many participants as possible during the available time during the two recruitment waves. We defined a clinically significant effect size by calculating, how big an effect would bring a person from 9.5 hours of daily data to reach the cutoff of 10 hours. This was defined as $$d=\frac{M1 - M2} {\sqrt{\frac {s_1^2+s_2^2} {2}} }$$ $^{(1)}$ with standard deviations estimated from feasibility study$^{(2)}$ data to be 72 minutes for both groups, resulting in a d=0.42. For our purposes, we decided to consider effect sizes between -0.3 and 0.3 as equivalent to zero.  
+  
+$^{(1)}$ Cohen J. A power primer. Psychol Bull. 1992 Jul;112(1):155-9.  
+$^{(2)}$ Hankonen N, Heino MTJ, Hynynen S-T, Laine H, Ara?jo-Soares V, Sniehotta FF, et al. Randomised controlled feasibility study of a school-based multi-level intervention to increase physical activity and decrease sedentary behaviour among vocational school students. Int J Behav Nutr Phys Act. Available from: http://ijbnpa.biomedcentral.com/articles/10.1186/s12966-017-0484-0
+
+```{r}
+
+xax <- seq(from = 0.01, to = 1, by = 0.01)
+
+graafi <- pwr.t.test(n = (133 + 129)/2, d = xax, sig.level = 0.05, power = NULL, type = "two.sample", alternative = "two.sided")
+
+qplot(xax, graafi$power) +
+    geom_point() + 
+    geom_line() +
+    xlab("True (unknown) effect size d") +
+    ylab("Power") +
+    scale_y_continuous(breaks = seq(0, 1, .05), minor_breaks = seq(0 , 1, .05))+
+    theme(axis.text=element_text(size=12), axis.title=element_text(size=14,face="bold")) +
+    scale_x_continuous(breaks = seq(0, 1, .1), minor_breaks = seq(0 , 1, .1), limits = c(0, 1))+
+    theme_bw()
+```
+
+### Type S and Type M errors
+
+Gelman and Carlin (54) propose going beyond type 1 and type 2 errors by assessing the risks of observing a result of the wrong sign ("type S error") and of an overstated magnitude (exaggeration ratio; "type M error"). The underlying philosophy relates to the fact that, should a low-powered design produce a "significant" result, the observed effect size is very likely to be unstable, i.e. of the wrong sign and of an overstated magnitude. This, in turn is a result of the tautology that if an effect size is large by chance, it is also more likely to observe p < alpha. 
+
+The reference is:
+
+Gelman, A., & Carlin, J. (2014). Beyond Power Calculations Assessing Type S (Sign) and Type M (Magnitude) Errors. Perspectives on Psychological Science, 9(6), 641-651. http://doi.org/10.1177/1745691614551642
+
+```{r retrodesign}
+retrodesign <- function(A, s, alpha=.05, df=Inf, n.sims=10000){
+  z <- qt(1-alpha/2, df)
+  p.hi <- 1 - pt(z-A/s, df)
+  p.lo <- pt(-z-A/s, df)
+  power <- p.hi + p.lo
+  typeS <- p.lo/power
+  estimate <- A + s*rt(n.sims,df)
+  significant <- abs(estimate) > s*z
+  exaggeration <- mean(abs(estimate)[significant])/A
+  return(list(power=power, typeS=typeS, exaggeration=exaggeration))
+}
+```
+
+Note: standard error formula for d was acquired from slide 9 (on p. 5) of [this Cambell Collaboration document](http://www.campbellcollaboration.org/artman2/uploads/1/2_D_Wilson__Calculating_ES.pdf).
+
+```{r retroplots, warning = FALSE, tidy = TRUE, message = FALSE}
+## Create a vector of possible effect sizes for the x-axis:
+xax <- seq(from = 0.05, to = 2, by = 0.05)
+
+## Calculate the SE of d in this particular case:
+n1 <- 133
+n2 <- 129
+sed <- sqrt((n1+n2)/(n1*n2)+(xax^2)/(2*(n1+n2)))
+
+retroPow <- (retrodesign(xax, sed)$power)
+
+# qplot(xax, retroPow) +
+#     geom_point() + 
+#     geom_line() +
+#     xlab("True (unknown) effect size d") +
+#     ylab("Power") +
+#     scale_y_continuous(breaks = seq(0, 1, .05), minor_breaks = seq(0 , 1, .05))+
+#     theme(axis.text=element_text(size=12), axis.title=element_text(size=14,face="bold")) +
+#     scale_x_continuous(breaks = seq(0, 1, .1), minor_breaks = seq(0 , 1, .1), limits = c(0, 1))+
+#     theme_bw()
+
+```
+
+### Exaggeration ratio (type M error)
+
+Figure below shows our expected exaggeration ratio for different hypothetical true effect sizes.
+
+```{r}
+
+retroExg <- (retrodesign(xax, sed)$exaggeration)
+
+qplot(xax, retroExg) + 
+    ylim(0,30) +
+    xlim(0, 1) +
+    geom_point() + 
+    geom_line() +
+    xlab("True effect size") +
+    ylab("Expected type M error (exaggeration ratio)") +
+    scale_y_continuous(breaks = seq(0, 30, 1), minor_breaks = seq(0 , 30, 1))+
+    theme(axis.text=element_text(size=12), axis.title=element_text(size=14,face="bold")) +
+    theme_bw()
+```
+
+This figure shows how, given a detected nonzero true effect, we are expected to observe a grossly exaggerated estimate for very small (d ??? 0.1) effects. Even for the effects of interest to us, a threefold exaggeration in size would be expected.
+
+### Probability of wrong sign (type S error)
+
+As can be seen from the figure below, our type S error rate remains very small, even for very small effect sizes. Should we detect an effect, we could thus be relatively confident with its sign.
+
+```{r}
+
+retroS <- (retrodesign(xax, sed)$typeS)
+
+qplot(xax, retroS) + 
+    ylim(0,40) +
+    xlim(0, 1) +
+    geom_point() + 
+    geom_line() +
+    xlab("True effect size") +
+    ylab("Expected type S error: p(wrong sign)") +
+    scale_y_continuous(breaks = seq(0, 0.2, .025), minor_breaks = seq(0 , 0.2, .025))+
+    theme(axis.text=element_text(size=12), axis.title=element_text(size=14,face="bold"))+
+    theme_bw()
+
+```
+
+### Evaluating the v-statistic
+
+The "v-statistic" (55) is an indication of how accurately data estimates corresponding population parameter values. A v of 0.50 represents random guessing accuracy. Cohen (56) suggests r=0.1 (and thus, r2=0.01) as the lower limit of a "small effect".
+
+Code below is adapted from [Daniel Lakens' blog](http://daniellakens.blogspot.fi/2014/11/evaluating-estimation-accuracy-with.html).
+
+```{r vstat, warning = FALSE, tidy = TRUE, message = FALSE}
+
+#Lakens:
+#"Below, I'm vectorizing the function so that I can plot curves.
+#The rest is unchanged from the vstat function by Stober-Davis & Dana.
+#If you want to use R unbiased, remove the # before the Rsq adjustment calculation below"
+vstat <- Vectorize(function(n,p,Rsq)
+{
+    Rsq = Re(1-((n-2)/(n-p))*(1-Rsq)*hypergeo(1,1,(n-p+2)*.5,1-Rsq))
+    if (Rsq<=0) {Rsq = .0001}
+    r = ((p-1)*(1-Rsq))/((n-p)*Rsq)
+    g = min(r,1)
+    if (g<.5001 && g>.4999) {g = .5001}
+    z = (g - sqrt(g-g^2))/(2*g - 1)
+    alpha = acos((1-z)/sqrt(1-2*z*(1-z)))
+    v = Re((((2*cos(alpha)*gamma((p+2)/2))/(sqrt(pi)*gamma((p+1)/2)))*(hypergeo(.5,(1-p)/2, 3/2, cos(alpha)^2) - sin(alpha)^(p-1))))
+    return(v)
+}
+)
+
+## Plot it:
+curve(vstat(Rsq=x, n=133+129+83+7, p=2), 0.01, 0.25, type="l", col="purple", ylim=c(0, 1), xlab="R-squared when Estimating 2 Parameters", lty=1, ylab="v-statistic")
+par(new=TRUE)
+curve(vstat(Rsq=x, n=133+129, p=2), 0.01, 0.25, type="l", col="green", ylim=c(0, 1), xaxt = "n", yaxt = "n", xlab="", ylab="", lty=2)
+par(new=TRUE)
+
+# Horizontal line at 0.5 cut-off
+abline(h=0.5, col="azure4", lty=5)
+# Legend
+legend(0.05,0.4,c("Reminder (n=262) v. no reminder (n=90)","Reason (n=133) v. Succinct (n=129)"), lty=c(1,2), lwd=c(2.5,2.5), col=c("purple", "green"))
+```
+
+The figure shows the v-statistic when estimating two parameters (two medians, in our case), where 0.5 represents guessing. Figure reveals our sample size was inadequate for reliably detecting small effects. It illustrates that our design for comparison of two medians only starts superseding random guessing near $r^{2} = 0.03$, and approaches 0.8 at $r^{2} \approx 0.10$ (a "medium" effect by Cohen's indices). This illustrates the fact that--if the effect is small instead of zero--to make reliable estimates, one needs much larger sample sizes than what we were able to gather for this research. For "medium"-sized effects, our design was satisfactory.
+
+# Results   
+  
+  
+##Implementation measures {.tabset}  
+
+### Reading the messages
+
+```{r reading}
+reading <- lmi %>% select(SMS_read, SMSg2) %>% 
+    mutate(SMS_read = factor(SMS_read))
+
+levels(reading$SMS_read) <- c("Not on a single morning", "On a single morning", "On 2-3 mornings", "On 4-5 mornings", "Every morning")
+
+names(reading$SMS_read) <- "I opened the SMS and read it on the morning it was sent..."
+
+reading <- reading %>% filter(complete.cases(.))
+
+ggplot(reading) +
+  aes(x = SMSg2, fill = factor(SMS_read)) +
+  geom_bar(position = "fill") +
+  labs(title = "I opened the SMS and read it on the morning it was sent...", x = "", y = "Proportion of respondents") +
+  theme_apa() +
+  scale_fill_viridis(name = "", end = 0.90, discrete = TRUE)
+
+## Old plot attempt:
+# par(mar=c(2, 1, 3, 3))    # Sets the bottom, left, top and right margins
+# layout(matrix(1:2, 2, 1, byrow=TRUE), heights=c(1, 0.2))
+# spineplot(SMS_read ~ SMSg2, data = reading, col = (viridis(5)), ylab = "%", yaxt="n", xlab="", yaxlabels = "", main = "I opened the SMS and read it on the morning it was sent...")
+# 
+# par(mar=c(0, 1, 0, 1)) # Reduce plot margins
+# plot.new()
+# legend(x = "center", legend = c(levels(reading$SMS_read)), fill = viridis(5), cex = 0.75, box.lty = 0, ncol = 2)
+```
+
+**Test for difference between groups **
+
+```{r}
+chisq.test(lmi$SMS_read, lmi$SMSg2)
+
+
+# Create data matrix for Bayesian contingency tables:
+table.readbf <- table(data.frame(lmi$SMS_read, lmi$SMSg2))
+
+# Bayes factor for the contingency tables with default prior concentration:
+
+readbf <- contingencyTableBF(table.readbf, sampleType = "poisson")
+extractBF(readbf)$bf
+
+# Create a vector of different prior concentrations:
+priorWidths <- c(seq(1, 1.25, by = 0.001), seq(1.25, 2, by = 0.01))
+
+# Save the BFs calculated w/ each concentration:
+bayesFactors <- sapply(priorWidths, function(ownprior) {
+    extractBF(contingencyTableBF(table.readbf, sampleType = "poisson", priorConcentration = ownprior))$bf
+})
+
+# Make a data frame for ggplot
+plotdf <- data.frame(priorWidths, bayesFactors)
+
+# Plot BFs with different priors:
+plot1 <- ggplot(data = plotdf, aes(x = priorWidths, y = bayesFactors, group = 1)) + 
+    ylim(0, max(bayesFactors)) +
+    xlim(1, 2) +
+    geom_line() +
+    geom_hline(yintercept = 0, colour = "azure4") +
+    xlab("Prior Width") +
+    ylab("BF10") +
+    theme_bw()
+
+plot2 <- plot1 + geom_hline(yintercept = 1/10, linetype = "dashed", colour = "darkgrey") 
+
+plot2 + geom_hline(yintercept = 10, linetype = "dashed", colour = "darkgrey") 
+
+```
+
+
+### Discussing the messages
+
+```{r discussing}
+
+discussing <- lmi %>% select(SMS_contam, SMSg2) %>% 
+    mutate(SMS_contam = factor(SMS_contam))
+
+levels(discussing$SMS_contam) <- c("Not once", "Once", "2-3 times", "4-5 times", "More often")
+
+names(discussing$SMS_contam) <- "I discussed the content of the messages with my peers at school..."
+
+discussing <- discussing %>% filter(complete.cases(.))
+
+ggplot(discussing) +
+  aes(x = SMSg2, fill = factor(SMS_contam)) +
+  geom_bar(position = "fill") +
+  labs(title = "I discussed the content of the messages with my peers at school...", x = "", y = "Proportion of respondents") +
+  theme_apa() +
+  scale_fill_viridis(name = "", end = 0.9, discrete = TRUE, direction = -1)
+
+## Old plot: 
+# par(mar=c(2, 1, 4, 3))    # Sets the bottom, left, top and right margins
+# layout(matrix(1:2, 2, 1, byrow=TRUE), heights=c(1, 0.2))
+# spineplot(SMS_contam ~ SMSg2, data = discussing, col = rev(viridis(5)), ylab = "%", yaxt="n", xlab="", yaxlabels = "", main = "I discussed the content of the messages \n  with my peers at school...")
+# 
+# par(mar=c(0, 1, 0, 1)) # Reduce plot margins
+# plot.new()
+# legend(x = "center", legend = c(levels(discussing$SMS_contam)), fill = rev(viridis(5)), cex = 0.75, box.lty = 0, ncol = 2)
+
+```
+
+**Test for differences in discussion**
+
+```{r discusstests}
+
+chisq.test(lmi$SMS_contam, lmi$SMSg2)
+
+# Create data matrix for Bayesian contingency tables:
+table.contambf <- table(data.frame(lmi$SMS_contam, lmi$SMSg2))
+
+# Bayes factor for the contingency tables with default prior concentration:
+
+contambf <- contingencyTableBF(table.contambf, sampleType = "poisson")
+extractBF(contambf)$bf
+
+# Create a vector of different prior concentrations:
+priorWidths <- c(seq(1, 1.25, by = 0.001), seq(1.25, 2, by = 0.01))
+
+# Save the BFs calculated w/ each concentration:
+bayesFactors <- sapply(priorWidths, function(ownprior) {
+    extractBF(contingencyTableBF(table.contambf, sampleType = "poisson", priorConcentration = ownprior))$bf
+})
+
+# Make a data frame for ggplot
+plotdf <- data.frame(priorWidths, bayesFactors)
+
+# Plot BFs with different priors:
+plot1 <- ggplot(data = plotdf, aes(x = priorWidths, y = bayesFactors, group = 1)) + 
+    ylim(0, max(bayesFactors)) +
+    xlim(1, 2) +
+    geom_line() +
+    geom_hline(yintercept = 0, colour = "azure4") +
+    xlab("Prior Width") +
+    ylab("BF10") +
+    theme_bw()
+
+plot2 <- plot1 + geom_hline(yintercept = 1/10, linetype = "dashed", colour = "darkgrey") 
+
+plot2 + geom_hline(yintercept = 10, linetype = "dashed", colour = "darkgrey") 
+```
+
+### Satisfaction with the messages 
+
+```{r satisfaction}
+lmi$satisf <- "I was satisfied with the content of the messages"
+
+satisfaction <- lmi %>% select(SMS_satisf, SMSg2) %>% 
+    mutate(SMS_satisf = factor(SMS_satisf))
+
+levels(satisfaction$SMS_satisf) <- c("Completely disagree", "Somewhat disagree", "Do not agree nor disagree", "Somewhat agree", "Completely agree")
+
+satisfaction <- satisfaction %>% filter(complete.cases(.))
+
+ggplot(satisfaction) +
+  aes(x = SMSg2, fill = factor(SMS_satisf)) +
+  geom_bar(position = "fill") +
+  labs(title = "I was satisfied with the content of the messages...", x = "", y = "Proportion of respondents") +
+  theme_apa() +
+  scale_fill_viridis(name = "", end = 0.90, discrete = TRUE)
+
+## Previous attempt at the plot: 
+# par(mar=c(2, 1, 3, 3))    # Sets the bottom, left, top and right margins
+# layout(matrix(1:2, 2, 1, byrow=TRUE), heights=c(1, 0.2))
+# spineplot(SMS_satisf ~ SMSg2, data = satisfaction, col = viridis(5), ylab = "%", yaxt="n", xlab="", yaxlabels = "", main = "I was satisfied with the content of the messages...")
+# 
+# par(mar=c(0, 1, 0, 1)) # Reduce plot margins
+# plot.new()
+# legend(x = "center", legend = c(levels(satisfaction$SMS_satisf)), fill = brewer.pal(5, "Spectral"), cex = 0.75, box.lty = 0, ncol = 2)
+
+```
+
+**Test for differences in satisfaction:**
+```{r}
+chisq.test(lmi$SMS_satisf, lmi$SMSg2)
+
+# Create data matrix for Bayesian contingency tables:
+table.satisfbf <- table(data.frame(lmi$SMS_satisf, lmi$SMSg2))
+
+# Bayes factor for the contingency tables with default prior concentration:
+
+satisfbf <- contingencyTableBF(table.satisfbf, sampleType = "poisson")
+extractBF(satisfbf)$bf
+
+# Create a vector of different prior concentrations:
+priorWidths <- c(seq(1, 1.25, by = 0.001), seq(1.25, 2, by = 0.01))
+
+# Save the BFs calculated w/ each concentration:
+bayesFactors <- sapply(priorWidths, function(ownprior) {
+    extractBF(contingencyTableBF(table.satisfbf, sampleType = "poisson", priorConcentration = ownprior))$bf
+})
+
+# Make a data frame for ggplot
+plotdf <- data.frame(priorWidths, bayesFactors)
+
+# Plot BFs with different priors:
+plot1 <- ggplot(data = plotdf, aes(x = priorWidths, y = bayesFactors, group = 1)) + 
+    ylim(0, max(bayesFactors)) +
+    xlim(1, 2) +
+    geom_line() +
+    geom_hline(yintercept = 0, colour = "azure4") +
+    xlab("Prior Width") +
+    ylab("BF10") +
+    theme_bw()
+
+plot2 <- plot1 + geom_hline(yintercept = 1/10, linetype = "dashed", colour = "darkgrey") 
+
+plot2 + geom_hline(yintercept = 10, linetype = "dashed", colour = "darkgrey") 
+```
+
+## Kernel density plots for total wear times {.tabset}  
+  
+**Code to set up the modified function**
+```{r sm, verbose = FALSE}
+
+# Changing the sm density compare function to allow different color of the band of equality. Copied from https://web.archive.org/web/20170222214214/https://stat.ethz.ch/pipermail/r-help//2009-March/416920.html.
+
+sm.density.compare2 <- function (x, group, h, model = "none", bandcol =
+                                  'cyan', lwd = par("lwd"), usePolyg = NULL, asp=NA, 
+                                xlab=opt$xlab, ylab=opt$ylab, ...) 
+{
+  if (!is.vector(x)) 
+    stop("sm.density.compare can handle only 1-d data")
+  opt <- sm.options(list(...))
+  sm:::replace.na(opt, ngrid, 50)                 
+  ## These all changed from replace.na() --> sm:::
+  sm:::replace.na(opt, display, "line")
+  sm:::replace.na(opt, xlab, deparse(substitute(x)))
+  sm:::replace.na(opt, ylab, "Density")
+  sm:::replace.na(opt, xlim, c(min(x) - diff(range(x))/4, max(x) + 
+                                 diff(range(x))/4))
+  sm:::replace.na(opt, eval.points, seq(opt$xlim[1], opt$xlim[2], 
+                                        length = opt$ngrid))
+  if (is.na(opt$band)) {
+    if (model == "none") 
+      opt$band <- FALSE
+    else opt$band <- TRUE
+  }
+  if ((model == "none") && opt$band) 
+    opt$band <- FALSE
+  band <- opt$band
+  ngrid <- opt$ngrid
+  xlim <- opt$xlim
+  nboot <- opt$nboot
+  y <- x
+  if (is.na(opt$test)) {
+    if (model == "none") 
+      opt$test <- FALSE
+    else opt$test <- TRUE
+  }
+  if ((model == "none") && opt$test) 
+    opt$test <- FALSE
+  test <- opt$test
+  if (opt$display %in% "none") 
+    band <- FALSE
+  fact <- factor(group)
+  fact.levels <- levels(fact)
+  nlev <- length(fact.levels)
+  ni <- table(fact)
+  if (band & (nlev > 2)) {
+    cat("Reference band available to compare two groups only.", 
+        "\n")
+    band <- FALSE
+  }
+  if (length(opt$lty) < nlev) 
+    opt$lty <- 1:nlev
+  if (length(opt$col) < nlev) 
+    opt$col <- 2:(nlev + 1)
+  if (missing(h)) 
+    h <- h.select(x, y = NA, group = group, ...)
+  opt$band <- band
+  opt$test <- test
+  estimate <- matrix(0, ncol = opt$ngrid, nrow = nlev)
+  se <- matrix(0, ncol = opt$ngrid, nrow = nlev)
+  for (i in 1:nlev) {
+    sm <- sm.density(y[fact == fact.levels[i]], h = h, display = "none", 
+                     eval.points = opt$eval.points)
+    estimate[i, ] <- sm$estimate
+    se[i, ] <- sm$se
+  }
+  eval.points <- sm$eval.points
+  if (!(opt$display %in% "none" | band)) {
+    plot(xlim, c(0, 1.1 * max(as.vector(estimate))), xlab = opt$xlab, 
+         ylab = opt$ylab, type = "n")
+    #for (i in 1:nlev) lines(eval.points, estimate[i, ], lty = opt$lty[i], 
+    #    col = opt$col[i])
+    for (i in 1:nlev) lines(eval.points, estimate[i, ], lty =
+                              opt$lty[i],   ## lwd hacked in
+                            col = opt$col[i], lwd = lwd[i])
+  }
+  est <- NULL
+  p <- NULL
+  if (model == "equal" & test) {
+    if (nlev == 2) {
+      ts <- sum((estimate[1, ] - estimate[2, ])^2)
+    }
+    else {
+      sm.mean <- sm.density(y, h = h, xlim = opt$xlim, 
+                            ngrid = opt$ngrid, display = "none")$estimate
+      ts <- 0
+      for (i in 1:nlev) ts <- ts + ni[i] * sum((estimate[i, 
+                                                         ] - sm.mean)^2)
+    }
+    p <- 0
+    est.star <- matrix(0, ncol = opt$ngrid, nrow = nlev)
+    for (iboot in 1:nboot) {
+      ind <- (1:length(y))
+      for (i in 1:nlev) {
+        indi <- sample((1:length(ind)), ni[i])
+        est.star[i, ] <- sm.density(y[ind[indi]], h = h, 
+                                    ngrid = opt$ngrid, xlim = opt$xlim, display =
+                                      "none")$estimate
+        ind <- ind[-indi]
+      }
+      if (nlev == 2) {
+        ts.star <- sum((est.star[1, ] - est.star[2, ])^2)
+      }
+      else {
+        sm.mean <- sm.density(y, h = h, xlim = opt$xlim, 
+                              ngrid = opt$ngrid, display = "none")$estimate
+        ts.star <- 0
+        for (i in 1:nlev) {
+          ts.star <- ts.star + ni[i] * sum((est.star[i, 
+                                                     ] - sm.mean)^2)
+        }
+      }
+      if (ts.star > ts) 
+        p <- p + 1
+      if (opt$verbose > 1) {
+        cat(iboot)
+        cat(" ")
+      }
+    }
+    p <- p/nboot
+    cat("\nTest of equal densities:  p-value = ", round(p, 
+                                                        3), "\n")
+    est <- list(p = p, h = h)
+  }
+  if (model == "equal" & band) {
+    av <- (sqrt(estimate[1, ]) + sqrt(estimate[2, ]))/2
+    se <- sqrt(se[1, ]^2 + se[2, ]^2)
+    upper <- (av + se)^2
+    lower <- pmax(av - se, 0)^2
+    plot(xlim, c(0, 1.1 * max(as.vector(estimate), upper)), 
+         xlab = xlab, ylab = ylab, type = "n", asp=asp, ...)     
+    ## ... and asp added; was opt$xlab and opt$ylab
+    polygon(c(eval.points, rev(eval.points)), c(upper, rev(lower)), 
+            col = bandcol, border = 0)                                      
+    ## was col = "cyan"
+    if (is.null(usePolyg)) {
+      lines(eval.points, estimate[1, ], lty = opt$lty[1], col =
+              opt$col[1], lwd = lwd[1])
+      lines(eval.points, estimate[2, ], lty = opt$lty[2], col =
+              opt$col[2], lwd = lwd[2])
+    }
+    else {
+      polygon(eval.points, estimate[1, ], lty = opt$lty[1], col =
+                opt$col[1], lwd = lwd[1])
+      polygon(eval.points, estimate[2, ], lty = opt$lty[2], col =
+                opt$col[2], lwd = lwd[2])
+    }
+    est <- list(p = p, upper = upper, lower = lower, h = h)
+  }
+  invisible(est)
+}
+```
+
+### SMS types
+  
+**Compare the effect of SMS types on total wear time**
+
+Total wear time in minutes (dashed line for the reason condition, solid for succinct). Grey band around the kernel density plots refers to 95% likelihood of containing the true density plot, if the two lines were generated by data from the same distribution.
+
+```{r}
+
+# WEARTIME KERNEL: H_Weartime.SUM
+
+lmix <- lmi %>% select(H_Weartime.SUM, SMSg2) %>% filter(complete.cases(.))
+
+summary(lmix)
+
+set.seed(100) # set random number generator for replicable results.
+
+sm.density.compare2(lmix$H_Weartime.SUM, lmix$SMSg2, xlab="Minutes", col=c(1,2), lty=c(2,1), bandcol='LightGray', model="equal", lwd=(c(2,2)), xlim=c(0,8000))
+
+title(main="")
+
+colfill<-c(1,2)
+
+legend("topleft", inset=.05, levels(lmi$SMSg2), fill=colfill)
+MeanR <- mean(lmi$H_Weartime.SUM[which(lmi$SMS_group=="1")], na.rm=T)
+MeanS <- mean(lmi$H_Weartime.SUM[which(lmi$SMS_group=="2")], na.rm=T)
+MediR <- median(lmi$H_Weartime.SUM[which(lmi$SMS_group=="1")], na.rm=T)
+MediS <- median(lmi$H_Weartime.SUM[which(lmi$SMS_group=="2")], na.rm=T)
+SdR <- sd(lmi$H_Weartime.SUM[which(lmi$SMS_group=="1")], na.rm=T)
+SdS <- sd(lmi$H_Weartime.SUM[which(lmi$SMS_group=="2")], na.rm=T)
+legend("bottom", legend = c(paste("Mean (sd) Reason:", sep=""),
+                                 paste(round(MeanR, 2), " (", round(SdR, 2),")", "; n=", sum(!is.na(lmi$H_Weartime.SUM[which(lmi$SMS_group=="1")])), sep=""),
+                                 paste(" "),
+                                 paste("Mean (sd) Succinct:", sep=""),
+                                 paste(round(MeanS, 2), " (", round(SdS, 2),")", "; n=", sum(!is.na(lmi$H_Weartime.SUM[which(lmi$SMS_group=="2")])), sep="")), 
+       bty = "n", cex=0.5)
+```
+
+### Opt in vs. opt out
+
+**Compare the wear times between those who received messages, and those who did not**
+
+```{r}
+
+lmix <- lmi %>% select(H_Weartime.SUM, SMSg4) %>% filter(complete.cases(.))
+
+summary(lmix)
+
+set.seed(100) # set random number generator for replicable results.
+
+sm.density.compare2(lmix$H_Weartime.SUM, lmix$SMSg4, xlab="Minutes", col=c(1,2), lty=c(2,1), bandcol='LightGray', model="equal", lwd=(c(2,2)), xlim=c(0,8000))
+
+title(main="")
+
+colfill<-c(1,2)
+
+legend("topleft", inset=.05, levels(lmi$SMSg4), fill=colfill)
+MeanR <- mean(lmi$H_Weartime.SUM[which(lmi$SMSg4=="Opt in")], na.rm=T)
+MeanS <- mean(lmi$H_Weartime.SUM[which(lmi$SMSg4=="Opt out")], na.rm=T)
+MediR <- median(lmi$H_Weartime.SUM[which(lmi$SMSg4=="Opt in")], na.rm=T)
+MediS <- median(lmi$H_Weartime.SUM[which(lmi$SMSg4=="Opt out")], na.rm=T)
+SdR <- sd(lmi$H_Weartime.SUM[which(lmi$SMSg4=="Opt in")], na.rm=T)
+SdS <- sd(lmi$H_Weartime.SUM[which(lmi$SMSg4=="Opt out")], na.rm=T)
+legend("bottom", legend = c(paste("Mean (sd) Opt in:", sep=""),
+                                 paste(round(MeanR, 2), " (", round(SdR, 2),")", "; n=", sum(!is.na(lmi$H_Weartime.SUM[which(lmi$SMSg4=="Opt in")])), sep=""),
+                                 paste(" "),
+                                 paste("Mean (sd) Opt out:", sep=""),
+                                 paste(round(MeanS, 2), " (", round(SdS, 2),")", "; n=", sum(!is.na(lmi$H_Weartime.SUM[which(lmi$SMSg4=="Opt out")])), sep="")), 
+       bty = "n", cex=0.5)
+```
+
+## Weartime minutes (Mann-Whitney U-tests) 
+
+
+```{r Ureasonsuccinct}
+
+# Mann-Whitney U-test
+reasonsucc <- wilcox.test(lmi$H_Weartime.SUM ~ lmi$SMSg2, exact = TRUE, conf.int = TRUE, conf.level = 0.95, alternative = "two.sided")
+
+```
+
+**Reason vs. succinct message**
+
+W-statistic: `r reasonsucc$statistic %>% round(., 3)`  
+Confidence interval: `r reasonsucc$conf.int %>% round(., 3)`  
+p-value: `r reasonsucc$p.value %>% round(., 3)`  
+
+```{r Uschools}
+schools <- wilcox.test(lmi$H_Weartime.SUM ~ lmi$iv, exact = TRUE, conf.int = TRUE, conf.level = 0.95, alternative = "two.sided")
+```
+
+**Schools**
+
+W-statistic: `r schools$statistic %>% round(., 3)`  
+Confidence interval: `r schools$conf.int %>% round(., 3)`  
+p-value: `r schools$p.value %>% round(., 3)`  
+
+```{r Uwaves}
+waves <- wilcox.test(lmi$H_Weartime.SUM ~ lmi$batch, exact = TRUE, conf.int = TRUE, conf.level = 0.95, alternative = "two.sided")
+
+
+```
+
+**Waves**
+
+W-statistic: `r waves$statistic %>% round(., 3)`  
+Confidence interval: `r waves$conf.int %>% round(., 3)`  
+p-value: `r waves$p.value %>% round(., 3)`
+
+```{r Uoptin}
+optin <- wilcox.test(lmi$H_Weartime.SUM ~ lmi$SMSg4, exact = TRUE, conf.int = TRUE, conf.level = 0.95, alternative = "two.sided")
+```
+
+**Opting in for the reminders**
+
+W-statistic: `r optin$statistic %>% round(., 3)`  
+Confidence interval: `r round(optin$conf.int) %>% round(., 3)`  
+p-value: `r optin$p.value %>% round(., 3)`  
+
+## Weartime (ANOVA, MANOVA)  
+
+**ANOVA**
+
+Means and the total wear time distributions of the three groups. Error bars indicate 95% confidence intervals. No differences are detected.
+
+```{r weartime anova}
+userfriendlyscience::oneway(y=lmi$H_Weartime.SUM,
+       x=lmi$SMSg3,
+       means=TRUE, posthoc="holm", plot=TRUE, levene=TRUE)
+
+```
+
+**MANOVA**
+
+Check correlations between outcome variables
+
+```{r outcome correlations for manova}
+lapply(c("pearson", "kendall", "spearman"), function(x) {cor(lmi$H_Weartime.SUM, lmi$H_DaysWornN_over10h, use = "pairwise.complete.obs", method = x)})
+```
+
+Reason vs. succinct
+
+```{r reasonsucc manova}
+Y <- cbind(lmi$H_Weartime.SUM, lmi$H_DaysWornN_over10h)
+fit <- manova(Y ~ lmi$SMSg2)
+summary(fit, test="Pillai")
+```
+
+Reason vs. succinct vs. opt out
+
+```{r reasonsuccoptout manova}
+Y <- cbind(lmi$H_Weartime.SUM, lmi$H_DaysWornN_over10h)
+fit <- manova(Y ~ lmi$SMSg3)
+lapply(c("Pillai", "Wilks", "Hotelling-Lawley", "Roy"), function(x) {summary(fit, test=x)})
+```
+
+Type 3 sums of squares
+
+```{r type3 ss manova}
+
+fitIII <- lm(cbind(H_Weartime.SUM, H_DaysWornN_over10h) ~ SMSg3, data=lmi)
+ManRes <- Manova(fitIII, type="III")
+summary(ManRes, multivariate=TRUE)
+
+```
+(On Roy's largest root: "Because it is a maximum, it can behave differently from the other three test statistics. In instances where the other three are not significant and Roy's is significant, the effect should be considered insignificant." [source](http://www.ats.ucla.edu/stat/stata/output/Stata_MANOVA.htm))
+
+
+## Equivalence testing (TOST) {.tabset}
+
+### Minutes; Reason vs. succinct
+
+```{r}
+lmi.tost <- lmi %>% select(H_Weartime.SUM, 
+                           H_DaysWornN_over10h, 
+                           SMSgall) %>%
+                    filter(complete.cases(.))
+
+m.minutes <- lmi.tost %>% dplyr::group_by(factor(SMSgall)) %>% 
+    summarise(mean = mean(H_Weartime.SUM), 
+              sd = sd(H_Weartime.SUM),
+              n = n())
+
+m.minutes
+
+TOSTtwo(m1 = m.minutes$mean[1], m2 = m.minutes$mean[2], sd1 = m.minutes$sd[1], sd2 = m.minutes$sd[2], n1=m.minutes$n[1], n2=m.minutes$n[2], low_eqbound_d = -0.3, high_eqbound_d = 0.3, alpha = 0.05, var.equal=FALSE)
+
+```
+The graph above indicates that the effect of SMS type on total wear minutes was statistically significantly closer to zero than |0.3|.
+
+### Minutes; Opt in vs. opt out
+
+```{r}
+lmi.tost <- lmi %>% select(H_Weartime.SUM, 
+                           H_DaysWornN_over10h, 
+                           SMSg4) %>% 
+                    filter(complete.cases(.))
+
+m.minutes <- lmi.tost %>% dplyr::group_by(factor(SMSg4)) %>% 
+    summarise(mean = mean(H_Weartime.SUM), 
+              sd = sd(H_Weartime.SUM),
+              n = n())
+
+m.minutes
+
+TOSTtwo(m1 = m.minutes$mean[1], m2 = m.minutes$mean[2], sd1 = m.minutes$sd[1], sd2 = m.minutes$sd[2], n1=m.minutes$n[1], n2=m.minutes$n[2], low_eqbound_d = -0.3, high_eqbound_d = 0.3, alpha = 0.05, var.equal=FALSE)
+
+```
+
+The effect of opting in / out on total wear time minutes was statistically significantly closer to zero than |0.3|.
+
+### Days w/ valid data; Reason vs. succinct
+
+```{r}
+lmi.tost <- lmi %>% select(H_Weartime.SUM, 
+                           H_DaysWornN_over10h, 
+                           SMSgall) %>%
+                    filter(complete.cases(.))
+
+m.minutes <- lmi.tost %>% dplyr::group_by(factor(SMSgall)) %>% 
+    summarise(mean = mean(H_DaysWornN_over10h), 
+              sd = sd(H_DaysWornN_over10h),
+              n = n())
+
+m.minutes
+
+TOSTtwo(m1 = m.minutes$mean[1], m2 = m.minutes$mean[2], sd1 = m.minutes$sd[1], sd2 = m.minutes$sd[2], n1=m.minutes$n[1], n2=m.minutes$n[2], low_eqbound_d = -0.3, high_eqbound_d = 0.3, alpha = 0.05, var.equal=FALSE)
+```
+The effect of SMS type on days with equal to or less than 10 hours of recorded data was statistically significantly closer to zero than |0.3|.
+
+### Days w/ valid data; Opt in vs. opt out
+
+```{r}
+lmi.tost <- lmi %>% select(H_Weartime.SUM, 
+                           H_DaysWornN_over10h, 
+                           SMSg4) %>% 
+                    filter(complete.cases(.))
+
+m.minutes <- lmi.tost %>% dplyr::group_by(factor(SMSg4)) %>% 
+    summarise(mean = mean(H_DaysWornN_over10h), 
+              sd = sd(H_DaysWornN_over10h),
+              n = n())
+
+m.minutes
+
+TOSTtwo(m1 = m.minutes$mean[1], m2 = m.minutes$mean[2], sd1 = m.minutes$sd[1], sd2 = m.minutes$sd[2], n1=m.minutes$n[1], n2=m.minutes$n[2], low_eqbound_d = -0.3, high_eqbound_d = 0.30, alpha = 0.05, var.equal=FALSE)
+
+```
+The effect of opting to receive reminders on days with equal to or less than 10 hours of recorded data was statistically significantly smaller than 0.3, but we could not reject the hypothesis that the effect was higher than -0.3.
+
+## Heterogeneity among clusters
+
+Here we present the weartimes among different educational groups, i.e. the clusters participants were nested in.
+
+```{r}
+lmi.tracks <- lmi %>% select(H_Weartime.SUM, q0008, SMSg3, girl) %>% 
+    mutate(track = ifelse(q0008 == 1, "1", 
+                    ifelse(q0008 == 2, "2", NA)),
+           track = factor(track),
+           track.grp = paste0(track, SMSg3),
+           track.grp = factor(track.grp)) %>% 
+    filter(q0008 == 1 | q0008 == 2) %>% 
+    filter(complete.cases(.))
+
+sm.density.compare2(lmi.tracks$H_Weartime.SUM, lmi.tracks$track.grp, xlab="Minutes", col=c(1,2,3,4,5,6), lty=c(2,1), bandcol='LightGray', model="equal", lwd=(c(2,2)), xlim=c(0,8000))
+
+# lmi.tracks %>% group_by(track.grp) %>% 
+#     summarise(mean = mean(H_Weartime.SUM, na.rm = T), n = n(), percent.girl = mean(girl==1))
+
+lmi.tracks %>% group_by(track.grp) %>% 
+    summarise(mean = mean(H_Weartime.SUM, na.rm = T), n = n())
+
+```
+
+1 and 2 in front of groups indicate educational tracks. The analysis above points out, that students opting out in one of the main tracks wore the accelerometer less than others. This might be due to e.g. social dynamics.  
+
+There are differences in wear times between tracks and group allocation. The Differences remain, when the poorly performing group is removed, as shown here:
+
+```{r}
+lmi.tracks2 <- lmi.tracks %>% filter(track.grp != "2Opt out (n=83)")
+
+sm.density.compare2(lmi.tracks2$H_Weartime.SUM, lmi.tracks2$track.grp, xlab="Minutes", col=c(1,2,3,4,5), lty=c(2,1), bandcol='LightGray', model="equal", lwd=(c(2,2)), xlim=c(0,8000))
+
+```
+
+It seems like educational track is a good determinant of wear time. Here is track 1 groups only:
+
+```{r}
+lmi.tracks3 <- lmi.tracks %>% filter(track.grp != "2Opt out (n=83)", track.grp != "2Reason (n=133)", track.grp != "2Succinct (n=135)")
+
+sm.density.compare2(lmi.tracks3$H_Weartime.SUM, lmi.tracks3$track.grp, xlab="Minutes", col=c(1,2,3,4,5), lty=c(2,1), bandcol='LightGray', model="equal", lwd=(c(2,2)), xlim=c(0,8000))
+
+```
+Same for track 2, after removing the small outlier group:
+
+```{r}
+lmi.tracks4 <- lmi.tracks %>% filter(track.grp != "1Opt out (n=83)", track.grp != "1Reason (n=133)", track.grp != "1Succinct (n=135)", track.grp != "2Opt out (n=83)")
+
+sm.density.compare2(lmi.tracks4$H_Weartime.SUM, lmi.tracks4$track.grp, xlab="Minutes", col=c(1,2,3,4,5), lty=c(2,1), bandcol='LightGray', model="equal", lwd=(c(2,2)), xlim=c(0,8000))
+
+```
+
+***
+
+## Bayesian ANOVA  
+
+(NOTE: prior graphs from now on with BF01 instead of BF10):
+
+```{r bayesanova}
+summary(aov(lmi$H_Weartime.SUM ~ lmi$SMSg3))
+
+weartime.fullobs <- data.frame(lmi$H_Weartime.SUM, lmi$SMSg3)
+weartime.fullobs <- weartime.fullobs[complete.cases(weartime.fullobs), ]
+
+#These are equivalent:
+# weartimeBf <- anovaBF(lmi.H_Weartime.SUM ~ lmi.SMSg3, data = weartime.fullobs, whichRandom = weartime.fullobs$lmi.H_Weartime.SUM)
+
+weartimeBf <- anovaBF(lmi.H_Weartime.SUM ~ lmi.SMSg3, data = weartime.fullobs, rscaleFixed = 0.3)
+
+#BF10:
+extractBF(weartimeBf)$bf
+#BF01:
+extractBF(1/weartimeBf)$bf
+
+# Create a vector of different prior concentrations:
+priorWidths <- c(seq(0.01, 2, by = 0.01))
+
+# Save the BFs calculated w/ each concentration:
+bayesFactors <- sapply(priorWidths, function(ownprior) {
+    extractBF(weartimeBf <- anovaBF(lmi.H_Weartime.SUM ~ lmi.SMSg3, data = weartime.fullobs, rscaleFixed = ownprior))$bf
+})
+
+bayesFactors2 <- 1/bayesFactors
+
+# Make a data frame for ggplot
+plotdf <- data.frame(priorWidths, bayesFactors2)
+
+# Plot results with different priors:
+plot1 <- ggplot(data = plotdf, aes(x = priorWidths, y = bayesFactors2, group = 1)) + 
+    ylim(0, max(bayesFactors2)) +
+    xlim(min(priorWidths), max(priorWidths)) +
+    geom_line() +
+    geom_hline(yintercept = 0, colour = "azure4") +
+    xlab("Prior Width") +
+    ylab("BF01") +
+    theme_bw()
+
+# Dashed line for BF10 = 1/10, indicating strong evidence for null.
+plot2 <- plot1 + geom_hline(yintercept = 1/10, linetype = "dashed", colour = "darkgrey") 
+
+plot2 + geom_hline(yintercept = 10, linetype = "dashed", colour = "darkgrey") 
+
+```
+
+### Grouping order: reason > succinct > opt out
+
+Note that this could be considered not the end of the analysis. The null model can be false in ways not consistent with H1 (see [here](https://web.archive.org/web/20170226172405/http://bayesfactor.blogspot.fi/2015/01/multiple-comparisons-with-bayesfactor-2.html)). The code that follows is also adapted from the link.
+
+The number of possible orderings in this case is 3!/(3-2)! = 6. Thus, prior odds are 1/6. 
+
+Sampling from the posterior: 
+```{r}
+weartimeBf <- anovaBF(lmi.H_Weartime.SUM ~ lmi.SMSg3, data = weartime.fullobs)
+samples <- posterior(weartimeBf, iterations = 10000)
+head(samples)
+```
+
+Check the proportion of samples where Reason > Succinct > Opt out.
+```{r}
+consistent <- (samples[, "lmi.SMSg3-Reason (n=133)"] > samples[, "lmi.SMSg3-Succinct (n=135)"]) &
+  (samples[, "lmi.SMSg3-Succinct (n=135)"] > samples[, "lmi.SMSg3-Opt out (n=83)"])
+N_consistent <- sum(consistent)
+
+# posterior probability of the order reason > succinct > opt out:
+
+N_consistent / 10000
+```
+
+Now, the posterior restriction for the *full* (all means unequal) model is `r N_consistent / 10000` divided by 1. Bayes factor is:
+
+```{r}
+	
+bf_restriction_against_full = (N_consistent / 10000) / (1 / 6)
+bf_restriction_against_full
+
+```
+
+The data are not sensitive enough to say anything about the specified order against the full (all means unequal) model. The evidence doesn't give a boost to order prediction, because p(prediction is true) is low and/or riskiness of prediction is low.
+
+```{r}
+## Convert bf1 to a number so that we can multiply it
+bf_full_against_null <- as.vector(weartimeBf)
+bf_full_against_null
+## Use transitivity to compute desired Bayes factor
+bf_restriction_against_null <- bf_restriction_against_full * bf_full_against_null
+bf_restriction_against_null
+```
+
+So, the BF10 of the order against null is `r bf_restriction_against_null` and the BF01 is `r 1/bf_restriction_against_null`.
+
+***
+
+Measurement days of >10 hours of valid data gathered by group. Horizontal lines represent means, boxes Bayesian 95% Highest Density Intervals (with flat priors).
+
+## Weardays {.tabset}
+
+```{r weardays.reasonsucc}
+pirateplot(formula = H_DaysWornN_over10h ~ SMSg3,
+           data = lmi,
+           xlab = "",
+           ylab = ">10h Measurement days",
+           pal = "up",
+           point.o = .25,
+           avg.line.o = 1,
+           bean.b.o = .2,
+           inf.f.col = "grey", # Inf fill col
+           inf.b.col = "black", # Inf border col
+           inf.f.o = .5,
+           inf.b.o = .5,
+           point.cex = 1,
+           jitter.val = .07,
+           gl.col = 'white',
+           hdi.iter = 100000
+)
+
+
+```
+
+**Previous plot with CI instead of HDI:**
+
+```{r CI.weardays.reasonsucc}
+pirateplot(formula = H_DaysWornN_over10h ~ SMSg3,
+           data = lmi,
+           xlab = "",
+           ylab = ">10h Measurement days",
+           pal = "up",
+           point.o = .25,
+           avg.line.o = 1,
+           bean.b.o = .2,
+           inf.f.col = "grey", # Inf fill col
+           inf.b.col = "black", # Inf border col
+           inf.f.o = .5,
+           inf.b.o = .5,
+           point.cex = 1,
+           jitter.val = .07,
+           gl.col = 'white',
+           inf.method = "ci"
+)
+
+
+```
+
+### Chi^2 weardays; was sent messages to v. was not
+
+```{r weardays.receiveornot}
+lmi$SMS_group_receiveornot <- NA
+lmi$SMS_group_receiveornot[lmi$SMS_group==1] <- "1"
+lmi$SMS_group_receiveornot[lmi$SMS_group==2] <- "1"
+lmi$SMS_group_receiveornot[lmi$SMS_group==3] <- "2"
+lmi$SMS_group_receiveornot[lmi$SMS_group==4] <- "2"
+table(lmi$SMS_group_receiveornot)
+
+chisq.test(lmi$H_DaysWornN_over10h, lmi$SMS_group_receiveornot)
+```
+
+### BF weardays, was sent messages to v. was not
+
+```{r bf.weardays.receiveornot}
+# Create data matrix for Bayesian contingency tables:
+table.dayswornbf <- table(data.frame(lmi$H_DaysWornN_over10h, lmi$SMS_group_receiveornot))
+
+# Bayes factor for the contingency tables with default prior concentration:
+dayswornbf <- contingencyTableBF(table.dayswornbf, sampleType = "poisson")
+extractBF(dayswornbf)$bf
+
+1/dayswornbf
+
+# Create a vector of different prior concentrations:
+priorWidths <- c(seq(1, 1.25, by = 0.001), seq(1.25, 2, by = 0.01))
+
+# Save the BFs calculated w/ each concentration:
+bayesFactors <- sapply(priorWidths, function(ownprior) {
+    extractBF(contingencyTableBF(table.dayswornbf, sampleType = "poisson", priorConcentration = ownprior))$bf
+})
+
+bayesFactors2 <- 1/bayesFactors
+# Make a data frame for ggplot
+plotdf <- data.frame(priorWidths, bayesFactors2)
+
+# Plot BFs with different priors:
+plot1 <- ggplot(data = plotdf, aes(x = priorWidths, y = bayesFactors2, group = 1)) + 
+    ylim(0, max(bayesFactors2)) +
+    xlim(1, 2) +
+    geom_line() +
+    geom_hline(yintercept = 0, colour = "azure4") +
+    xlab("Prior Width") +
+    ylab("BF01") +
+    theme_bw()
+
+# Dashed line for BF01 = 1/10, indicating strong evidence for alternative.
+plot2 <- plot1 + geom_hline(yintercept = 1/10, linetype = "dashed", colour = "darkgrey") 
+
+# Dashed line for BF01 = 10, indicating strong evidence for null.
+plot2 + geom_hline(yintercept = 10, linetype = "dashed", colour = "darkgrey") 
+```
+
+
+### Chi^2 Weardays; Reason v. Succinct
+
+```{r weardays.reasonsuccinct}
+chisq.test(lmi$H_DaysWornN_over10h, lmi$SMSg2)
+
+```
+
+### BF Weardays; Reason v. Succinct
+
+```{r bf.weardays.reasonsuccinct}
+# Create data matrix for Bayesian contingency tables:
+table.dayswornbf <- table(data.frame(lmi$H_DaysWornN_over10h, lmi$SMSg2))
+
+# Bayes factor for the contingency tables with default prior concentration:
+dayswornbf <- contingencyTableBF(table.dayswornbf, sampleType = "poisson")
+extractBF(dayswornbf)$bf
+
+1/dayswornbf
+
+# Create a vector of different prior concentrations:
+priorWidths <- c(seq(1, 1.25, by = 0.001), seq(1.25, 2, by = 0.01))
+
+# Save the BFs calculated w/ each concentration:
+bayesFactors <- sapply(priorWidths, function(ownprior) {
+    extractBF(contingencyTableBF(table.dayswornbf, sampleType = "poisson", priorConcentration = ownprior))$bf
+})
+
+bayesFactors2 <- 1/bayesFactors
+# Make a data frame for ggplot
+plotdf <- data.frame(priorWidths, bayesFactors)
+
+# Plot BFs with different priors:
+plot1 <- ggplot(data = plotdf, aes(x = priorWidths, y = bayesFactors2, group = 1)) + 
+    ylim(0, max(bayesFactors2)) +
+    xlim(1, 2) +
+    geom_line() +
+    geom_hline(yintercept = 0, colour = "azure4") +
+    xlab("Prior Width") +
+    ylab("BF01") +
+    theme_bw()
+
+# Dashed line for BF01 = 1/10, indicating strong evidence for alternative.
+plot2 <- plot1 + geom_hline(yintercept = 1/10, linetype = "dashed", colour = "darkgrey") 
+
+# Dashed line for BF01 = 10, indicating strong evidence for null.
+plot2 + geom_hline(yintercept = 10, linetype = "dashed", colour = "darkgrey") 
+```
+
+***
+
+# Dose dependence
+
+Self-reported opening and reading of messages. Y-axis is total wear time. Boxes represent 95% HDIs for the means, solid lines connect means and dashed lines connect medians. Participants who opted out of reminders are aggregated with those who indicated not having opened the messages even once. Participants who received messages, but did not answer the question on message reading, are excluded.
+
+```{r dosedependence}
+
+dosedf <- lmi %>% 
+    select(SMS_read, SMSgall, H_Weartime.SUM) %>% 
+    rename(weartime = H_Weartime.SUM) %>% 
+    mutate(grouping = ifelse(SMS_read == 1, "0 (n=94)",
+                        ifelse(SMS_read == 2, "1 (n=11)",
+                        ifelse(SMS_read == 3, "2-3 (n=29)",       
+                        ifelse(SMS_read == 4, "4-5 (n=27)",
+                        ifelse(SMS_read == 5, "6 (n=121)", NA))))))
+
+dosedf$grouping[dosedf$SMSgall == "Opt out"] <- "0 (n=94)"
+
+dosedf <- dosedf %>% select(weartime, grouping) %>% 
+    filter(complete.cases(.))
+
+table(dosedf$grouping)
+
+dosedf <- dosedf %>% mutate(grouping = factor(grouping))
+
+levels(dosedf$grouping) <- c("Not on a single \n morning (n=94)",
+                           "On a single \n morning (n=11)",
+                           "On 2-3 \n mornings (n=29)",
+                           "On 4-5 \n mornings (n=27)",
+                           "Every morning \n (n=121)")
+
+means <- dosedf %>% dplyr::group_by(grouping) %>% 
+    summarise(mean = mean(weartime, na.rm = T))
+
+means <- means$mean
+
+medians <- dosedf %>% dplyr::group_by(grouping) %>% 
+    summarise(median = median(weartime, na.rm = T))
+
+medians <- medians$median
+
+pirateplot(formula = weartime ~ grouping,
+           data = dosedf,
+           xlab = "",
+           ylab = "",
+           cex.lab = 0.57,
+           cex.names = 0.7,
+           pal = "up",
+           point.o = .25,
+           avg.line.o = 0,
+           avg.line.fun = median,
+           bean.b.o = .2,
+           inf.f.col = "grey", # Inf fill col
+           inf.b.col = "black", # Inf border col
+           inf.f.o = 0.2,
+           inf.b.o = 0.3,
+           point.cex = 1,
+           jitter.val = .07,
+           gl.col = 'white',
+           hdi.iter = 10000
+)
+points(x = 1:5, y = means, type = "b", pch = 20)
+points(x = 1:5, y = medians, type = "b", pch = 1, lty = "dashed", cex = 0.8)
+
+```
+
+***
+
+# Additional analyses
+
+## Extra: Chi^2 and BF Weardays; Opt in v. opt out
+
+(Note: this is basically the same analysis as the one comparing participants for whom the messages were sent vs. for whom they were not.)  
+
+```{r weardays.optinoptout}
+chisq.test(lmi$H_DaysWornN_over10h, lmi$SMSg4)
+
+# Create data matrix for Bayesian contingency tables:
+table.dayswornbf <- table(data.frame(lmi$H_DaysWornN_over10h, lmi$SMSg4))
+
+# Bayes factor for the contingency tables with default prior concentration:
+dayswornbf <- contingencyTableBF(table.dayswornbf, sampleType = "poisson")
+extractBF(dayswornbf)$bf
+
+1/dayswornbf
+
+# Create a vector of different prior concentrations:
+priorWidths <- c(seq(1, 1.25, by = 0.001), seq(1.25, 2, by = 0.01))
+
+# Save the BFs calculated w/ each concentration:
+bayesFactors <- sapply(priorWidths, function(ownprior) {
+    extractBF(contingencyTableBF(table.dayswornbf, sampleType = "poisson", priorConcentration = ownprior))$bf
+})
+
+bayesFactors2 <- 1/bayesFactors
+# Make a data frame for ggplot
+plotdf <- data.frame(priorWidths, bayesFactors2)
+
+# Plot BFs with different priors:
+plot1 <- ggplot(data = plotdf, aes(x = priorWidths, y = bayesFactors2, group = 1)) + 
+    ylim(0, max(bayesFactors2)) +
+    xlim(1, 2) +
+    geom_line() +
+    geom_hline(yintercept = 0, colour = "azure4") +
+    xlab("Prior Width") +
+    ylab("BF01") +
+    theme_bw()
+
+# Dashed line for BF01 = 1/10, indicating strong evidence for alternative.
+plot2 <- plot1 + geom_hline(yintercept = 1/10, linetype = "dashed", colour = "darkgrey") 
+
+# Dashed line for BF01 = 10, indicating strong evidence for null.
+plot2 + geom_hline(yintercept = 10, linetype = "dashed", colour = "darkgrey") 
+```
+
+**Other exploratory analyses:**
+
+In addition, we investigated all bivariate correlations between wear time and questionnaire measures, as well as bioimpedance results, in the hope of creating hypotheses for falsification with new data. We discovered only low, presumably spurious, correlations. All of these were of order tau < 0.15. "Significant" items included doing PA because others say one should do so, self-reported sitting during class and using mnemonic cues to carry out PA plans.

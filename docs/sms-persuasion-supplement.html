@@ -1,0 +1,3068 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title></title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 66px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+
+.section h2 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.section h3 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.section h4 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.section h5 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.section h6 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Comparing persuasive SMS reminders</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">About</a>
+</li>
+<li>
+  <a href="manuscript/baseline-manuscript.pdf">Manuscript</a>
+</li>
+<li>
+  <a href="baseline-supplement.html">Supplement</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+
+</div>
+
+
+<p>Welcome to the supplementary file!</p>
+<p>Open code blocks by clicking the “code”-buttons on the right hand side.</p>
+<div id="load-packages" class="section level1">
+<h1>Load packages</h1>
+<p>The code block shows all installed packages and the session information of the computer this was run on.</p>
+<pre class="r"><code>if(!require(&quot;pacman&quot;)) install.packages(&quot;pacman&quot;)
+library(&quot;pacman&quot;)
+
+p_load(viridis, tidyverse, userfriendlyscience, MASS, BayesFactor, car, mvtnorm, Rcpp, TOSTER, devtools, yarrr, dplyr, RColorBrewer, sm, hypergeo, nlme, pwr, lme4, broom, papaja)
+
+# library(tidyverse)
+devtools::session_info()</code></pre>
+<pre><code>##  setting  value                       
+##  version  R version 3.4.3 (2017-11-30)
+##  system   x86_64, mingw32             
+##  ui       RStudio (1.1.383)           
+##  language (EN)                        
+##  collate  Finnish_Finland.1252        
+##  tz       Europe/Helsinki             
+##  date     2017-12-19                  
+## 
+##  package             * version     date      
+##  assertthat            0.2.0       2017-04-11
+##  backports             1.1.1       2017-09-25
+##  base                * 3.4.3       2017-12-06
+##  BayesFactor         * 0.9.12-2    2015-09-19
+##  BiasedUrn             1.07        2015-12-28
+##  bindr                 0.1         2016-11-13
+##  bindrcpp            * 0.2         2017-06-17
+##  BiocInstaller       * 1.28.0      2017-10-31
+##  brew                  1.0-6       2011-04-13
+##  broom               * 0.4.3       2017-11-20
+##  car                 * 2.1-6       2017-11-19
+##  cellranger            1.1.0       2016-07-27
+##  circlize            * 0.4.2       2017-11-18
+##  cli                   1.0.0       2017-11-05
+##  coda                * 0.19-1      2016-12-08
+##  codetools             0.2-15      2016-10-05
+##  colorspace            1.3-2       2016-12-14
+##  compiler              3.4.3       2017-12-06
+##  contfrac              1.1-11      2017-07-09
+##  crayon                1.3.4       2017-09-16
+##  curl                  3.0         2017-10-06
+##  data.table            1.10.4-3    2017-10-27
+##  data.tree             0.7.3       2017-09-10
+##  datasets            * 3.4.3       2017-12-06
+##  deSolve               1.20        2017-07-14
+##  devtools            * 1.13.4      2017-11-09
+##  DiagrammeR            0.9.2       2017-09-06
+##  digest                0.6.12      2017-01-27
+##  diptest               0.75-7      2016-12-05
+##  downloader            0.4         2015-07-09
+##  dplyr               * 0.7.4       2017-09-28
+##  elliptic              1.3-7       2016-05-26
+##  evaluate              0.10.1      2017-06-24
+##  fBasics               3042.89     2017-11-17
+##  forcats             * 0.2.0       2017-01-23
+##  foreign               0.8-69      2017-06-22
+##  formatR             * 1.5         2017-04-25
+##  GGally                1.3.2       2017-08-02
+##  ggplot2             * 2.2.1       2016-12-30
+##  ggrepel               0.7.0       2017-09-29
+##  ggridges              0.4.1       2017-09-15
+##  git2r                 0.19.0      2017-07-19
+##  GlobalOptions         0.0.12      2017-05-21
+##  glue                  1.2.0       2017-10-29
+##  GPArotation           2014.11-1   2014-11-25
+##  graphics            * 3.4.3       2017-12-06
+##  grDevices           * 3.4.3       2017-12-06
+##  grid                  3.4.3       2017-12-06
+##  gridExtra             2.3         2017-09-09
+##  gtable                0.2.0       2016-02-26
+##  gtools                3.5.0       2015-05-29
+##  haven                 1.1.0       2017-07-09
+##  hms                   0.4.0       2017-11-23
+##  htmltools             0.3.6       2017-04-28
+##  htmlwidgets           0.9         2017-07-10
+##  httr                  1.3.1       2017-08-20
+##  hypergeo            * 1.2-13      2016-04-07
+##  igraph                1.1.2       2017-07-21
+##  influenceR            0.1.0       2015-09-03
+##  inline                0.3.14      2015-04-13
+##  jpeg                * 0.1-8       2014-01-23
+##  jsonlite              1.5         2017-06-01
+##  knitr                 1.17        2017-08-10
+##  labeling              0.3         2014-08-23
+##  lattice               0.20-35     2017-03-25
+##  lavaan                0.5-23.1097 2017-02-24
+##  lazyeval              0.2.1       2017-10-29
+##  lme4                * 1.1-14      2017-09-27
+##  loo                 * 1.1.0       2017-03-27
+##  lubridate             1.7.1       2017-11-03
+##  magrittr              1.5         2014-11-22
+##  MASS                * 7.3-47      2017-02-26
+##  Matrix              * 1.2-12      2017-11-20
+##  MatrixModels          0.4-1       2015-08-22
+##  matrixStats           0.52.2      2017-04-14
+##  MBESS                 4.4.1       2017-11-01
+##  memoise               1.1.0       2017-04-21
+##  methods             * 3.4.3       2017-12-06
+##  mgcv                  1.8-22      2017-09-24
+##  minpack.lm            1.2-1       2016-11-20
+##  minqa                 1.2.4       2014-10-09
+##  mnormt                1.5-5       2016-10-15
+##  modelr                0.1.1       2017-07-24
+##  munsell               0.4.3       2016-02-13
+##  mvtnorm             * 1.0-6       2017-03-02
+##  nlme                * 3.1-131     2017-02-06
+##  nloptr                1.0.4       2014-08-04
+##  nnet                  7.3-12      2016-02-02
+##  openxlsx              4.0.17      2017-03-23
+##  pacman              * 0.4.6       2017-05-14
+##  pander                0.6.1       2017-08-06
+##  papaja              * 0.1.0.9492  2017-11-28
+##  parallel            * 3.4.3       2017-12-06
+##  pbapply               1.3-3       2017-07-04
+##  pbivnorm              0.6.0       2015-01-23
+##  pbkrtest              0.4-7       2017-03-15
+##  pkgconfig             2.0.1       2017-03-21
+##  plyr                  1.8.4       2016-06-08
+##  psych                 1.7.8       2017-09-09
+##  purrr               * 0.2.4       2017-10-18
+##  pwr                 * 1.2-1       2017-03-25
+##  quadprog              1.5-5       2013-04-17
+##  quantreg              5.34        2017-10-25
+##  R6                    2.2.2       2017-06-17
+##  RColorBrewer        * 1.1-2       2014-12-07
+##  Rcpp                * 0.12.14     2017-11-23
+##  readr               * 1.1.1       2017-05-16
+##  readxl                1.0.0       2017-04-18
+##  reshape               0.8.7       2017-08-06
+##  reshape2              1.4.2       2016-10-22
+##  rethinking          * 1.59        2017-12-19
+##  rgexf                 0.15.3      2015-03-24
+##  rio                   0.5.5       2017-06-18
+##  rlang                 0.1.4       2017-11-05
+##  rmarkdown             1.8         2017-11-17
+##  Rook                  1.1-1       2014-10-20
+##  rprojroot             1.2         2017-01-16
+##  rstan               * 2.16.2      2017-07-03
+##  rstudioapi            0.7         2017-09-07
+##  rvest                 0.3.2       2016-06-17
+##  scales                0.5.0       2017-08-24
+##  SCRT                  1.2.1       2017-06-01
+##  shape                 1.4.3       2017-08-16
+##  sm                  * 2.2-5.4     2014-01-16
+##  SparseM               1.77        2017-04-23
+##  spatial               7.3-11      2015-08-30
+##  splines               3.4.3       2017-12-06
+##  StanHeaders         * 2.16.0-1    2017-07-03
+##  stats               * 3.4.3       2017-12-06
+##  stats4                3.4.3       2017-12-06
+##  stringi               1.1.6       2017-11-17
+##  stringr             * 1.2.0       2017-02-18
+##  SuppDists             1.1-9.4     2016-09-23
+##  tibble              * 1.3.4       2017-08-22
+##  tidyr               * 0.7.2       2017-10-16
+##  tidyverse           * 1.2.1       2017-11-14
+##  timeDate              3042.101    2017-11-16
+##  timeSeries            3042.102    2017-11-17
+##  tools                 3.4.3       2017-12-06
+##  TOSTER              * 0.3         2017-11-15
+##  userfriendlyscience * 0.7.0       2017-11-17
+##  utils               * 3.4.3       2017-12-06
+##  viridis             * 0.4.0       2017-03-27
+##  viridisLite         * 0.2.0       2017-03-24
+##  visNetwork            2.0.1       2017-07-30
+##  withr                 2.1.0       2017-11-01
+##  XML                   3.98-1.9    2017-06-19
+##  xml2                  1.1.1       2017-01-24
+##  xtable                1.8-2       2016-02-05
+##  yaml                  2.1.15      2017-12-01
+##  yarrr               * 0.1.5       2017-04-19
+##  source                                
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.1)                        
+##  local                                 
+##  CRAN (R 3.4.3)                        
+##  CRAN (R 3.4.1)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  Bioconductor                          
+##  CRAN (R 3.4.1)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.3)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.3)                        
+##  CRAN (R 3.4.2)                        
+##  local                                 
+##  CRAN (R 3.4.1)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.3)                        
+##  local                                 
+##  CRAN (R 3.4.1)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.3)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.1)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.3)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.3)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.3)                        
+##  CRAN (R 3.4.3)                        
+##  CRAN (R 3.4.3)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.3)                        
+##  CRAN (R 3.4.3)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.3)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.1)                        
+##  local                                 
+##  local                                 
+##  local                                 
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.1)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.3)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.3)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.1)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.1)                        
+##  CRAN (R 3.4.3)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.3)                        
+##  CRAN (R 3.4.3)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  local                                 
+##  CRAN (R 3.4.3)                        
+##  CRAN (R 3.4.3)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.1)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.1)                        
+##  CRAN (R 3.4.3)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.3)                        
+##  CRAN (R 3.4.3)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.3)                        
+##  Github (crsh/papaja@ede6845)          
+##  local                                 
+##  CRAN (R 3.4.1)                        
+##  CRAN (R 3.4.1)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.3)                        
+##  CRAN (R 3.4.1)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.1)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.3)                        
+##  CRAN (R 3.4.2)                        
+##  Github (rmcelreath/rethinking@1def057)
+##  CRAN (R 3.4.3)                        
+##  CRAN (R 3.4.3)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.1)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.1)                        
+##  CRAN (R 3.4.1)                        
+##  CRAN (R 3.4.3)                        
+##  CRAN (R 3.4.1)                        
+##  CRAN (R 3.4.3)                        
+##  local                                 
+##  CRAN (R 3.4.2)                        
+##  local                                 
+##  local                                 
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.1)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.3)                        
+##  local                                 
+##  CRAN (R 3.4.3)                        
+##  CRAN (R 3.4.3)                        
+##  local                                 
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.3)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.1)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.2)                        
+##  CRAN (R 3.4.3)                        
+##  CRAN (R 3.4.3)</code></pre>
+</div>
+<div id="data-wrangling" class="section level1">
+<h1>Data wrangling</h1>
+<p>The code block loads data and creates the relevant variables.</p>
+<pre class="r"><code>lmi &lt;- read_csv(&quot;./sms-persuasion-data.csv&quot;)
+
+# Recruitment wave
+names(lmi)[1] &lt;- &quot;id&quot;
+lmi &lt;- lmi %&gt;% dplyr::mutate(batch = factor(ifelse(id &lt; 1000, &quot;1&quot;, 
+                                            ifelse (id &gt; 1000 &amp; id &lt; 2000, &quot;2&quot;, 
+                                            ifelse (id &gt;=9000 &amp; id  &lt;= 9026, &quot;1&quot;,
+                                                    &quot;2&quot;)))))
+    
+lmi$gender &lt;- factor(lmi$q0005, levels=c(1,2), labels=c(&quot;Boy&quot;,&quot;Girl&quot;))
+
+lmi &lt;- lmi %&gt;% dplyr::mutate(girl = factor(ifelse(gender == &quot;Girl&quot;, &quot;1&quot;,
+                                           ifelse(gender == &quot;Boy&quot;, &quot;0&quot;, NA))))
+
+# SMS-group as a FACTOR:
+lmi$SMSg &lt;- factor(lmi$SMS_group, levels=c(1,2,3,4), labels=c(&quot;Reason&quot;,&quot;Succinct&quot;,&quot;No SMS&quot;,&quot;Failed to send&quot;))
+
+lmi$SMSg2 &lt;- factor(lmi$SMS_group, levels=c(1,2), labels=c(&quot;Reason&quot;,&quot;Succinct&quot;))
+
+lmi$SMSg3 &lt;- factor(lmi$SMS_group, levels=c(1,2,3), labels=c(&quot;Reason (n=133)&quot;,&quot;Succinct (n=135)&quot;,&quot;Opt out (n=83)&quot;))
+
+lmi$SMSg4 &lt;- factor(lmi$SMS_group_optinvsoptout, levels=c(1,2), labels=c(&quot;Opt in&quot;,&quot;Opt out&quot;))
+
+lmi$SMSgall &lt;- factor(lmi$SMS_group, levels=c(1,2,3,4), labels=c(&quot;Reason&quot;, &quot;Succinct&quot;, &quot;Opt out&quot;, &quot;Send failed&quot;))</code></pre>
+</div>
+<div id="methods" class="section level1">
+<h1>Methods</h1>
+<div id="interpreting-bayes-factors" class="section level2">
+<h2>Interpreting Bayes Factors</h2>
+<p>In Bayesian philosophy, probabilities are conceived as quantified beliefs, instead of hypothetical long-run frequencies. A Bayes Factor BF10 (BF01) indicates how much prior odds should be shifted towards the alternative (null) hypothesis, in the light of the data: BF10 = <span class="math inline">\(\frac {p(data, given H1)} {p(data, given H0)}\)</span>. When prior odds <span class="math inline">\(\frac {p(H1)} {p(H0)}\)</span> are multiplied by the BF, it results as the posterior odds. As an example, take a modestly skeptical scientist, who holds 1:3 odds against the alternative hypothesis, corresponding to a 25% posterior probability. After observing data that indicate a BF10 of 15 (or a BF01 of 1/15), the scientist should shift his or her prior odds to become <span class="math inline">\(\frac {1} {3} * \frac {15} {1}\)</span> = 15:3 or 5:1, now favoring the alternative hypothesis with a posterior probability of <span class="math inline">\(\frac {5} {6}\)</span> = 83%.</p>
+<p>Although considered sufficient in some contexts (e.g. FMRI-studies, where data collection is extremely costly), we share Etz and Vandekerckhove’s* concern about a BF of 3 not indicating much evidence. A BF10 of three would lead a scientist from 1:1 odds (or 50% probability) to 3:1 odds (or 75% probability); still with the same probability of erring as drawing a heart from a deck of cards.</p>
+<ul>
+<li>Etz A, Vandekerckhove J. A Bayesian Perspective on the Reproducibility Project: Psychology. PLOS ONE. 2016 Feb 26;11(2):e0149794.</li>
+</ul>
+</div>
+<div id="study-design" class="section level2">
+<h2>Study design</h2>
+<div id="statistical-power" class="section level3">
+<h3>Statistical Power</h3>
+<p>Our final sample size was unknown, as well as (in the absence of similar studies) the true effect size, so sample size planning according to the expected effect was out of the question. Our aim was to collect as many participants as possible during the available time during the two recruitment waves. We defined a clinically significant effect size by calculating, how big an effect would bring a person from 9.5 hours of daily data to reach the cutoff of 10 hours. This was defined as <span class="math display">\[d=\frac{M1 - M2} {\sqrt{\frac {s_1^2+s_2^2} {2}} }\]</span> <span class="math inline">\(^{(1)}\)</span> with standard deviations estimated from feasibility study<span class="math inline">\(^{(2)}\)</span> data to be 72 minutes for both groups, resulting in a d=0.42. For our purposes, we decided to consider effect sizes between -0.3 and 0.3 as equivalent to zero.</p>
+<p><span class="math inline">\(^{(1)}\)</span> Cohen J. A power primer. Psychol Bull. 1992 Jul;112(1):155-9.<br />
+<span class="math inline">\(^{(2)}\)</span> Hankonen N, Heino MTJ, Hynynen S-T, Laine H, Ara?jo-Soares V, Sniehotta FF, et al. Randomised controlled feasibility study of a school-based multi-level intervention to increase physical activity and decrease sedentary behaviour among vocational school students. Int J Behav Nutr Phys Act. Available from: <a href="http://ijbnpa.biomedcentral.com/articles/10.1186/s12966-017-0484-0" class="uri">http://ijbnpa.biomedcentral.com/articles/10.1186/s12966-017-0484-0</a></p>
+<pre class="r"><code>xax &lt;- seq(from = 0.01, to = 1, by = 0.01)
+
+graafi &lt;- pwr.t.test(n = (133 + 129)/2, d = xax, sig.level = 0.05, power = NULL, type = &quot;two.sample&quot;, alternative = &quot;two.sided&quot;)
+
+qplot(xax, graafi$power) +
+    geom_point() + 
+    geom_line() +
+    xlab(&quot;True (unknown) effect size d&quot;) +
+    ylab(&quot;Power&quot;) +
+    scale_y_continuous(breaks = seq(0, 1, .05), minor_breaks = seq(0 , 1, .05))+
+    theme(axis.text=element_text(size=12), axis.title=element_text(size=14,face=&quot;bold&quot;)) +
+    scale_x_continuous(breaks = seq(0, 1, .1), minor_breaks = seq(0 , 1, .1), limits = c(0, 1))+
+    theme_bw()</code></pre>
+<p><img src="sms-persuasion-supplement_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+</div>
+<div id="type-s-and-type-m-errors" class="section level3">
+<h3>Type S and Type M errors</h3>
+<p>Gelman and Carlin (54) propose going beyond type 1 and type 2 errors by assessing the risks of observing a result of the wrong sign (“type S error”) and of an overstated magnitude (exaggeration ratio; “type M error”). The underlying philosophy relates to the fact that, should a low-powered design produce a “significant” result, the observed effect size is very likely to be unstable, i.e. of the wrong sign and of an overstated magnitude. This, in turn is a result of the tautology that if an effect size is large by chance, it is also more likely to observe p &lt; alpha.</p>
+<p>The reference is:</p>
+<p>Gelman, A., &amp; Carlin, J. (2014). Beyond Power Calculations Assessing Type S (Sign) and Type M (Magnitude) Errors. Perspectives on Psychological Science, 9(6), 641-651. <a href="http://doi.org/10.1177/1745691614551642" class="uri">http://doi.org/10.1177/1745691614551642</a></p>
+<pre class="r"><code>retrodesign &lt;- function(A, s, alpha=.05, df=Inf, n.sims=10000){
+  z &lt;- qt(1-alpha/2, df)
+  p.hi &lt;- 1 - pt(z-A/s, df)
+  p.lo &lt;- pt(-z-A/s, df)
+  power &lt;- p.hi + p.lo
+  typeS &lt;- p.lo/power
+  estimate &lt;- A + s*rt(n.sims,df)
+  significant &lt;- abs(estimate) &gt; s*z
+  exaggeration &lt;- mean(abs(estimate)[significant])/A
+  return(list(power=power, typeS=typeS, exaggeration=exaggeration))
+}</code></pre>
+<p>Note: standard error formula for d was acquired from slide 9 (on p. 5) of <a href="http://www.campbellcollaboration.org/artman2/uploads/1/2_D_Wilson__Calculating_ES.pdf">this Cambell Collaboration document</a>.</p>
+<pre class="r"><code>## Create a vector of possible effect sizes for the x-axis:
+xax &lt;- seq(from = 0.05, to = 2, by = 0.05)
+
+## Calculate the SE of d in this particular case:
+n1 &lt;- 133
+n2 &lt;- 129
+sed &lt;- sqrt((n1+n2)/(n1*n2)+(xax^2)/(2*(n1+n2)))
+
+retroPow &lt;- (retrodesign(xax, sed)$power)
+
+# qplot(xax, retroPow) +
+#     geom_point() + 
+#     geom_line() +
+#     xlab(&quot;True (unknown) effect size d&quot;) +
+#     ylab(&quot;Power&quot;) +
+#     scale_y_continuous(breaks = seq(0, 1, .05), minor_breaks = seq(0 , 1, .05))+
+#     theme(axis.text=element_text(size=12), axis.title=element_text(size=14,face=&quot;bold&quot;)) +
+#     scale_x_continuous(breaks = seq(0, 1, .1), minor_breaks = seq(0 , 1, .1), limits = c(0, 1))+
+#     theme_bw()</code></pre>
+</div>
+<div id="exaggeration-ratio-type-m-error" class="section level3">
+<h3>Exaggeration ratio (type M error)</h3>
+<p>Figure below shows our expected exaggeration ratio for different hypothetical true effect sizes.</p>
+<pre class="r"><code>retroExg &lt;- (retrodesign(xax, sed)$exaggeration)
+
+qplot(xax, retroExg) + 
+    ylim(0,30) +
+    xlim(0, 1) +
+    geom_point() + 
+    geom_line() +
+    xlab(&quot;True effect size&quot;) +
+    ylab(&quot;Expected type M error (exaggeration ratio)&quot;) +
+    scale_y_continuous(breaks = seq(0, 30, 1), minor_breaks = seq(0 , 30, 1))+
+    theme(axis.text=element_text(size=12), axis.title=element_text(size=14,face=&quot;bold&quot;)) +
+    theme_bw()</code></pre>
+<p><img src="sms-persuasion-supplement_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>This figure shows how, given a detected nonzero true effect, we are expected to observe a grossly exaggerated estimate for very small (d ??? 0.1) effects. Even for the effects of interest to us, a threefold exaggeration in size would be expected.</p>
+</div>
+<div id="probability-of-wrong-sign-type-s-error" class="section level3">
+<h3>Probability of wrong sign (type S error)</h3>
+<p>As can be seen from the figure below, our type S error rate remains very small, even for very small effect sizes. Should we detect an effect, we could thus be relatively confident with its sign.</p>
+<pre class="r"><code>retroS &lt;- (retrodesign(xax, sed)$typeS)
+
+qplot(xax, retroS) + 
+    ylim(0,40) +
+    xlim(0, 1) +
+    geom_point() + 
+    geom_line() +
+    xlab(&quot;True effect size&quot;) +
+    ylab(&quot;Expected type S error: p(wrong sign)&quot;) +
+    scale_y_continuous(breaks = seq(0, 0.2, .025), minor_breaks = seq(0 , 0.2, .025))+
+    theme(axis.text=element_text(size=12), axis.title=element_text(size=14,face=&quot;bold&quot;))+
+    theme_bw()</code></pre>
+<p><img src="sms-persuasion-supplement_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+</div>
+<div id="evaluating-the-v-statistic" class="section level3">
+<h3>Evaluating the v-statistic</h3>
+<p>The “v-statistic” (55) is an indication of how accurately data estimates corresponding population parameter values. A v of 0.50 represents random guessing accuracy. Cohen (56) suggests r=0.1 (and thus, r2=0.01) as the lower limit of a “small effect”.</p>
+<p>Code below is adapted from <a href="http://daniellakens.blogspot.fi/2014/11/evaluating-estimation-accuracy-with.html">Daniel Lakens’ blog</a>.</p>
+<pre class="r"><code>#Lakens:
+#&quot;Below, I&#39;m vectorizing the function so that I can plot curves.
+#The rest is unchanged from the vstat function by Stober-Davis &amp; Dana.
+#If you want to use R unbiased, remove the # before the Rsq adjustment calculation below&quot;
+vstat &lt;- Vectorize(function(n,p,Rsq)
+{
+    Rsq = Re(1-((n-2)/(n-p))*(1-Rsq)*hypergeo(1,1,(n-p+2)*.5,1-Rsq))
+    if (Rsq&lt;=0) {Rsq = .0001}
+    r = ((p-1)*(1-Rsq))/((n-p)*Rsq)
+    g = min(r,1)
+    if (g&lt;.5001 &amp;&amp; g&gt;.4999) {g = .5001}
+    z = (g - sqrt(g-g^2))/(2*g - 1)
+    alpha = acos((1-z)/sqrt(1-2*z*(1-z)))
+    v = Re((((2*cos(alpha)*gamma((p+2)/2))/(sqrt(pi)*gamma((p+1)/2)))*(hypergeo(.5,(1-p)/2, 3/2, cos(alpha)^2) - sin(alpha)^(p-1))))
+    return(v)
+}
+)
+
+## Plot it:
+curve(vstat(Rsq=x, n=133+129+83+7, p=2), 0.01, 0.25, type=&quot;l&quot;, col=&quot;purple&quot;, ylim=c(0, 1), xlab=&quot;R-squared when Estimating 2 Parameters&quot;, lty=1, ylab=&quot;v-statistic&quot;)
+par(new=TRUE)
+curve(vstat(Rsq=x, n=133+129, p=2), 0.01, 0.25, type=&quot;l&quot;, col=&quot;green&quot;, ylim=c(0, 1), xaxt = &quot;n&quot;, yaxt = &quot;n&quot;, xlab=&quot;&quot;, ylab=&quot;&quot;, lty=2)
+par(new=TRUE)
+
+# Horizontal line at 0.5 cut-off
+abline(h=0.5, col=&quot;azure4&quot;, lty=5)
+# Legend
+legend(0.05,0.4,c(&quot;Reminder (n=262) v. no reminder (n=90)&quot;,&quot;Reason (n=133) v. Succinct (n=129)&quot;), lty=c(1,2), lwd=c(2.5,2.5), col=c(&quot;purple&quot;, &quot;green&quot;))</code></pre>
+<p><img src="sms-persuasion-supplement_files/figure-html/vstat-1.png" width="672" /></p>
+<p>The figure shows the v-statistic when estimating two parameters (two medians, in our case), where 0.5 represents guessing. Figure reveals our sample size was inadequate for reliably detecting small effects. It illustrates that our design for comparison of two medians only starts superseding random guessing near <span class="math inline">\(r^{2} = 0.03\)</span>, and approaches 0.8 at <span class="math inline">\(r^{2} \approx 0.10\)</span> (a “medium” effect by Cohen’s indices). This illustrates the fact that–if the effect is small instead of zero–to make reliable estimates, one needs much larger sample sizes than what we were able to gather for this research. For “medium”-sized effects, our design was satisfactory.</p>
+</div>
+</div>
+</div>
+<div id="results" class="section level1">
+<h1>Results</h1>
+<div id="implementation-measures" class="section level2 tabset">
+<h2>Implementation measures</h2>
+<div id="reading-the-messages" class="section level3">
+<h3>Reading the messages</h3>
+<pre class="r"><code>reading &lt;- lmi %&gt;% select(SMS_read, SMSg2) %&gt;% 
+    mutate(SMS_read = factor(SMS_read))
+
+levels(reading$SMS_read) &lt;- c(&quot;Not on a single morning&quot;, &quot;On a single morning&quot;, &quot;On 2-3 mornings&quot;, &quot;On 4-5 mornings&quot;, &quot;Every morning&quot;)
+
+names(reading$SMS_read) &lt;- &quot;I opened the SMS and read it on the morning it was sent...&quot;
+
+reading &lt;- reading %&gt;% filter(complete.cases(.))
+
+ggplot(reading) +
+  aes(x = SMSg2, fill = factor(SMS_read)) +
+  geom_bar(position = &quot;fill&quot;) +
+  labs(title = &quot;I opened the SMS and read it on the morning it was sent...&quot;, x = &quot;&quot;, y = &quot;Proportion of respondents&quot;) +
+  theme_apa() +
+  scale_fill_viridis(name = &quot;&quot;, end = 0.90, discrete = TRUE)</code></pre>
+<p><img src="sms-persuasion-supplement_files/figure-html/reading-1.png" width="672" /></p>
+<pre class="r"><code>## Old plot attempt:
+# par(mar=c(2, 1, 3, 3))    # Sets the bottom, left, top and right margins
+# layout(matrix(1:2, 2, 1, byrow=TRUE), heights=c(1, 0.2))
+# spineplot(SMS_read ~ SMSg2, data = reading, col = (viridis(5)), ylab = &quot;%&quot;, yaxt=&quot;n&quot;, xlab=&quot;&quot;, yaxlabels = &quot;&quot;, main = &quot;I opened the SMS and read it on the morning it was sent...&quot;)
+# 
+# par(mar=c(0, 1, 0, 1)) # Reduce plot margins
+# plot.new()
+# legend(x = &quot;center&quot;, legend = c(levels(reading$SMS_read)), fill = viridis(5), cex = 0.75, box.lty = 0, ncol = 2)</code></pre>
+<p><strong>Test for difference between groups </strong></p>
+<pre class="r"><code>chisq.test(lmi$SMS_read, lmi$SMSg2)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test
+## 
+## data:  lmi$SMS_read and lmi$SMSg2
+## X-squared = 1.3564, df = 4, p-value = 0.8517</code></pre>
+<pre class="r"><code># Create data matrix for Bayesian contingency tables:
+table.readbf &lt;- table(data.frame(lmi$SMS_read, lmi$SMSg2))
+
+# Bayes factor for the contingency tables with default prior concentration:
+
+readbf &lt;- contingencyTableBF(table.readbf, sampleType = &quot;poisson&quot;)
+extractBF(readbf)$bf</code></pre>
+<pre><code>## [1] 0.02846462</code></pre>
+<pre class="r"><code># Create a vector of different prior concentrations:
+priorWidths &lt;- c(seq(1, 1.25, by = 0.001), seq(1.25, 2, by = 0.01))
+
+# Save the BFs calculated w/ each concentration:
+bayesFactors &lt;- sapply(priorWidths, function(ownprior) {
+    extractBF(contingencyTableBF(table.readbf, sampleType = &quot;poisson&quot;, priorConcentration = ownprior))$bf
+})
+
+# Make a data frame for ggplot
+plotdf &lt;- data.frame(priorWidths, bayesFactors)
+
+# Plot BFs with different priors:
+plot1 &lt;- ggplot(data = plotdf, aes(x = priorWidths, y = bayesFactors, group = 1)) + 
+    ylim(0, max(bayesFactors)) +
+    xlim(1, 2) +
+    geom_line() +
+    geom_hline(yintercept = 0, colour = &quot;azure4&quot;) +
+    xlab(&quot;Prior Width&quot;) +
+    ylab(&quot;BF10&quot;) +
+    theme_bw()
+
+plot2 &lt;- plot1 + geom_hline(yintercept = 1/10, linetype = &quot;dashed&quot;, colour = &quot;darkgrey&quot;) 
+
+plot2 + geom_hline(yintercept = 10, linetype = &quot;dashed&quot;, colour = &quot;darkgrey&quot;) </code></pre>
+<p><img src="sms-persuasion-supplement_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+</div>
+<div id="discussing-the-messages" class="section level3">
+<h3>Discussing the messages</h3>
+<pre class="r"><code>discussing &lt;- lmi %&gt;% select(SMS_contam, SMSg2) %&gt;% 
+    mutate(SMS_contam = factor(SMS_contam))
+
+levels(discussing$SMS_contam) &lt;- c(&quot;Not once&quot;, &quot;Once&quot;, &quot;2-3 times&quot;, &quot;4-5 times&quot;, &quot;More often&quot;)
+
+names(discussing$SMS_contam) &lt;- &quot;I discussed the content of the messages with my peers at school...&quot;
+
+discussing &lt;- discussing %&gt;% filter(complete.cases(.))
+
+ggplot(discussing) +
+  aes(x = SMSg2, fill = factor(SMS_contam)) +
+  geom_bar(position = &quot;fill&quot;) +
+  labs(title = &quot;I discussed the content of the messages with my peers at school...&quot;, x = &quot;&quot;, y = &quot;Proportion of respondents&quot;) +
+  theme_apa() +
+  scale_fill_viridis(name = &quot;&quot;, end = 0.9, discrete = TRUE, direction = -1)</code></pre>
+<p><img src="sms-persuasion-supplement_files/figure-html/discussing-1.png" width="672" /></p>
+<pre class="r"><code>## Old plot: 
+# par(mar=c(2, 1, 4, 3))    # Sets the bottom, left, top and right margins
+# layout(matrix(1:2, 2, 1, byrow=TRUE), heights=c(1, 0.2))
+# spineplot(SMS_contam ~ SMSg2, data = discussing, col = rev(viridis(5)), ylab = &quot;%&quot;, yaxt=&quot;n&quot;, xlab=&quot;&quot;, yaxlabels = &quot;&quot;, main = &quot;I discussed the content of the messages \n  with my peers at school...&quot;)
+# 
+# par(mar=c(0, 1, 0, 1)) # Reduce plot margins
+# plot.new()
+# legend(x = &quot;center&quot;, legend = c(levels(discussing$SMS_contam)), fill = rev(viridis(5)), cex = 0.75, box.lty = 0, ncol = 2)</code></pre>
+<p><strong>Test for differences in discussion</strong></p>
+<pre class="r"><code>chisq.test(lmi$SMS_contam, lmi$SMSg2)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test
+## 
+## data:  lmi$SMS_contam and lmi$SMSg2
+## X-squared = 2.5666, df = 4, p-value = 0.6327</code></pre>
+<pre class="r"><code># Create data matrix for Bayesian contingency tables:
+table.contambf &lt;- table(data.frame(lmi$SMS_contam, lmi$SMSg2))
+
+# Bayes factor for the contingency tables with default prior concentration:
+
+contambf &lt;- contingencyTableBF(table.contambf, sampleType = &quot;poisson&quot;)
+extractBF(contambf)$bf</code></pre>
+<pre><code>## [1] 0.01093142</code></pre>
+<pre class="r"><code># Create a vector of different prior concentrations:
+priorWidths &lt;- c(seq(1, 1.25, by = 0.001), seq(1.25, 2, by = 0.01))
+
+# Save the BFs calculated w/ each concentration:
+bayesFactors &lt;- sapply(priorWidths, function(ownprior) {
+    extractBF(contingencyTableBF(table.contambf, sampleType = &quot;poisson&quot;, priorConcentration = ownprior))$bf
+})
+
+# Make a data frame for ggplot
+plotdf &lt;- data.frame(priorWidths, bayesFactors)
+
+# Plot BFs with different priors:
+plot1 &lt;- ggplot(data = plotdf, aes(x = priorWidths, y = bayesFactors, group = 1)) + 
+    ylim(0, max(bayesFactors)) +
+    xlim(1, 2) +
+    geom_line() +
+    geom_hline(yintercept = 0, colour = &quot;azure4&quot;) +
+    xlab(&quot;Prior Width&quot;) +
+    ylab(&quot;BF10&quot;) +
+    theme_bw()
+
+plot2 &lt;- plot1 + geom_hline(yintercept = 1/10, linetype = &quot;dashed&quot;, colour = &quot;darkgrey&quot;) 
+
+plot2 + geom_hline(yintercept = 10, linetype = &quot;dashed&quot;, colour = &quot;darkgrey&quot;) </code></pre>
+<p><img src="sms-persuasion-supplement_files/figure-html/discusstests-1.png" width="672" /></p>
+</div>
+<div id="satisfaction-with-the-messages" class="section level3">
+<h3>Satisfaction with the messages</h3>
+<pre class="r"><code>lmi$satisf &lt;- &quot;I was satisfied with the content of the messages&quot;
+
+satisfaction &lt;- lmi %&gt;% select(SMS_satisf, SMSg2) %&gt;% 
+    mutate(SMS_satisf = factor(SMS_satisf))
+
+levels(satisfaction$SMS_satisf) &lt;- c(&quot;Completely disagree&quot;, &quot;Somewhat disagree&quot;, &quot;Do not agree nor disagree&quot;, &quot;Somewhat agree&quot;, &quot;Completely agree&quot;)
+
+satisfaction &lt;- satisfaction %&gt;% filter(complete.cases(.))
+
+ggplot(satisfaction) +
+  aes(x = SMSg2, fill = factor(SMS_satisf)) +
+  geom_bar(position = &quot;fill&quot;) +
+  labs(title = &quot;I was satisfied with the content of the messages...&quot;, x = &quot;&quot;, y = &quot;Proportion of respondents&quot;) +
+  theme_apa() +
+  scale_fill_viridis(name = &quot;&quot;, end = 0.90, discrete = TRUE)</code></pre>
+<p><img src="sms-persuasion-supplement_files/figure-html/satisfaction-1.png" width="672" /></p>
+<pre class="r"><code>## Previous attempt at the plot: 
+# par(mar=c(2, 1, 3, 3))    # Sets the bottom, left, top and right margins
+# layout(matrix(1:2, 2, 1, byrow=TRUE), heights=c(1, 0.2))
+# spineplot(SMS_satisf ~ SMSg2, data = satisfaction, col = viridis(5), ylab = &quot;%&quot;, yaxt=&quot;n&quot;, xlab=&quot;&quot;, yaxlabels = &quot;&quot;, main = &quot;I was satisfied with the content of the messages...&quot;)
+# 
+# par(mar=c(0, 1, 0, 1)) # Reduce plot margins
+# plot.new()
+# legend(x = &quot;center&quot;, legend = c(levels(satisfaction$SMS_satisf)), fill = brewer.pal(5, &quot;Spectral&quot;), cex = 0.75, box.lty = 0, ncol = 2)</code></pre>
+<p><strong>Test for differences in satisfaction:</strong></p>
+<pre class="r"><code>chisq.test(lmi$SMS_satisf, lmi$SMSg2)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test
+## 
+## data:  lmi$SMS_satisf and lmi$SMSg2
+## X-squared = 3.9027, df = 4, p-value = 0.4193</code></pre>
+<pre class="r"><code># Create data matrix for Bayesian contingency tables:
+table.satisfbf &lt;- table(data.frame(lmi$SMS_satisf, lmi$SMSg2))
+
+# Bayes factor for the contingency tables with default prior concentration:
+
+satisfbf &lt;- contingencyTableBF(table.satisfbf, sampleType = &quot;poisson&quot;)
+extractBF(satisfbf)$bf</code></pre>
+<pre><code>## [1] 0.03160562</code></pre>
+<pre class="r"><code># Create a vector of different prior concentrations:
+priorWidths &lt;- c(seq(1, 1.25, by = 0.001), seq(1.25, 2, by = 0.01))
+
+# Save the BFs calculated w/ each concentration:
+bayesFactors &lt;- sapply(priorWidths, function(ownprior) {
+    extractBF(contingencyTableBF(table.satisfbf, sampleType = &quot;poisson&quot;, priorConcentration = ownprior))$bf
+})
+
+# Make a data frame for ggplot
+plotdf &lt;- data.frame(priorWidths, bayesFactors)
+
+# Plot BFs with different priors:
+plot1 &lt;- ggplot(data = plotdf, aes(x = priorWidths, y = bayesFactors, group = 1)) + 
+    ylim(0, max(bayesFactors)) +
+    xlim(1, 2) +
+    geom_line() +
+    geom_hline(yintercept = 0, colour = &quot;azure4&quot;) +
+    xlab(&quot;Prior Width&quot;) +
+    ylab(&quot;BF10&quot;) +
+    theme_bw()
+
+plot2 &lt;- plot1 + geom_hline(yintercept = 1/10, linetype = &quot;dashed&quot;, colour = &quot;darkgrey&quot;) 
+
+plot2 + geom_hline(yintercept = 10, linetype = &quot;dashed&quot;, colour = &quot;darkgrey&quot;) </code></pre>
+<p><img src="sms-persuasion-supplement_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+</div>
+<div id="kernel-density-plots-for-total-wear-times" class="section level2 tabset">
+<h2>Kernel density plots for total wear times</h2>
+<p><strong>Code to set up the modified function</strong></p>
+<pre class="r"><code># Changing the sm density compare function to allow different color of the band of equality. Copied from https://web.archive.org/web/20170222214214/https://stat.ethz.ch/pipermail/r-help//2009-March/416920.html.
+
+sm.density.compare2 &lt;- function (x, group, h, model = &quot;none&quot;, bandcol =
+                                  &#39;cyan&#39;, lwd = par(&quot;lwd&quot;), usePolyg = NULL, asp=NA, 
+                                xlab=opt$xlab, ylab=opt$ylab, ...) 
+{
+  if (!is.vector(x)) 
+    stop(&quot;sm.density.compare can handle only 1-d data&quot;)
+  opt &lt;- sm.options(list(...))
+  sm:::replace.na(opt, ngrid, 50)                 
+  ## These all changed from replace.na() --&gt; sm:::
+  sm:::replace.na(opt, display, &quot;line&quot;)
+  sm:::replace.na(opt, xlab, deparse(substitute(x)))
+  sm:::replace.na(opt, ylab, &quot;Density&quot;)
+  sm:::replace.na(opt, xlim, c(min(x) - diff(range(x))/4, max(x) + 
+                                 diff(range(x))/4))
+  sm:::replace.na(opt, eval.points, seq(opt$xlim[1], opt$xlim[2], 
+                                        length = opt$ngrid))
+  if (is.na(opt$band)) {
+    if (model == &quot;none&quot;) 
+      opt$band &lt;- FALSE
+    else opt$band &lt;- TRUE
+  }
+  if ((model == &quot;none&quot;) &amp;&amp; opt$band) 
+    opt$band &lt;- FALSE
+  band &lt;- opt$band
+  ngrid &lt;- opt$ngrid
+  xlim &lt;- opt$xlim
+  nboot &lt;- opt$nboot
+  y &lt;- x
+  if (is.na(opt$test)) {
+    if (model == &quot;none&quot;) 
+      opt$test &lt;- FALSE
+    else opt$test &lt;- TRUE
+  }
+  if ((model == &quot;none&quot;) &amp;&amp; opt$test) 
+    opt$test &lt;- FALSE
+  test &lt;- opt$test
+  if (opt$display %in% &quot;none&quot;) 
+    band &lt;- FALSE
+  fact &lt;- factor(group)
+  fact.levels &lt;- levels(fact)
+  nlev &lt;- length(fact.levels)
+  ni &lt;- table(fact)
+  if (band &amp; (nlev &gt; 2)) {
+    cat(&quot;Reference band available to compare two groups only.&quot;, 
+        &quot;\n&quot;)
+    band &lt;- FALSE
+  }
+  if (length(opt$lty) &lt; nlev) 
+    opt$lty &lt;- 1:nlev
+  if (length(opt$col) &lt; nlev) 
+    opt$col &lt;- 2:(nlev + 1)
+  if (missing(h)) 
+    h &lt;- h.select(x, y = NA, group = group, ...)
+  opt$band &lt;- band
+  opt$test &lt;- test
+  estimate &lt;- matrix(0, ncol = opt$ngrid, nrow = nlev)
+  se &lt;- matrix(0, ncol = opt$ngrid, nrow = nlev)
+  for (i in 1:nlev) {
+    sm &lt;- sm.density(y[fact == fact.levels[i]], h = h, display = &quot;none&quot;, 
+                     eval.points = opt$eval.points)
+    estimate[i, ] &lt;- sm$estimate
+    se[i, ] &lt;- sm$se
+  }
+  eval.points &lt;- sm$eval.points
+  if (!(opt$display %in% &quot;none&quot; | band)) {
+    plot(xlim, c(0, 1.1 * max(as.vector(estimate))), xlab = opt$xlab, 
+         ylab = opt$ylab, type = &quot;n&quot;)
+    #for (i in 1:nlev) lines(eval.points, estimate[i, ], lty = opt$lty[i], 
+    #    col = opt$col[i])
+    for (i in 1:nlev) lines(eval.points, estimate[i, ], lty =
+                              opt$lty[i],   ## lwd hacked in
+                            col = opt$col[i], lwd = lwd[i])
+  }
+  est &lt;- NULL
+  p &lt;- NULL
+  if (model == &quot;equal&quot; &amp; test) {
+    if (nlev == 2) {
+      ts &lt;- sum((estimate[1, ] - estimate[2, ])^2)
+    }
+    else {
+      sm.mean &lt;- sm.density(y, h = h, xlim = opt$xlim, 
+                            ngrid = opt$ngrid, display = &quot;none&quot;)$estimate
+      ts &lt;- 0
+      for (i in 1:nlev) ts &lt;- ts + ni[i] * sum((estimate[i, 
+                                                         ] - sm.mean)^2)
+    }
+    p &lt;- 0
+    est.star &lt;- matrix(0, ncol = opt$ngrid, nrow = nlev)
+    for (iboot in 1:nboot) {
+      ind &lt;- (1:length(y))
+      for (i in 1:nlev) {
+        indi &lt;- sample((1:length(ind)), ni[i])
+        est.star[i, ] &lt;- sm.density(y[ind[indi]], h = h, 
+                                    ngrid = opt$ngrid, xlim = opt$xlim, display =
+                                      &quot;none&quot;)$estimate
+        ind &lt;- ind[-indi]
+      }
+      if (nlev == 2) {
+        ts.star &lt;- sum((est.star[1, ] - est.star[2, ])^2)
+      }
+      else {
+        sm.mean &lt;- sm.density(y, h = h, xlim = opt$xlim, 
+                              ngrid = opt$ngrid, display = &quot;none&quot;)$estimate
+        ts.star &lt;- 0
+        for (i in 1:nlev) {
+          ts.star &lt;- ts.star + ni[i] * sum((est.star[i, 
+                                                     ] - sm.mean)^2)
+        }
+      }
+      if (ts.star &gt; ts) 
+        p &lt;- p + 1
+      if (opt$verbose &gt; 1) {
+        cat(iboot)
+        cat(&quot; &quot;)
+      }
+    }
+    p &lt;- p/nboot
+    cat(&quot;\nTest of equal densities:  p-value = &quot;, round(p, 
+                                                        3), &quot;\n&quot;)
+    est &lt;- list(p = p, h = h)
+  }
+  if (model == &quot;equal&quot; &amp; band) {
+    av &lt;- (sqrt(estimate[1, ]) + sqrt(estimate[2, ]))/2
+    se &lt;- sqrt(se[1, ]^2 + se[2, ]^2)
+    upper &lt;- (av + se)^2
+    lower &lt;- pmax(av - se, 0)^2
+    plot(xlim, c(0, 1.1 * max(as.vector(estimate), upper)), 
+         xlab = xlab, ylab = ylab, type = &quot;n&quot;, asp=asp, ...)     
+    ## ... and asp added; was opt$xlab and opt$ylab
+    polygon(c(eval.points, rev(eval.points)), c(upper, rev(lower)), 
+            col = bandcol, border = 0)                                      
+    ## was col = &quot;cyan&quot;
+    if (is.null(usePolyg)) {
+      lines(eval.points, estimate[1, ], lty = opt$lty[1], col =
+              opt$col[1], lwd = lwd[1])
+      lines(eval.points, estimate[2, ], lty = opt$lty[2], col =
+              opt$col[2], lwd = lwd[2])
+    }
+    else {
+      polygon(eval.points, estimate[1, ], lty = opt$lty[1], col =
+                opt$col[1], lwd = lwd[1])
+      polygon(eval.points, estimate[2, ], lty = opt$lty[2], col =
+                opt$col[2], lwd = lwd[2])
+    }
+    est &lt;- list(p = p, upper = upper, lower = lower, h = h)
+  }
+  invisible(est)
+}</code></pre>
+<div id="sms-types" class="section level3">
+<h3>SMS types</h3>
+<p><strong>Compare the effect of SMS types on total wear time</strong></p>
+<p>Total wear time in minutes (dashed line for the reason condition, solid for succinct). Grey band around the kernel density plots refers to 95% likelihood of containing the true density plot, if the two lines were generated by data from the same distribution.</p>
+<pre class="r"><code># WEARTIME KERNEL: H_Weartime.SUM
+
+lmix &lt;- lmi %&gt;% select(H_Weartime.SUM, SMSg2) %&gt;% filter(complete.cases(.))
+
+summary(lmix)</code></pre>
+<pre><code>##  H_Weartime.SUM        SMSg2    
+##  Min.   : 370.9   Reason  :133  
+##  1st Qu.:3531.1   Succinct:129  
+##  Median :4859.1                 
+##  Mean   :4515.1                 
+##  3rd Qu.:5807.8                 
+##  Max.   :7442.5</code></pre>
+<pre class="r"><code>set.seed(100) # set random number generator for replicable results.
+
+sm.density.compare2(lmix$H_Weartime.SUM, lmix$SMSg2, xlab=&quot;Minutes&quot;, col=c(1,2), lty=c(2,1), bandcol=&#39;LightGray&#39;, model=&quot;equal&quot;, lwd=(c(2,2)), xlim=c(0,8000))</code></pre>
+<pre><code>## 
+## Test of equal densities:  p-value =  0.28</code></pre>
+<pre class="r"><code>title(main=&quot;&quot;)
+
+colfill&lt;-c(1,2)
+
+legend(&quot;topleft&quot;, inset=.05, levels(lmi$SMSg2), fill=colfill)
+MeanR &lt;- mean(lmi$H_Weartime.SUM[which(lmi$SMS_group==&quot;1&quot;)], na.rm=T)
+MeanS &lt;- mean(lmi$H_Weartime.SUM[which(lmi$SMS_group==&quot;2&quot;)], na.rm=T)
+MediR &lt;- median(lmi$H_Weartime.SUM[which(lmi$SMS_group==&quot;1&quot;)], na.rm=T)
+MediS &lt;- median(lmi$H_Weartime.SUM[which(lmi$SMS_group==&quot;2&quot;)], na.rm=T)
+SdR &lt;- sd(lmi$H_Weartime.SUM[which(lmi$SMS_group==&quot;1&quot;)], na.rm=T)
+SdS &lt;- sd(lmi$H_Weartime.SUM[which(lmi$SMS_group==&quot;2&quot;)], na.rm=T)
+legend(&quot;bottom&quot;, legend = c(paste(&quot;Mean (sd) Reason:&quot;, sep=&quot;&quot;),
+                                 paste(round(MeanR, 2), &quot; (&quot;, round(SdR, 2),&quot;)&quot;, &quot;; n=&quot;, sum(!is.na(lmi$H_Weartime.SUM[which(lmi$SMS_group==&quot;1&quot;)])), sep=&quot;&quot;),
+                                 paste(&quot; &quot;),
+                                 paste(&quot;Mean (sd) Succinct:&quot;, sep=&quot;&quot;),
+                                 paste(round(MeanS, 2), &quot; (&quot;, round(SdS, 2),&quot;)&quot;, &quot;; n=&quot;, sum(!is.na(lmi$H_Weartime.SUM[which(lmi$SMS_group==&quot;2&quot;)])), sep=&quot;&quot;)), 
+       bty = &quot;n&quot;, cex=0.5)</code></pre>
+<p><img src="sms-persuasion-supplement_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+<div id="opt-in-vs.opt-out" class="section level3">
+<h3>Opt in vs. opt out</h3>
+<p><strong>Compare the wear times between those who received messages, and those who did not</strong></p>
+<pre class="r"><code>lmix &lt;- lmi %&gt;% select(H_Weartime.SUM, SMSg4) %&gt;% filter(complete.cases(.))
+
+summary(lmix)</code></pre>
+<pre><code>##  H_Weartime.SUM       SMSg4    
+##  Min.   : 370.9   Opt in :262  
+##  1st Qu.:3463.5   Opt out: 83  
+##  Median :4915.3                
+##  Mean   :4514.7                
+##  3rd Qu.:5810.0                
+##  Max.   :7442.5</code></pre>
+<pre class="r"><code>set.seed(100) # set random number generator for replicable results.
+
+sm.density.compare2(lmix$H_Weartime.SUM, lmix$SMSg4, xlab=&quot;Minutes&quot;, col=c(1,2), lty=c(2,1), bandcol=&#39;LightGray&#39;, model=&quot;equal&quot;, lwd=(c(2,2)), xlim=c(0,8000))</code></pre>
+<pre><code>## 
+## Test of equal densities:  p-value =  0.35</code></pre>
+<pre class="r"><code>title(main=&quot;&quot;)
+
+colfill&lt;-c(1,2)
+
+legend(&quot;topleft&quot;, inset=.05, levels(lmi$SMSg4), fill=colfill)
+MeanR &lt;- mean(lmi$H_Weartime.SUM[which(lmi$SMSg4==&quot;Opt in&quot;)], na.rm=T)
+MeanS &lt;- mean(lmi$H_Weartime.SUM[which(lmi$SMSg4==&quot;Opt out&quot;)], na.rm=T)
+MediR &lt;- median(lmi$H_Weartime.SUM[which(lmi$SMSg4==&quot;Opt in&quot;)], na.rm=T)
+MediS &lt;- median(lmi$H_Weartime.SUM[which(lmi$SMSg4==&quot;Opt out&quot;)], na.rm=T)
+SdR &lt;- sd(lmi$H_Weartime.SUM[which(lmi$SMSg4==&quot;Opt in&quot;)], na.rm=T)
+SdS &lt;- sd(lmi$H_Weartime.SUM[which(lmi$SMSg4==&quot;Opt out&quot;)], na.rm=T)
+legend(&quot;bottom&quot;, legend = c(paste(&quot;Mean (sd) Opt in:&quot;, sep=&quot;&quot;),
+                                 paste(round(MeanR, 2), &quot; (&quot;, round(SdR, 2),&quot;)&quot;, &quot;; n=&quot;, sum(!is.na(lmi$H_Weartime.SUM[which(lmi$SMSg4==&quot;Opt in&quot;)])), sep=&quot;&quot;),
+                                 paste(&quot; &quot;),
+                                 paste(&quot;Mean (sd) Opt out:&quot;, sep=&quot;&quot;),
+                                 paste(round(MeanS, 2), &quot; (&quot;, round(SdS, 2),&quot;)&quot;, &quot;; n=&quot;, sum(!is.na(lmi$H_Weartime.SUM[which(lmi$SMSg4==&quot;Opt out&quot;)])), sep=&quot;&quot;)), 
+       bty = &quot;n&quot;, cex=0.5)</code></pre>
+<p><img src="sms-persuasion-supplement_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+</div>
+</div>
+<div id="weartime-minutes-mann-whitney-u-tests" class="section level2">
+<h2>Weartime minutes (Mann-Whitney U-tests)</h2>
+<pre class="r"><code># Mann-Whitney U-test
+reasonsucc &lt;- wilcox.test(lmi$H_Weartime.SUM ~ lmi$SMSg2, exact = TRUE, conf.int = TRUE, conf.level = 0.95, alternative = &quot;two.sided&quot;)</code></pre>
+<p><strong>Reason vs. succinct message</strong></p>
+<p>W-statistic: 8860<br />
+Confidence interval: -280.9, 447.2<br />
+p-value: 0.647</p>
+<pre class="r"><code>schools &lt;- wilcox.test(lmi$H_Weartime.SUM ~ lmi$iv, exact = TRUE, conf.int = TRUE, conf.level = 0.95, alternative = &quot;two.sided&quot;)</code></pre>
+<p><strong>Schools</strong></p>
+<p>W-statistic: 17398.5<br />
+Confidence interval: -1.6, 619.6<br />
+p-value: 0.051</p>
+<pre class="r"><code>waves &lt;- wilcox.test(lmi$H_Weartime.SUM ~ lmi$batch, exact = TRUE, conf.int = TRUE, conf.level = 0.95, alternative = &quot;two.sided&quot;)</code></pre>
+<p><strong>Waves</strong></p>
+<p>W-statistic: 17310.5<br />
+Confidence interval: -19, 586.3<br />
+p-value: 0.067</p>
+<pre class="r"><code>optin &lt;- wilcox.test(lmi$H_Weartime.SUM ~ lmi$SMSg4, exact = TRUE, conf.int = TRUE, conf.level = 0.95, alternative = &quot;two.sided&quot;)</code></pre>
+<p><strong>Opting in for the reminders</strong></p>
+<p>W-statistic: 10642.5<br />
+Confidence interval: -424, 305<br />
+p-value: 0.771</p>
+</div>
+<div id="weartime-anova-manova" class="section level2">
+<h2>Weartime (ANOVA, MANOVA)</h2>
+<p><strong>ANOVA</strong></p>
+<p>Means and the total wear time distributions of the three groups. Error bars indicate 95% confidence intervals. No differences are detected.</p>
+<pre class="r"><code>userfriendlyscience::oneway(y=lmi$H_Weartime.SUM,
+       x=lmi$SMSg3,
+       means=TRUE, posthoc=&quot;holm&quot;, plot=TRUE, levene=TRUE)</code></pre>
+<p><img src="sms-persuasion-supplement_files/figure-html/weartime%20anova-1.png" width="672" /></p>
+<pre><code>## ### Oneway Anova for y=H_Weartime.SUM and x=SMSg3 (groups: Reason (n=133), Succinct (n=135), Opt out (n=83))
+## 
+## Omega squared: 95% CI = [NA; 0], point estimate = -.01
+## Eta Squared: 95% CI = [0; 0], point estimate = 0
+## 
+##                                           SS  Df         MS    F    p
+## Between groups (error + effect)    320392.32   2  160196.16 0.06 .942
+## Within groups (error only)      923850181.99 342 2701316.32          
+## 
+## ### Means for y (H_Weartime.SUM) separate for each level of x (SMSg3):
+## 
+## SMSg3 = Reason (n=133):
+##     n mean   sd median  se
+##   133 4550 1642   4909 142
+## 
+## SMSg3 = Succinct (n=135):
+##     n mean   sd median  se
+##   129 4480 1616   4808 142
+## 
+## SMSg3 = Opt out (n=83):
+##    n mean   sd median  se
+##   83 4513 1688   5067 185
+## 
+## ### Levene&#39;s test for homogeneity of variance:
+## 
+## F[2, 342] = 0.93, p = .396.
+## 
+## ### Post hoc test: holm
+## 
+##                  Reason (n=133) Succinct (n=135)
+## Succinct (n=135) 1                              
+## Opt out (n=83)   1              1</code></pre>
+<p><strong>MANOVA</strong></p>
+<p>Check correlations between outcome variables</p>
+<pre class="r"><code>lapply(c(&quot;pearson&quot;, &quot;kendall&quot;, &quot;spearman&quot;), function(x) {cor(lmi$H_Weartime.SUM, lmi$H_DaysWornN_over10h, use = &quot;pairwise.complete.obs&quot;, method = x)})</code></pre>
+<pre><code>## [[1]]
+## [1] 0.9485561
+## 
+## [[2]]
+## [1] 0.8104757
+## 
+## [[3]]
+## [1] 0.9267793</code></pre>
+<p>Reason vs. succinct</p>
+<pre class="r"><code>Y &lt;- cbind(lmi$H_Weartime.SUM, lmi$H_DaysWornN_over10h)
+fit &lt;- manova(Y ~ lmi$SMSg2)
+summary(fit, test=&quot;Pillai&quot;)</code></pre>
+<pre><code>##            Df   Pillai approx F num Df den Df Pr(&gt;F)
+## lmi$SMSg2   1 0.014226   1.8688      2    259 0.1564
+## Residuals 260</code></pre>
+<p>Reason vs. succinct vs. opt out</p>
+<pre class="r"><code>Y &lt;- cbind(lmi$H_Weartime.SUM, lmi$H_DaysWornN_over10h)
+fit &lt;- manova(Y ~ lmi$SMSg3)
+lapply(c(&quot;Pillai&quot;, &quot;Wilks&quot;, &quot;Hotelling-Lawley&quot;, &quot;Roy&quot;), function(x) {summary(fit, test=x)})</code></pre>
+<pre><code>## [[1]]
+##            Df  Pillai approx F num Df den Df  Pr(&gt;F)  
+## lmi$SMSg3   2 0.02684   2.3261      4    684 0.05503 .
+## Residuals 342                                         
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## [[2]]
+##            Df   Wilks approx F num Df den Df  Pr(&gt;F)  
+## lmi$SMSg3   2 0.97316   2.3348      4    682 0.05426 .
+## Residuals 342                                         
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## [[3]]
+##            Df Hotelling-Lawley approx F num Df den Df Pr(&gt;F)  
+## lmi$SMSg3   2          0.02757   2.3434      4    680 0.0535 .
+## Residuals 342                                                 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## [[4]]
+##            Df      Roy approx F num Df den Df   Pr(&gt;F)   
+## lmi$SMSg3   2 0.027376   4.6813      2    342 0.009869 **
+## Residuals 342                                            
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Type 3 sums of squares</p>
+<pre class="r"><code>fitIII &lt;- lm(cbind(H_Weartime.SUM, H_DaysWornN_over10h) ~ SMSg3, data=lmi)
+ManRes &lt;- Manova(fitIII, type=&quot;III&quot;)
+summary(ManRes, multivariate=TRUE)</code></pre>
+<pre><code>## 
+## Type III MANOVA Tests:
+## 
+## Sum of squares and products for error:
+##                     H_Weartime.SUM H_DaysWornN_over10h
+## H_Weartime.SUM           923850182         1064286.630
+## H_DaysWornN_over10h        1064287            1357.752
+## 
+## ------------------------------------------
+##  
+## Term: (Intercept) 
+## 
+## Sum of squares and products for the hypothesis:
+##                     H_Weartime.SUM H_DaysWornN_over10h
+## H_Weartime.SUM          2752913824         2866230.000
+## H_DaysWornN_over10h        2866230            2984.211
+## 
+## Multivariate Tests: (Intercept)
+##                  Df test stat approx F num Df den Df
+## Pillai            1  0.763968 551.8597      2    341
+## Wilks             1  0.236032 551.8597      2    341
+## Hotelling-Lawley  1  3.236714 551.8597      2    341
+## Roy               1  3.236714 551.8597      2    341
+##                                  Pr(&gt;F)    
+## Pillai           &lt; 0.000000000000000222 ***
+## Wilks            &lt; 0.000000000000000222 ***
+## Hotelling-Lawley &lt; 0.000000000000000222 ***
+## Roy              &lt; 0.000000000000000222 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## ------------------------------------------
+##  
+## Term: SMSg3 
+## 
+## Sum of squares and products for the hypothesis:
+##                     H_Weartime.SUM H_DaysWornN_over10h
+## H_Weartime.SUM         320392.3213         -340.170252
+## H_DaysWornN_over10h      -340.1703            2.375795
+## 
+## Multivariate Tests: SMSg3
+##                  Df test stat approx F num Df den Df    Pr(&gt;F)   
+## Pillai            2 0.0268404 2.326071      4    684 0.0550310 . 
+## Wilks             2 0.9731648 2.334803      4    682 0.0542588 . 
+## Hotelling-Lawley  2 0.0275699 2.343444      4    680 0.0535048 . 
+## Roy               2 0.0273761 4.681316      2    342 0.0098687 **
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>(On Roy’s largest root: “Because it is a maximum, it can behave differently from the other three test statistics. In instances where the other three are not significant and Roy’s is significant, the effect should be considered insignificant.” <a href="http://www.ats.ucla.edu/stat/stata/output/Stata_MANOVA.htm">source</a>)</p>
+</div>
+<div id="equivalence-testing-tost" class="section level2 tabset">
+<h2>Equivalence testing (TOST)</h2>
+<div id="minutes-reason-vs.succinct" class="section level3">
+<h3>Minutes; Reason vs. succinct</h3>
+<pre class="r"><code>lmi.tost &lt;- lmi %&gt;% select(H_Weartime.SUM, 
+                           H_DaysWornN_over10h, 
+                           SMSgall) %&gt;%
+                    filter(complete.cases(.))
+
+m.minutes &lt;- lmi.tost %&gt;% dplyr::group_by(factor(SMSgall)) %&gt;% 
+    summarise(mean = mean(H_Weartime.SUM), 
+              sd = sd(H_Weartime.SUM),
+              n = n())
+
+m.minutes</code></pre>
+<pre><code>## # A tibble: 4 x 4
+##   `factor(SMSgall)`     mean       sd     n
+##              &lt;fctr&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;
+## 1            Reason 4549.571 1642.142   133
+## 2          Succinct 4479.651 1616.042   129
+## 3           Opt out 4513.163 1687.873    83
+## 4       Send failed 5085.829 1124.863     7</code></pre>
+<pre class="r"><code>TOSTtwo(m1 = m.minutes$mean[1], m2 = m.minutes$mean[2], sd1 = m.minutes$sd[1], sd2 = m.minutes$sd[2], n1=m.minutes$n[1], n2=m.minutes$n[2], low_eqbound_d = -0.3, high_eqbound_d = 0.3, alpha = 0.05, var.equal=FALSE)</code></pre>
+<p><img src="sms-persuasion-supplement_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<pre><code>## Using alpha = 0.05 Welch&#39;s t-test was non-significant, t(259.9443) = 0.3473495, p = 0.7286099
+## Using alpha = 0.05 the equivalence test based on Welch&#39;s t-test  was significant, t(259.9443) = -2.080627, p = 0.01922372TOST results:
+##   t-value 1   p-value 1 t-value 2  p-value 2       df
+## 1  2.775326 0.002957576 -2.080627 0.01922372 259.9443
+## 
+## Equivalence bounds (Cohen&#39;s d):
+##   low bound d high bound d
+## 1        -0.3          0.3
+## 
+## Equivalence bounds (raw scores):
+##   low bound raw high bound raw
+## 1     -488.7433       488.7433
+## 
+## TOST confidence interval:
+##   Lower Limit 90% CI raw Upper Limit 90% CI raw
+## 1              -262.3674               402.2079</code></pre>
+<p>The graph above indicates that the effect of SMS type on total wear minutes was statistically significantly closer to zero than |0.3|.</p>
+</div>
+<div id="minutes-opt-in-vs.opt-out" class="section level3">
+<h3>Minutes; Opt in vs. opt out</h3>
+<pre class="r"><code>lmi.tost &lt;- lmi %&gt;% select(H_Weartime.SUM, 
+                           H_DaysWornN_over10h, 
+                           SMSg4) %&gt;% 
+                    filter(complete.cases(.))
+
+m.minutes &lt;- lmi.tost %&gt;% dplyr::group_by(factor(SMSg4)) %&gt;% 
+    summarise(mean = mean(H_Weartime.SUM), 
+              sd = sd(H_Weartime.SUM),
+              n = n())
+
+m.minutes</code></pre>
+<pre><code>## # A tibble: 2 x 4
+##   `factor(SMSg4)`     mean       sd     n
+##            &lt;fctr&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;
+## 1          Opt in 4515.145 1626.598   262
+## 2         Opt out 4513.163 1687.873    83</code></pre>
+<pre class="r"><code>TOSTtwo(m1 = m.minutes$mean[1], m2 = m.minutes$mean[2], sd1 = m.minutes$sd[1], sd2 = m.minutes$sd[2], n1=m.minutes$n[1], n2=m.minutes$n[2], low_eqbound_d = -0.3, high_eqbound_d = 0.3, alpha = 0.05, var.equal=FALSE)</code></pre>
+<p><img src="sms-persuasion-supplement_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<pre><code>## Using alpha = 0.05 Welch&#39;s t-test was non-significant, t(133.7121) = 0.009405577, p = 0.9925096
+## Using alpha = 0.05 the equivalence test based on Welch&#39;s t-test  was significant, t(133.7121) = -2.349858, p = 0.01012196TOST results:
+##   t-value 1   p-value 1 t-value 2  p-value 2       df
+## 1   2.36867 0.009641681 -2.349858 0.01012196 133.7121
+## 
+## Equivalence bounds (Cohen&#39;s d):
+##   low bound d high bound d
+## 1        -0.3          0.3
+## 
+## Equivalence bounds (raw scores):
+##   low bound raw high bound raw
+## 1     -497.2556       497.2556
+## 
+## TOST confidence interval:
+##   Lower Limit 90% CI raw Upper Limit 90% CI raw
+## 1              -347.1176               351.0824</code></pre>
+<p>The effect of opting in / out on total wear time minutes was statistically significantly closer to zero than |0.3|.</p>
+</div>
+<div id="days-w-valid-data-reason-vs.succinct" class="section level3">
+<h3>Days w/ valid data; Reason vs. succinct</h3>
+<pre class="r"><code>lmi.tost &lt;- lmi %&gt;% select(H_Weartime.SUM, 
+                           H_DaysWornN_over10h, 
+                           SMSgall) %&gt;%
+                    filter(complete.cases(.))
+
+m.minutes &lt;- lmi.tost %&gt;% dplyr::group_by(factor(SMSgall)) %&gt;% 
+    summarise(mean = mean(H_DaysWornN_over10h), 
+              sd = sd(H_DaysWornN_over10h),
+              n = n())
+
+m.minutes</code></pre>
+<pre><code>## # A tibble: 4 x 4
+##   `factor(SMSgall)`     mean       sd     n
+##              &lt;fctr&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;
+## 1            Reason 4.736842 2.040851   133
+## 2          Succinct 4.806202 1.912449   129
+## 3           Opt out 4.951807 2.035679    83
+## 4       Send failed 5.714286 1.496026     7</code></pre>
+<pre class="r"><code>TOSTtwo(m1 = m.minutes$mean[1], m2 = m.minutes$mean[2], sd1 = m.minutes$sd[1], sd2 = m.minutes$sd[2], n1=m.minutes$n[1], n2=m.minutes$n[2], low_eqbound_d = -0.3, high_eqbound_d = 0.3, alpha = 0.05, var.equal=FALSE)</code></pre>
+<p><img src="sms-persuasion-supplement_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<pre><code>## Using alpha = 0.05 Welch&#39;s t-test was non-significant, t(259.6946) = -0.2839437, p = 0.7766798
+## Using alpha = 0.05 the equivalence test based on Welch&#39;s t-test  was significant, t(259.6946) = 2.144939, p = 0.0164428TOST results:
+##   t-value 1 p-value 1 t-value 2   p-value 2       df
+## 1  2.144939 0.0164428 -2.712826 0.003558599 259.6946
+## 
+## Equivalence bounds (Cohen&#39;s d):
+##   low bound d high bound d
+## 1        -0.3          0.3
+## 
+## Equivalence bounds (raw scores):
+##   low bound raw high bound raw
+## 1    -0.5933077      0.5933077
+## 
+## TOST confidence interval:
+##   Lower Limit 90% CI raw Upper Limit 90% CI raw
+## 1             -0.4725893              0.3338704</code></pre>
+<p>The effect of SMS type on days with equal to or less than 10 hours of recorded data was statistically significantly closer to zero than |0.3|.</p>
+</div>
+<div id="days-w-valid-data-opt-in-vs.opt-out" class="section level3">
+<h3>Days w/ valid data; Opt in vs. opt out</h3>
+<pre class="r"><code>lmi.tost &lt;- lmi %&gt;% select(H_Weartime.SUM, 
+                           H_DaysWornN_over10h, 
+                           SMSg4) %&gt;% 
+                    filter(complete.cases(.))
+
+m.minutes &lt;- lmi.tost %&gt;% dplyr::group_by(factor(SMSg4)) %&gt;% 
+    summarise(mean = mean(H_DaysWornN_over10h), 
+              sd = sd(H_DaysWornN_over10h),
+              n = n())
+
+m.minutes</code></pre>
+<pre><code>## # A tibble: 2 x 4
+##   `factor(SMSg4)`     mean       sd     n
+##            &lt;fctr&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;
+## 1          Opt in 4.770992 1.975191   262
+## 2         Opt out 4.951807 2.035679    83</code></pre>
+<pre class="r"><code>TOSTtwo(m1 = m.minutes$mean[1], m2 = m.minutes$mean[2], sd1 = m.minutes$sd[1], sd2 = m.minutes$sd[2], n1=m.minutes$n[1], n2=m.minutes$n[2], low_eqbound_d = -0.3, high_eqbound_d = 0.30, alpha = 0.05, var.equal=FALSE)</code></pre>
+<p><img src="sms-persuasion-supplement_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<pre><code>## Using alpha = 0.05 Welch&#39;s t-test was non-significant, t(134.4491) = -0.7102073, p = 0.4788056
+## Using alpha = 0.05 the equivalence test based on Welch&#39;s t-test  was non-significant, t(134.4491) = 1.653155, p = 0.0503163TOST results:
+##   t-value 1 p-value 1 t-value 2   p-value 2       df
+## 1  1.653155 0.0503163 -3.073569 0.001280832 134.4491
+## 
+## Equivalence bounds (Cohen&#39;s d):
+##   low bound d high bound d
+## 1        -0.3          0.3
+## 
+## Equivalence bounds (raw scores):
+##   low bound raw high bound raw
+## 1    -0.6016989      0.6016989
+## 
+## TOST confidence interval:
+##   Lower Limit 90% CI raw Upper Limit 90% CI raw
+## 1             -0.6024911              0.2408613</code></pre>
+<p>The effect of opting to receive reminders on days with equal to or less than 10 hours of recorded data was statistically significantly smaller than 0.3, but we could not reject the hypothesis that the effect was higher than -0.3.</p>
+</div>
+</div>
+<div id="heterogeneity-among-clusters" class="section level2">
+<h2>Heterogeneity among clusters</h2>
+<p>Here we present the weartimes among different educational groups, i.e. the clusters participants were nested in.</p>
+<pre class="r"><code>lmi.tracks &lt;- lmi %&gt;% select(H_Weartime.SUM, q0008, SMSg3, girl) %&gt;% 
+    mutate(track = ifelse(q0008 == 1, &quot;1&quot;, 
+                    ifelse(q0008 == 2, &quot;2&quot;, NA)),
+           track = factor(track),
+           track.grp = paste0(track, SMSg3),
+           track.grp = factor(track.grp)) %&gt;% 
+    filter(q0008 == 1 | q0008 == 2) %&gt;% 
+    filter(complete.cases(.))
+
+sm.density.compare2(lmi.tracks$H_Weartime.SUM, lmi.tracks$track.grp, xlab=&quot;Minutes&quot;, col=c(1,2,3,4,5,6), lty=c(2,1), bandcol=&#39;LightGray&#39;, model=&quot;equal&quot;, lwd=(c(2,2)), xlim=c(0,8000))</code></pre>
+<pre><code>## Reference band available to compare two groups only.</code></pre>
+<p><img src="sms-persuasion-supplement_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<pre><code>## 
+## Test of equal densities:  p-value =  0</code></pre>
+<pre class="r"><code># lmi.tracks %&gt;% group_by(track.grp) %&gt;% 
+#     summarise(mean = mean(H_Weartime.SUM, na.rm = T), n = n(), percent.girl = mean(girl==1))
+
+lmi.tracks %&gt;% group_by(track.grp) %&gt;% 
+    summarise(mean = mean(H_Weartime.SUM, na.rm = T), n = n())</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##           track.grp     mean     n
+##              &lt;fctr&gt;    &lt;dbl&gt; &lt;int&gt;
+## 1   1Opt out (n=83) 5087.344    36
+## 2   1Reason (n=133) 4950.112    41
+## 3 1Succinct (n=135) 4976.495    38
+## 4   2Opt out (n=83) 3965.480    40
+## 5   2Reason (n=133) 4494.258    84
+## 6 2Succinct (n=135) 4231.516    87</code></pre>
+<p>1 and 2 in front of groups indicate educational tracks. The analysis above points out, that students opting out in one of the main tracks wore the accelerometer less than others. This might be due to e.g. social dynamics.</p>
+<p>There are differences in wear times between tracks and group allocation. The Differences remain, when the poorly performing group is removed, as shown here:</p>
+<pre class="r"><code>lmi.tracks2 &lt;- lmi.tracks %&gt;% filter(track.grp != &quot;2Opt out (n=83)&quot;)
+
+sm.density.compare2(lmi.tracks2$H_Weartime.SUM, lmi.tracks2$track.grp, xlab=&quot;Minutes&quot;, col=c(1,2,3,4,5), lty=c(2,1), bandcol=&#39;LightGray&#39;, model=&quot;equal&quot;, lwd=(c(2,2)), xlim=c(0,8000))</code></pre>
+<pre><code>## Reference band available to compare two groups only.</code></pre>
+<p><img src="sms-persuasion-supplement_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<pre><code>## 
+## Test of equal densities:  p-value =  0</code></pre>
+<p>It seems like educational track is a good determinant of wear time. Here is track 1 groups only:</p>
+<pre class="r"><code>lmi.tracks3 &lt;- lmi.tracks %&gt;% filter(track.grp != &quot;2Opt out (n=83)&quot;, track.grp != &quot;2Reason (n=133)&quot;, track.grp != &quot;2Succinct (n=135)&quot;)
+
+sm.density.compare2(lmi.tracks3$H_Weartime.SUM, lmi.tracks3$track.grp, xlab=&quot;Minutes&quot;, col=c(1,2,3,4,5), lty=c(2,1), bandcol=&#39;LightGray&#39;, model=&quot;equal&quot;, lwd=(c(2,2)), xlim=c(0,8000))</code></pre>
+<pre><code>## Reference band available to compare two groups only.</code></pre>
+<p><img src="sms-persuasion-supplement_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<pre><code>## 
+## Test of equal densities:  p-value =  0.53</code></pre>
+<p>Same for track 2, after removing the small outlier group:</p>
+<pre class="r"><code>lmi.tracks4 &lt;- lmi.tracks %&gt;% filter(track.grp != &quot;1Opt out (n=83)&quot;, track.grp != &quot;1Reason (n=133)&quot;, track.grp != &quot;1Succinct (n=135)&quot;, track.grp != &quot;2Opt out (n=83)&quot;)
+
+sm.density.compare2(lmi.tracks4$H_Weartime.SUM, lmi.tracks4$track.grp, xlab=&quot;Minutes&quot;, col=c(1,2,3,4,5), lty=c(2,1), bandcol=&#39;LightGray&#39;, model=&quot;equal&quot;, lwd=(c(2,2)), xlim=c(0,8000))</code></pre>
+<pre><code>## 
+## Test of equal densities:  p-value =  0.21</code></pre>
+<p><img src="sms-persuasion-supplement_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<hr />
+</div>
+<div id="bayesian-anova" class="section level2">
+<h2>Bayesian ANOVA</h2>
+<p>(NOTE: prior graphs from now on with BF01 instead of BF10):</p>
+<pre class="r"><code>summary(aov(lmi$H_Weartime.SUM ~ lmi$SMSg3))</code></pre>
+<pre><code>##              Df    Sum Sq Mean Sq F value Pr(&gt;F)
+## lmi$SMSg3     2    320392  160196   0.059  0.942
+## Residuals   342 923850182 2701316               
+## 155 observations deleted due to missingness</code></pre>
+<pre class="r"><code>weartime.fullobs &lt;- data.frame(lmi$H_Weartime.SUM, lmi$SMSg3)
+weartime.fullobs &lt;- weartime.fullobs[complete.cases(weartime.fullobs), ]
+
+#These are equivalent:
+# weartimeBf &lt;- anovaBF(lmi.H_Weartime.SUM ~ lmi.SMSg3, data = weartime.fullobs, whichRandom = weartime.fullobs$lmi.H_Weartime.SUM)
+
+weartimeBf &lt;- anovaBF(lmi.H_Weartime.SUM ~ lmi.SMSg3, data = weartime.fullobs, rscaleFixed = 0.3)</code></pre>
+<pre><code>## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%</code></pre>
+<pre class="r"><code>#BF10:
+extractBF(weartimeBf)$bf</code></pre>
+<pre><code>## [1] 0.08300075</code></pre>
+<pre class="r"><code>#BF01:
+extractBF(1/weartimeBf)$bf</code></pre>
+<pre><code>## [1] 12.04808</code></pre>
+<pre class="r"><code># Create a vector of different prior concentrations:
+priorWidths &lt;- c(seq(0.01, 2, by = 0.01))
+
+# Save the BFs calculated w/ each concentration:
+bayesFactors &lt;- sapply(priorWidths, function(ownprior) {
+    extractBF(weartimeBf &lt;- anovaBF(lmi.H_Weartime.SUM ~ lmi.SMSg3, data = weartime.fullobs, rscaleFixed = ownprior))$bf
+})</code></pre>
+<pre><code>## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%</code></pre>
+<pre class="r"><code>bayesFactors2 &lt;- 1/bayesFactors
+
+# Make a data frame for ggplot
+plotdf &lt;- data.frame(priorWidths, bayesFactors2)
+
+# Plot results with different priors:
+plot1 &lt;- ggplot(data = plotdf, aes(x = priorWidths, y = bayesFactors2, group = 1)) + 
+    ylim(0, max(bayesFactors2)) +
+    xlim(min(priorWidths), max(priorWidths)) +
+    geom_line() +
+    geom_hline(yintercept = 0, colour = &quot;azure4&quot;) +
+    xlab(&quot;Prior Width&quot;) +
+    ylab(&quot;BF01&quot;) +
+    theme_bw()
+
+# Dashed line for BF10 = 1/10, indicating strong evidence for null.
+plot2 &lt;- plot1 + geom_hline(yintercept = 1/10, linetype = &quot;dashed&quot;, colour = &quot;darkgrey&quot;) 
+
+plot2 + geom_hline(yintercept = 10, linetype = &quot;dashed&quot;, colour = &quot;darkgrey&quot;) </code></pre>
+<p><img src="sms-persuasion-supplement_files/figure-html/bayesanova-1.png" width="672" /></p>
+<div id="grouping-order-reason-succinct-opt-out" class="section level3">
+<h3>Grouping order: reason &gt; succinct &gt; opt out</h3>
+<p>Note that this could be considered not the end of the analysis. The null model can be false in ways not consistent with H1 (see <a href="https://web.archive.org/web/20170226172405/http://bayesfactor.blogspot.fi/2015/01/multiple-comparisons-with-bayesfactor-2.html">here</a>). The code that follows is also adapted from the link.</p>
+<p>The number of possible orderings in this case is 3!/(3-2)! = 6. Thus, prior odds are 1/6.</p>
+<p>Sampling from the posterior:</p>
+<pre class="r"><code>weartimeBf &lt;- anovaBF(lmi.H_Weartime.SUM ~ lmi.SMSg3, data = weartime.fullobs)</code></pre>
+<pre><code>## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%</code></pre>
+<pre class="r"><code>samples &lt;- posterior(weartimeBf, iterations = 10000)
+head(samples)</code></pre>
+<pre><code>## Markov Chain Monte Carlo (MCMC) output:
+## Start = 1 
+## End = 7 
+## Thinning interval = 1 
+##            mu lmi.SMSg3-Reason (n=133) lmi.SMSg3-Succinct (n=135)
+## [1,] 4514.094                 35.17353                  -34.22440
+## [2,] 4537.058               -106.86205                  177.80482
+## [3,] 4492.272                -24.08825                 -174.07755
+## [4,] 4539.221                188.42423                  -12.51438
+## [5,] 4418.490                165.10658                  -74.17637
+## [6,] 4388.473                -89.60789                  178.68862
+## [7,] 4600.031                137.48098                 -155.61824
+##      lmi.SMSg3-Opt out (n=83)    sig2 g_lmi.SMSg3
+## [1,]               -0.9491288 2181005  0.07363933
+## [2,]              -70.9427617 2568488  0.11679025
+## [3,]              198.1657981 2467137  0.15676857
+## [4,]             -175.9098503 3159836  0.13681377
+## [5,]              -90.9302139 2430578  0.05789996
+## [6,]              -89.0807239 2922014  0.09344006
+## [7,]               18.1372554 2923905  0.24005259</code></pre>
+<p>Check the proportion of samples where Reason &gt; Succinct &gt; Opt out.</p>
+<pre class="r"><code>consistent &lt;- (samples[, &quot;lmi.SMSg3-Reason (n=133)&quot;] &gt; samples[, &quot;lmi.SMSg3-Succinct (n=135)&quot;]) &amp;
+  (samples[, &quot;lmi.SMSg3-Succinct (n=135)&quot;] &gt; samples[, &quot;lmi.SMSg3-Opt out (n=83)&quot;])
+N_consistent &lt;- sum(consistent)
+
+# posterior probability of the order reason &gt; succinct &gt; opt out:
+
+N_consistent / 10000</code></pre>
+<pre><code>## [1] 0.2068</code></pre>
+<p>Now, the posterior restriction for the <em>full</em> (all means unequal) model is 0.2068 divided by 1. Bayes factor is:</p>
+<pre class="r"><code>bf_restriction_against_full = (N_consistent / 10000) / (1 / 6)
+bf_restriction_against_full</code></pre>
+<pre><code>## [1] 1.2408</code></pre>
+<p>The data are not sensitive enough to say anything about the specified order against the full (all means unequal) model. The evidence doesn’t give a boost to order prediction, because p(prediction is true) is low and/or riskiness of prediction is low.</p>
+<pre class="r"><code>## Convert bf1 to a number so that we can multiply it
+bf_full_against_null &lt;- as.vector(weartimeBf)
+bf_full_against_null</code></pre>
+<pre><code>##  lmi.SMSg3 
+## 0.03444662</code></pre>
+<pre class="r"><code>## Use transitivity to compute desired Bayes factor
+bf_restriction_against_null &lt;- bf_restriction_against_full * bf_full_against_null
+bf_restriction_against_null</code></pre>
+<pre><code>##  lmi.SMSg3 
+## 0.04274137</code></pre>
+<p>So, the BF10 of the order against null is 0.0427414 and the BF01 is 23.396535.</p>
+<hr />
+<p>Measurement days of &gt;10 hours of valid data gathered by group. Horizontal lines represent means, boxes Bayesian 95% Highest Density Intervals (with flat priors).</p>
+</div>
+</div>
+<div id="weardays" class="section level2 tabset">
+<h2>Weardays</h2>
+<pre class="r"><code>pirateplot(formula = H_DaysWornN_over10h ~ SMSg3,
+           data = lmi,
+           xlab = &quot;&quot;,
+           ylab = &quot;&gt;10h Measurement days&quot;,
+           pal = &quot;up&quot;,
+           point.o = .25,
+           avg.line.o = 1,
+           bean.b.o = .2,
+           inf.f.col = &quot;grey&quot;, # Inf fill col
+           inf.b.col = &quot;black&quot;, # Inf border col
+           inf.f.o = .5,
+           inf.b.o = .5,
+           point.cex = 1,
+           jitter.val = .07,
+           gl.col = &#39;white&#39;,
+           hdi.iter = 100000
+)</code></pre>
+<p><img src="sms-persuasion-supplement_files/figure-html/weardays.reasonsucc-1.png" width="672" /></p>
+<p><strong>Previous plot with CI instead of HDI:</strong></p>
+<pre class="r"><code>pirateplot(formula = H_DaysWornN_over10h ~ SMSg3,
+           data = lmi,
+           xlab = &quot;&quot;,
+           ylab = &quot;&gt;10h Measurement days&quot;,
+           pal = &quot;up&quot;,
+           point.o = .25,
+           avg.line.o = 1,
+           bean.b.o = .2,
+           inf.f.col = &quot;grey&quot;, # Inf fill col
+           inf.b.col = &quot;black&quot;, # Inf border col
+           inf.f.o = .5,
+           inf.b.o = .5,
+           point.cex = 1,
+           jitter.val = .07,
+           gl.col = &#39;white&#39;,
+           inf.method = &quot;ci&quot;
+)</code></pre>
+<p><img src="sms-persuasion-supplement_files/figure-html/CI.weardays.reasonsucc-1.png" width="672" /></p>
+<div id="chi2-weardays-was-sent-messages-to-v.-was-not" class="section level3">
+<h3>Chi^2 weardays; was sent messages to v. was not</h3>
+<pre class="r"><code>lmi$SMS_group_receiveornot &lt;- NA
+lmi$SMS_group_receiveornot[lmi$SMS_group==1] &lt;- &quot;1&quot;
+lmi$SMS_group_receiveornot[lmi$SMS_group==2] &lt;- &quot;1&quot;
+lmi$SMS_group_receiveornot[lmi$SMS_group==3] &lt;- &quot;2&quot;
+lmi$SMS_group_receiveornot[lmi$SMS_group==4] &lt;- &quot;2&quot;
+table(lmi$SMS_group_receiveornot)</code></pre>
+<pre><code>## 
+##   1   2 
+## 273 102</code></pre>
+<pre class="r"><code>chisq.test(lmi$H_DaysWornN_over10h, lmi$SMS_group_receiveornot)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test
+## 
+## data:  lmi$H_DaysWornN_over10h and lmi$SMS_group_receiveornot
+## X-squared = 8.344, df = 7, p-value = 0.3032</code></pre>
+</div>
+<div id="bf-weardays-was-sent-messages-to-v.-was-not" class="section level3">
+<h3>BF weardays, was sent messages to v. was not</h3>
+<pre class="r"><code># Create data matrix for Bayesian contingency tables:
+table.dayswornbf &lt;- table(data.frame(lmi$H_DaysWornN_over10h, lmi$SMS_group_receiveornot))
+
+# Bayes factor for the contingency tables with default prior concentration:
+dayswornbf &lt;- contingencyTableBF(table.dayswornbf, sampleType = &quot;poisson&quot;)
+extractBF(dayswornbf)$bf</code></pre>
+<pre><code>## [1] 0.02874026</code></pre>
+<pre class="r"><code>1/dayswornbf</code></pre>
+<pre><code>## Bayes factor analysis
+## --------------
+## [1] Indep. (a=1) : 34.79439 ±0%
+## 
+## Against denominator:
+##   Alternative, non-independence, a = 1 
+## ---
+## Bayes factor type: BFcontingencyTable, poisson</code></pre>
+<pre class="r"><code># Create a vector of different prior concentrations:
+priorWidths &lt;- c(seq(1, 1.25, by = 0.001), seq(1.25, 2, by = 0.01))
+
+# Save the BFs calculated w/ each concentration:
+bayesFactors &lt;- sapply(priorWidths, function(ownprior) {
+    extractBF(contingencyTableBF(table.dayswornbf, sampleType = &quot;poisson&quot;, priorConcentration = ownprior))$bf
+})
+
+bayesFactors2 &lt;- 1/bayesFactors
+# Make a data frame for ggplot
+plotdf &lt;- data.frame(priorWidths, bayesFactors2)
+
+# Plot BFs with different priors:
+plot1 &lt;- ggplot(data = plotdf, aes(x = priorWidths, y = bayesFactors2, group = 1)) + 
+    ylim(0, max(bayesFactors2)) +
+    xlim(1, 2) +
+    geom_line() +
+    geom_hline(yintercept = 0, colour = &quot;azure4&quot;) +
+    xlab(&quot;Prior Width&quot;) +
+    ylab(&quot;BF01&quot;) +
+    theme_bw()
+
+# Dashed line for BF01 = 1/10, indicating strong evidence for alternative.
+plot2 &lt;- plot1 + geom_hline(yintercept = 1/10, linetype = &quot;dashed&quot;, colour = &quot;darkgrey&quot;) 
+
+# Dashed line for BF01 = 10, indicating strong evidence for null.
+plot2 + geom_hline(yintercept = 10, linetype = &quot;dashed&quot;, colour = &quot;darkgrey&quot;) </code></pre>
+<p><img src="sms-persuasion-supplement_files/figure-html/bf.weardays.receiveornot-1.png" width="672" /></p>
+</div>
+<div id="chi2-weardays-reason-v.-succinct" class="section level3">
+<h3>Chi^2 Weardays; Reason v. Succinct</h3>
+<pre class="r"><code>chisq.test(lmi$H_DaysWornN_over10h, lmi$SMSg2)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test
+## 
+## data:  lmi$H_DaysWornN_over10h and lmi$SMSg2
+## X-squared = 7.8931, df = 7, p-value = 0.3421</code></pre>
+</div>
+<div id="bf-weardays-reason-v.-succinct" class="section level3">
+<h3>BF Weardays; Reason v. Succinct</h3>
+<pre class="r"><code># Create data matrix for Bayesian contingency tables:
+table.dayswornbf &lt;- table(data.frame(lmi$H_DaysWornN_over10h, lmi$SMSg2))
+
+# Bayes factor for the contingency tables with default prior concentration:
+dayswornbf &lt;- contingencyTableBF(table.dayswornbf, sampleType = &quot;poisson&quot;)
+extractBF(dayswornbf)$bf</code></pre>
+<pre><code>## [1] 0.143689</code></pre>
+<pre class="r"><code>1/dayswornbf</code></pre>
+<pre><code>## Bayes factor analysis
+## --------------
+## [1] Indep. (a=1) : 6.959475 ±0%
+## 
+## Against denominator:
+##   Alternative, non-independence, a = 1 
+## ---
+## Bayes factor type: BFcontingencyTable, poisson</code></pre>
+<pre class="r"><code># Create a vector of different prior concentrations:
+priorWidths &lt;- c(seq(1, 1.25, by = 0.001), seq(1.25, 2, by = 0.01))
+
+# Save the BFs calculated w/ each concentration:
+bayesFactors &lt;- sapply(priorWidths, function(ownprior) {
+    extractBF(contingencyTableBF(table.dayswornbf, sampleType = &quot;poisson&quot;, priorConcentration = ownprior))$bf
+})
+
+bayesFactors2 &lt;- 1/bayesFactors
+# Make a data frame for ggplot
+plotdf &lt;- data.frame(priorWidths, bayesFactors)
+
+# Plot BFs with different priors:
+plot1 &lt;- ggplot(data = plotdf, aes(x = priorWidths, y = bayesFactors2, group = 1)) + 
+    ylim(0, max(bayesFactors2)) +
+    xlim(1, 2) +
+    geom_line() +
+    geom_hline(yintercept = 0, colour = &quot;azure4&quot;) +
+    xlab(&quot;Prior Width&quot;) +
+    ylab(&quot;BF01&quot;) +
+    theme_bw()
+
+# Dashed line for BF01 = 1/10, indicating strong evidence for alternative.
+plot2 &lt;- plot1 + geom_hline(yintercept = 1/10, linetype = &quot;dashed&quot;, colour = &quot;darkgrey&quot;) 
+
+# Dashed line for BF01 = 10, indicating strong evidence for null.
+plot2 + geom_hline(yintercept = 10, linetype = &quot;dashed&quot;, colour = &quot;darkgrey&quot;) </code></pre>
+<p><img src="sms-persuasion-supplement_files/figure-html/bf.weardays.reasonsuccinct-1.png" width="672" /></p>
+<hr />
+</div>
+</div>
+</div>
+<div id="dose-dependence" class="section level1">
+<h1>Dose dependence</h1>
+<p>Self-reported opening and reading of messages. Y-axis is total wear time. Boxes represent 95% HDIs for the means, solid lines connect means and dashed lines connect medians. Participants who opted out of reminders are aggregated with those who indicated not having opened the messages even once. Participants who received messages, but did not answer the question on message reading, are excluded.</p>
+<pre class="r"><code>dosedf &lt;- lmi %&gt;% 
+    select(SMS_read, SMSgall, H_Weartime.SUM) %&gt;% 
+    rename(weartime = H_Weartime.SUM) %&gt;% 
+    mutate(grouping = ifelse(SMS_read == 1, &quot;0 (n=94)&quot;,
+                        ifelse(SMS_read == 2, &quot;1 (n=11)&quot;,
+                        ifelse(SMS_read == 3, &quot;2-3 (n=29)&quot;,       
+                        ifelse(SMS_read == 4, &quot;4-5 (n=27)&quot;,
+                        ifelse(SMS_read == 5, &quot;6 (n=121)&quot;, NA))))))
+
+dosedf$grouping[dosedf$SMSgall == &quot;Opt out&quot;] &lt;- &quot;0 (n=94)&quot;
+
+dosedf &lt;- dosedf %&gt;% select(weartime, grouping) %&gt;% 
+    filter(complete.cases(.))
+
+table(dosedf$grouping)</code></pre>
+<pre><code>## 
+##   0 (n=94)   1 (n=11) 2-3 (n=29) 4-5 (n=27)  6 (n=121) 
+##         94         11         29         27        121</code></pre>
+<pre class="r"><code>dosedf &lt;- dosedf %&gt;% mutate(grouping = factor(grouping))
+
+levels(dosedf$grouping) &lt;- c(&quot;Not on a single \n morning (n=94)&quot;,
+                           &quot;On a single \n morning (n=11)&quot;,
+                           &quot;On 2-3 \n mornings (n=29)&quot;,
+                           &quot;On 4-5 \n mornings (n=27)&quot;,
+                           &quot;Every morning \n (n=121)&quot;)
+
+means &lt;- dosedf %&gt;% dplyr::group_by(grouping) %&gt;% 
+    summarise(mean = mean(weartime, na.rm = T))
+
+means &lt;- means$mean
+
+medians &lt;- dosedf %&gt;% dplyr::group_by(grouping) %&gt;% 
+    summarise(median = median(weartime, na.rm = T))
+
+medians &lt;- medians$median
+
+pirateplot(formula = weartime ~ grouping,
+           data = dosedf,
+           xlab = &quot;&quot;,
+           ylab = &quot;&quot;,
+           cex.lab = 0.57,
+           cex.names = 0.7,
+           pal = &quot;up&quot;,
+           point.o = .25,
+           avg.line.o = 0,
+           avg.line.fun = median,
+           bean.b.o = .2,
+           inf.f.col = &quot;grey&quot;, # Inf fill col
+           inf.b.col = &quot;black&quot;, # Inf border col
+           inf.f.o = 0.2,
+           inf.b.o = 0.3,
+           point.cex = 1,
+           jitter.val = .07,
+           gl.col = &#39;white&#39;,
+           hdi.iter = 10000
+)
+points(x = 1:5, y = means, type = &quot;b&quot;, pch = 20)
+points(x = 1:5, y = medians, type = &quot;b&quot;, pch = 1, lty = &quot;dashed&quot;, cex = 0.8)</code></pre>
+<p><img src="sms-persuasion-supplement_files/figure-html/dosedependence-1.png" width="672" /></p>
+<hr />
+</div>
+<div id="additional-analyses" class="section level1">
+<h1>Additional analyses</h1>
+<div id="extra-chi2-and-bf-weardays-opt-in-v.-opt-out" class="section level2">
+<h2>Extra: Chi^2 and BF Weardays; Opt in v. opt out</h2>
+<p>(Note: this is basically the same analysis as the one comparing participants for whom the messages were sent vs. for whom they were not.)</p>
+<pre class="r"><code>chisq.test(lmi$H_DaysWornN_over10h, lmi$SMSg4)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test
+## 
+## data:  lmi$H_DaysWornN_over10h and lmi$SMSg4
+## X-squared = 8.9596, df = 7, p-value = 0.2556</code></pre>
+<pre class="r"><code># Create data matrix for Bayesian contingency tables:
+table.dayswornbf &lt;- table(data.frame(lmi$H_DaysWornN_over10h, lmi$SMSg4))
+
+# Bayes factor for the contingency tables with default prior concentration:
+dayswornbf &lt;- contingencyTableBF(table.dayswornbf, sampleType = &quot;poisson&quot;)
+extractBF(dayswornbf)$bf</code></pre>
+<pre><code>## [1] 0.03864754</code></pre>
+<pre class="r"><code>1/dayswornbf</code></pre>
+<pre><code>## Bayes factor analysis
+## --------------
+## [1] Indep. (a=1) : 25.87487 ±0%
+## 
+## Against denominator:
+##   Alternative, non-independence, a = 1 
+## ---
+## Bayes factor type: BFcontingencyTable, poisson</code></pre>
+<pre class="r"><code># Create a vector of different prior concentrations:
+priorWidths &lt;- c(seq(1, 1.25, by = 0.001), seq(1.25, 2, by = 0.01))
+
+# Save the BFs calculated w/ each concentration:
+bayesFactors &lt;- sapply(priorWidths, function(ownprior) {
+    extractBF(contingencyTableBF(table.dayswornbf, sampleType = &quot;poisson&quot;, priorConcentration = ownprior))$bf
+})
+
+bayesFactors2 &lt;- 1/bayesFactors
+# Make a data frame for ggplot
+plotdf &lt;- data.frame(priorWidths, bayesFactors2)
+
+# Plot BFs with different priors:
+plot1 &lt;- ggplot(data = plotdf, aes(x = priorWidths, y = bayesFactors2, group = 1)) + 
+    ylim(0, max(bayesFactors2)) +
+    xlim(1, 2) +
+    geom_line() +
+    geom_hline(yintercept = 0, colour = &quot;azure4&quot;) +
+    xlab(&quot;Prior Width&quot;) +
+    ylab(&quot;BF01&quot;) +
+    theme_bw()
+
+# Dashed line for BF01 = 1/10, indicating strong evidence for alternative.
+plot2 &lt;- plot1 + geom_hline(yintercept = 1/10, linetype = &quot;dashed&quot;, colour = &quot;darkgrey&quot;) 
+
+# Dashed line for BF01 = 10, indicating strong evidence for null.
+plot2 + geom_hline(yintercept = 10, linetype = &quot;dashed&quot;, colour = &quot;darkgrey&quot;) </code></pre>
+<p><img src="sms-persuasion-supplement_files/figure-html/weardays.optinoptout-1.png" width="672" /></p>
+<p><strong>Other exploratory analyses:</strong></p>
+<p>In addition, we investigated all bivariate correlations between wear time and questionnaire measures, as well as bioimpedance results, in the hope of creating hypotheses for falsification with new data. We discovered only low, presumably spurious, correlations. All of these were of order tau &lt; 0.15. “Significant” items included doing PA because others say one should do so, self-reported sitting during class and using mnemonic cues to carry out PA plans.</p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
