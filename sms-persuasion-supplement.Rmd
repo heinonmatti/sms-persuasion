@@ -1,6 +1,8 @@
+$\\$
 
+$\\$
 
-Welcome to the supplementary file!  
+**Welcome to the supplementary file!**
   
 Open code blocks by clicking the "code"-buttons on the right hand side.
 
