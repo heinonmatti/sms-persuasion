@@ -2,7 +2,7 @@ $\\$
 
 $\\$
 
-**Welcome to the supplementary file!**
+**Welcome to the supplementary website!**
   
 Open code blocks by clicking the "code"-buttons on the right hand side.
 
@@ -11,7 +11,10 @@ Github repository for this site can be found [here](https://github.com/heinonmat
 ```{r global_options, include=FALSE}
 .libPaths("C:/rlibs/3.4.2")
 
-knitr::opts_chunk$set(warning=FALSE, message=FALSE, cache = TRUE)
+knitr::opts_chunk$set(warning=FALSE, 
+                      message=FALSE, 
+                      cache = TRUE,
+                      dpi = 300)
 
 # Turn off scientific notation
 options(scipen=999)
@@ -22,6 +25,7 @@ options(scipen=999)
 The code block shows all installed packages and the session information of the computer this was run on.
 
 ```{r preliminaries, warning = FALSE, message = FALSE, cache = FALSE}
+
 if(!require("pacman")) install.packages("pacman")
 library("pacman")
 
@@ -32,7 +36,7 @@ devtools::session_info()
 
 ```
 
-# Data wrangling
+# Creating the analysis data
 
 The code block loads data and creates the relevant variables.
 
@@ -65,6 +69,10 @@ lmi$SMSgall <- factor(lmi$SMS_group, levels=c(1,2,3,4), labels=c("Reason", "Succ
 
 # Methods  
 
+This section presents supplementary information on the methods section.
+
+***
+
 ## Interpreting Bayes Factors
 
 In Bayesian philosophy, probabilities are conceived as quantified beliefs, instead of hypothetical long-run frequencies. A Bayes Factor BF10 (BF01) indicates how much prior odds should be shifted towards the alternative (null) hypothesis, in the light of the data: BF10 = $\frac {p(data, given H1)} {p(data, given H0)}$. When prior odds $\frac {p(H1)} {p(H0)}$  are multiplied by the BF, it results as the posterior odds. As an example, take a modestly skeptical scientist, who holds 1:3 odds against the alternative hypothesis, corresponding to a 25% posterior probability. After observing data that indicate a BF10 of 15 (or a BF01 of 1/15), the scientist should shift his or her prior odds to become $\frac {1} {3} * \frac {15} {1}$ = 15:3 or 5:1, now  favoring the alternative hypothesis with a posterior probability of $\frac {5} {6}$ = 83%.   
@@ -73,11 +81,15 @@ Although considered sufficient in some contexts (e.g. FMRI-studies, where data c
 
 * Etz A, Vandekerckhove J. A Bayesian Perspective on the Reproducibility Project: Psychology. PLOS ONE. 2016 Feb 26;11(2):e0149794. 
 
+***
+
 ## Study design
+
+Presented below are analyses regarding the study design, more specifically: statistical power, type M and type S error probabilities, the v-statistic.
 
 ### Statistical Power
 
-Our final sample size was unknown, as well as (in the absence of similar studies) the true effect size, so sample size planning according to the expected effect was out of the question. Our aim was to collect as many participants as possible during the available time during the two recruitment waves. We defined a clinically significant effect size by calculating, how big an effect would bring a person from 9.5 hours of daily data to reach the cutoff of 10 hours. This was defined as $$d=\frac{M1 - M2} {\sqrt{\frac {s_1^2+s_2^2} {2}} }$$ $^{(1)}$ with standard deviations estimated from feasibility study$^{(2)}$ data to be 72 minutes for both groups, resulting in a d=0.42. For our purposes, we decided to consider effect sizes between -0.3 and 0.3 as equivalent to zero.  
+Our final sample size was unknown, as well as (in the absence of similar studies) the true effect size, so sample size planning according to the expected effect was out of the question. Our aim was to collect as many participants as possible during the available time during the two recruitment waves. We defined a clinically significant effect size by calculating, how big an effect would bring a person from 9.5 hours of daily data to reach the cutoff of 10 hours. This was defined as following$^{(1)}$: $$d=\frac{M1 - M2} {\sqrt{\frac {s_1^2+s_2^2} {2}}}$$ with standard deviations estimated from feasibility study$^{(2)}$ data to be 72 minutes for both groups, resulting in a d=0.42. For our purposes, we decided to consider effect sizes between -0.3 and 0.3 as equivalent to zero.  
   
 $^{(1)}$ Cohen J. A power primer. Psychol Bull. 1992 Jul;112(1):155-9.  
 $^{(2)}$ Hankonen N, Heino MTJ, Hynynen S-T, Laine H, Araujo-Soares V, Sniehotta FF, et al. Randomised controlled feasibility study of a school-based multi-level intervention to increase physical activity and decrease sedentary behaviour among vocational school students. Int J Behav Nutr Phys Act. Available from: http://ijbnpa.biomedcentral.com/articles/10.1186/s12966-017-0484-0
@@ -99,7 +111,7 @@ qplot(xax, graafi$power) +
     theme_bw()
 ```
 
-fAnalysis regarding statistical power is presented in Figure above, holding alpha constant at 0.05 and sample size at achieved levels. As seen from the figure, we had 90% power to discover an effect of size d=0.39, 80% to detect d=0.3, 60% to detect d=0.27 and 40% to discover an effect of d=0.21. Thus, type 2 error probabilities were small for effects near our defined minimal effect size of interest, but high for small effects. 
+Analysis regarding statistical power is presented in the figure above, holding alpha constant at 0.05 and sample size at achieved levels. As seen from the figure, we had 90% power to discover an effect of size d=0.39, 80% to detect d=0.3, 60% to detect d=0.27 and 40% to discover an effect of d=0.21. Thus, type 2 error probabilities were small for effects near our defined minimal effect size of interest, but high for small effects. 
 
 ### Type S and Type M errors
 
@@ -231,15 +243,26 @@ legend(0.05,0.4,c("Reminder (n=262) v. no reminder (n=90)","Reason (n=133) v. Su
 
 The figure shows the v-statistic when estimating two parameters (two medians, in our case), where 0.5 represents guessing. Figure reveals our sample size was inadequate for reliably detecting small effects. It illustrates that our design for comparison of two medians only starts superseding random guessing near $r^{2} = 0.03$, and approaches 0.8 at $r^{2} \approx 0.10$ (a "medium" effect by Cohen's indices). This illustrates the fact that--if the effect is small instead of zero--to make reliable estimates, one needs much larger sample sizes than what we were able to gather for this research. For "medium"-sized effects, our design was satisfactory.
 
+***
+
 # Results   
   
-  
-##Implementation measures {.tabset}  
+This section presents supplementary information on the results section.
+
+## Implementation measures   
+
+
+
+These results relate to the short questionnaire, where we asked the participants whether they read the messages, discussed them with peers and were satisfied with them.
+
+ 
+
+***
 
 ### Reading the messages
 
 ```{r reading}
-reading <- lmi %>% select(SMS_read, SMSg2) %>% 
+reading <- lmi %>% dplyr::select(SMS_read, SMSg2) %>% 
     mutate(SMS_read = factor(SMS_read))
 
 levels(reading$SMS_read) <- c("Not on a single morning", "On a single morning", "On 2-3 mornings", "On 4-5 mornings", "Every morning")
@@ -306,12 +329,13 @@ plot2 + geom_hline(yintercept = 10, linetype = "dashed", colour = "darkgrey")
 
 ```
 
+***
 
 ### Discussing the messages
 
 ```{r discussing}
 
-discussing <- lmi %>% select(SMS_contam, SMSg2) %>% 
+discussing <- lmi %>% dplyr::select(SMS_contam, SMSg2) %>% 
     mutate(SMS_contam = factor(SMS_contam))
 
 levels(discussing$SMS_contam) <- c("Not once", "Once", "2-3 times", "4-5 times", "More often")
@@ -379,12 +403,14 @@ plot2 <- plot1 + geom_hline(yintercept = 1/10, linetype = "dashed", colour = "da
 plot2 + geom_hline(yintercept = 10, linetype = "dashed", colour = "darkgrey") 
 ```
 
+***
+
 ### Satisfaction with the messages 
 
 ```{r satisfaction}
 lmi$satisf <- "I was satisfied with the content of the messages"
 
-satisfaction <- lmi %>% select(SMS_satisf, SMSg2) %>% 
+satisfaction <- lmi %>% dplyr::select(SMS_satisf, SMSg2) %>% 
     mutate(SMS_satisf = factor(SMS_satisf))
 
 levels(satisfaction$SMS_satisf) <- c("Completely disagree", "Somewhat disagree", "Do not agree nor disagree", "Somewhat agree", "Completely agree")
@@ -448,9 +474,12 @@ plot2 <- plot1 + geom_hline(yintercept = 1/10, linetype = "dashed", colour = "da
 plot2 + geom_hline(yintercept = 10, linetype = "dashed", colour = "darkgrey") 
 ```
 
-## Kernel density plots for total wear times {.tabset}  
-  
-**Code to set up the modified function**
+***
+
+## Kernel density plots for total wear times   
+
+(Code to set up the modified function)
+
 ```{r sm, verbose = FALSE}
 
 # Changing the sm density compare function to allow different color of the band of equality. Copied from https://web.archive.org/web/20170222214214/https://stat.ethz.ch/pipermail/r-help//2009-March/416920.html.
@@ -605,6 +634,14 @@ sm.density.compare2 <- function (x, group, h, model = "none", bandcol =
 }
 ```
 
+
+
+This section shows density plots comparing the reason and succinct message groups, as well as the participants who opted in vs. opted out.
+
+ $\\$ $\\$
+
+***
+
 ### SMS types
   
 **Compare the effect of SMS types on total wear time**
@@ -615,7 +652,7 @@ Total wear time in minutes (dashed line for the reason condition, solid for succ
 
 # WEARTIME KERNEL: H_Weartime.SUM
 
-lmix <- lmi %>% select(H_Weartime.SUM, SMSg2) %>% filter(complete.cases(.))
+lmix <- lmi %>% dplyr::select(H_Weartime.SUM, SMSg2) %>% filter(complete.cases(.))
 
 summary(lmix)
 
@@ -642,13 +679,15 @@ legend("bottom", legend = c(paste("Mean (sd) Reason:", sep=""),
        bty = "n", cex=0.5)
 ```
 
+***
+
 ### Opt in vs. opt out
 
 **Compare the wear times between those who received messages, and those who did not**
 
 ```{r}
 
-lmix <- lmi %>% select(H_Weartime.SUM, SMSg4) %>% filter(complete.cases(.))
+lmix <- lmi %>% dplyr::select(H_Weartime.SUM, SMSg4) %>% filter(complete.cases(.))
 
 summary(lmix)
 
@@ -674,6 +713,8 @@ legend("bottom", legend = c(paste("Mean (sd) Opt in:", sep=""),
                                  paste(round(MeanS, 2), " (", round(SdS, 2),")", "; n=", sum(!is.na(lmi$H_Weartime.SUM[which(lmi$SMSg4=="Opt out")])), sep="")), 
        bty = "n", cex=0.5)
 ```
+
+***
 
 ## Weartime minutes (Mann-Whitney U-tests) 
 
@@ -723,6 +764,8 @@ W-statistic: `r optin$statistic %>% round(., 3)`
 Confidence interval: `r round(optin$conf.int) %>% round(., 3)`  
 p-value: `r optin$p.value %>% round(., 3)`  
 
+***
+
 ## Weartime (ANOVA, MANOVA)  
 
 **ANOVA**
@@ -769,15 +812,28 @@ ManRes <- Manova(fitIII, type="III")
 summary(ManRes, multivariate=TRUE)
 
 ```
+
 (On Roy's largest root: "Because it is a maximum, it can behave differently from the other three test statistics. In instances where the other three are not significant and Roy's is significant, the effect should be considered insignificant." [source](http://www.ats.ucla.edu/stat/stata/output/Stata_MANOVA.htm))
 
+***
 
-## Equivalence testing (TOST) {.tabset}
+## Equivalence testing (TOST) 
+
+
+
+This section describes the results of equivalence testing; more specifically, the "two one-sided tests" (TOST) approach. This is the reference:
+
+
+Lakens, Daniel. "Equivalence Tests: A Practical Primer for t Tests, Correlations, and Meta-Analyses." Social Psychological and Personality Science 8, no. 4 (May 1, 2017): 355-62. https://doi.org/10.1177/1948550617697177.
+
+ $\\$ $\\$
+
+***
 
 ### Minutes; Reason vs. succinct
 
 ```{r}
-lmi.tost <- lmi %>% select(H_Weartime.SUM, 
+lmi.tost <- lmi %>% dplyr::select(H_Weartime.SUM, 
                            H_DaysWornN_over10h, 
                            SMSgall) %>%
                     filter(complete.cases(.))
@@ -792,12 +848,15 @@ m.minutes
 TOSTtwo(m1 = m.minutes$mean[1], m2 = m.minutes$mean[2], sd1 = m.minutes$sd[1], sd2 = m.minutes$sd[2], n1=m.minutes$n[1], n2=m.minutes$n[2], low_eqbound_d = -0.3, high_eqbound_d = 0.3, alpha = 0.05, var.equal=FALSE)
 
 ```
+
 The graph above indicates that the effect of SMS type on total wear minutes was statistically significantly closer to zero than |0.3|.
+
+***
 
 ### Minutes; Opt in vs. opt out
 
 ```{r}
-lmi.tost <- lmi %>% select(H_Weartime.SUM, 
+lmi.tost <- lmi %>% dplyr::select(H_Weartime.SUM, 
                            H_DaysWornN_over10h, 
                            SMSg4) %>% 
                     filter(complete.cases(.))
@@ -815,10 +874,12 @@ TOSTtwo(m1 = m.minutes$mean[1], m2 = m.minutes$mean[2], sd1 = m.minutes$sd[1], s
 
 The effect of opting in / out on total wear time minutes was statistically significantly closer to zero than |0.3|.
 
+***
+
 ### Days w/ valid data; Reason vs. succinct
 
 ```{r}
-lmi.tost <- lmi %>% select(H_Weartime.SUM, 
+lmi.tost <- lmi %>% dplyr::select(H_Weartime.SUM, 
                            H_DaysWornN_over10h, 
                            SMSgall) %>%
                     filter(complete.cases(.))
@@ -832,12 +893,15 @@ m.minutes
 
 TOSTtwo(m1 = m.minutes$mean[1], m2 = m.minutes$mean[2], sd1 = m.minutes$sd[1], sd2 = m.minutes$sd[2], n1=m.minutes$n[1], n2=m.minutes$n[2], low_eqbound_d = -0.3, high_eqbound_d = 0.3, alpha = 0.05, var.equal=FALSE)
 ```
+
 The effect of SMS type on days with equal to or less than 10 hours of recorded data was statistically significantly closer to zero than |0.3|.
+
+***
 
 ### Days w/ valid data; Opt in vs. opt out
 
 ```{r}
-lmi.tost <- lmi %>% select(H_Weartime.SUM, 
+lmi.tost <- lmi %>% dplyr::select(H_Weartime.SUM, 
                            H_DaysWornN_over10h, 
                            SMSg4) %>% 
                     filter(complete.cases(.))
@@ -852,14 +916,17 @@ m.minutes
 TOSTtwo(m1 = m.minutes$mean[1], m2 = m.minutes$mean[2], sd1 = m.minutes$sd[1], sd2 = m.minutes$sd[2], n1=m.minutes$n[1], n2=m.minutes$n[2], low_eqbound_d = -0.3, high_eqbound_d = 0.30, alpha = 0.05, var.equal=FALSE)
 
 ```
+
 The effect of opting to receive reminders on days with equal to or less than 10 hours of recorded data was statistically significantly smaller than 0.3, but we could not reject the hypothesis that the effect was higher than -0.3.
+
+***
 
 ## Heterogeneity among clusters
 
 Here we present the weartimes among different educational groups, i.e. the clusters participants were nested in.
 
 ```{r}
-lmi.tracks <- lmi %>% select(H_Weartime.SUM, q0008, SMSg3, girl) %>% 
+lmi.tracks <- lmi %>% dplyr::select(H_Weartime.SUM, q0008, SMSg3, girl) %>% 
     mutate(track = ifelse(q0008 == 1, "1", 
                     ifelse(q0008 == 2, "2", NA)),
            track = factor(track),
@@ -897,6 +964,7 @@ lmi.tracks3 <- lmi.tracks %>% filter(track.grp != "2Opt out (n=83)", track.grp !
 sm.density.compare2(lmi.tracks3$H_Weartime.SUM, lmi.tracks3$track.grp, xlab="Minutes", col=c(1,2,3,4,5), lty=c(2,1), bandcol='LightGray', model="equal", lwd=(c(2,2)), xlim=c(0,8000))
 
 ```
+
 Same for track 2, after removing the small outlier group:
 
 ```{r}
@@ -910,7 +978,7 @@ sm.density.compare2(lmi.tracks4$H_Weartime.SUM, lmi.tracks4$track.grp, xlab="Min
 
 ## Bayesian ANOVA  
 
-(NOTE: prior graphs from now on with BF01 instead of BF10):
+(NOTE: the prior graph is with BF01 instead of BF10):
 
 ```{r bayesanova1, eval = FALSE}
 summary(aov(lmi$H_Weartime.SUM ~ lmi$SMSg3))
@@ -1006,6 +1074,13 @@ plot2 + geom_hline(yintercept = 10, linetype = "dashed", colour = "darkgrey")
 
 ```
 
+```{r}
+
+plot2 + geom_hline(yintercept = 10, linetype = "dashed", colour = "darkgrey") 
+
+```
+
+
 ### Grouping order: reason > succinct > opt out
 
 Note that this could be considered not the end of the analysis. The null model can be false in ways not consistent with H1 (see [here](https://web.archive.org/web/20170226172405/http://bayesfactor.blogspot.fi/2015/01/multiple-comparisons-with-bayesfactor-2.html)). The code that follows is also adapted from the link.
@@ -1028,6 +1103,7 @@ head(samples)
 
 
 Check the proportion of samples where Reason > Succinct > Opt out.
+
 ```{r}
 consistent <- (samples[, "lmi.SMSg3-Reason (n=133)"] > samples[, "lmi.SMSg3-Succinct (n=135)"]) &
   (samples[, "lmi.SMSg3-Succinct (n=135)"] > samples[, "lmi.SMSg3-Opt out (n=83)"])
@@ -1058,9 +1134,11 @@ cat(c("The BF10 of the order against null is", round(bf_restriction_against_null
 
 ```
 
+The analysis indicates the null model is more likely than a model where any means are unequal, by a Bayes Factor of about `r round(1/bf_restriction_against_null, 0)`.
+
 ***
 
-## Weardays {.tabset}
+## Weardays 
 
 Measurement days of >10 hours of valid data gathered by group. Horizontal lines represent means, boxes Bayesian 95% Highest Density Intervals (with flat priors).
 
@@ -1110,7 +1188,15 @@ pirateplot(formula = H_DaysWornN_over10h ~ SMSg3,
 
 ```
 
-### Chi^2 weardays; was sent messages to v. was not
+***
+
+### $\chi^2$-tests and Bayes Factors for wear days
+
+This section presents the main results for differences in wear days between the reason- and succinct arms, as well as between those who were sent messages to and those who were not.
+
+***
+
+#### $\chi^2$ weardays; was sent messages to v. was not
 
 ```{r weardays.receiveornot}
 lmi$SMS_group_receiveornot <- NA
@@ -1123,7 +1209,9 @@ cat(c("group sizes:", table(lmi$SMS_group_receiveornot)[[1]], "received,", table
 chisq.test(lmi$H_DaysWornN_over10h, lmi$SMS_group_receiveornot)
 ```
 
-### BF weardays, was sent messages to v. was not
+***
+
+#### BF weardays, was sent messages to v. was not
 
 ```{r bf.weardays.receiveornot}
 # Create data matrix for Bayesian contingency tables:
@@ -1165,15 +1253,18 @@ plot2 <- plot1 + geom_hline(yintercept = 1/10, linetype = "dashed", colour = "da
 plot2 + geom_hline(yintercept = 10, linetype = "dashed", colour = "darkgrey") 
 ```
 
+***
 
-### Chi^2 Weardays; Reason v. Succinct
+#### $\chi^2$ Weardays; Reason v. Succinct
 
 ```{r weardays.reasonsuccinct}
 chisq.test(lmi$H_DaysWornN_over10h, lmi$SMSg2)
 
 ```
 
-### BF Weardays; Reason v. Succinct
+***
+
+#### BF Weardays; Reason v. Succinct
 
 ```{r bf.weardays.reasonsuccinct}
 # Create data matrix for Bayesian contingency tables:
@@ -1225,7 +1316,7 @@ Self-reported opening and reading of messages. Y-axis is total wear time. Boxes 
 ```{r dosedependence}
 
 dosedf <- lmi %>% 
-    select(SMS_read, SMSgall, H_Weartime.SUM) %>% 
+    dplyr::select(SMS_read, SMSgall, H_Weartime.SUM) %>% 
     rename(weartime = H_Weartime.SUM) %>% 
     mutate(grouping = ifelse(SMS_read == 1, "0 (n=94)",
                         ifelse(SMS_read == 2, "1 (n=11)",
@@ -1235,7 +1326,7 @@ dosedf <- lmi %>%
 
 dosedf$grouping[dosedf$SMSgall == "Opt out"] <- "0 (n=94)"
 
-dosedf <- dosedf %>% select(weartime, grouping) %>% 
+dosedf <- dosedf %>% dplyr::select(weartime, grouping) %>% 
     filter(complete.cases(.))
 
 table(dosedf$grouping)
@@ -1287,7 +1378,7 @@ points(x = 1:5, y = medians, type = "b", pch = 1, lty = "dashed", cex = 0.8)
 
 # Additional analyses
 
-Chi^2 and BF Weardays; Opt in v. opt out
+$\chi^2$ and BF Weardays; Opt in v. opt out
 
 (Note: this is basically the same analysis as the one comparing participants for whom the messages were sent vs. for whom they were not.)  
 

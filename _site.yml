@@ -6,10 +6,12 @@ output:
     self_contained: no
     number_sections: no
     toc: yes
-    toc_float: true
+    toc_float: yes
+    toc_depth: 4
     collapsed: false
     code_folding: hide
     theme: readable
+    fig_caption: no
   pdf_document: default
 navbar:  
   title: "Comparing persuasive SMS reminders" 
@@ -20,3 +22,11 @@ navbar:
       href: manuscript/sms-persuasion-manuscript.pdf
     - text: "Supplement"
       href: sms-persuasion-supplement.html
+header-includes:
+- \usepackage{placeins}
+- \usepackage{setspace}
+- \usepackage{chngcntr}
+- \onehalfspacing
+- \counterwithin{figure}{section}
+- \counterwithin{table}{section}
+- \usepackage{fancyhdr}
