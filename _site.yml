@@ -18,7 +18,7 @@ navbar:
   left:
     - text: "About"
       href: index.html
-    - text: "Pre-print"
+    - text: "Preprint"
       href: https://psyarxiv.com/h4w9a
     - text: "Supplement"
       href: sms-persuasion-supplement.html

@@ -3,10 +3,18 @@ $\\$
 $\\$
 
 **Welcome to the supplementary website!**
+
+Links:
+
+* [Index page for this small site](https://heinonmatti.github.io/sms-persuasion/index.html)
+
+* [Github repository](https://github.com/heinonmatti/sms-persuasion/)
+
+* [Manuscript preprint](https://psyarxiv.com/h4w9a)
+
+* [OSF page](https://osf.io/7v5my/)
   
 Open code blocks by clicking the "code"-buttons on the right hand side.
-
-Github repository for this site can be found [here](https://github.com/heinonmatti/sms-persuasion/), the index page for this small site is [here](https://heinonmatti.github.io/sms-persuasion/index.html).
 
 ```{r global_options, include=FALSE}
 .libPaths("C:/rlibs/3.4.2")

@@ -6,6 +6,6 @@ title: "Index of SMS persuasion supplement"
 
 This site is a supplementary web page to a trial, where we tried to change people's behaviour by simple or rationale-providing (e.g. using the word "because") SMS reminders.
 
-The project is based on my master's thesis available under [the OSF page](https://osf.io/7v5my/); link to the manuscript preprint will be added later.
+The project is based on my master's thesis available under [the OSF page](https://osf.io/7v5my/); manuscript preprint can be found [here](https://psyarxiv.com/h4w9a).
 
 See [mattiheino.com](www.mattiheino.com) for my primary blog. A post on this study can be found [here](https://mattiheino.com/2016/05/03/myth-of-the-magical-because/).

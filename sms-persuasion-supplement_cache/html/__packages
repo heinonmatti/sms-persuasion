@@ -33,10 +33,3 @@ lme4
 broom
 papaja
 bindrcpp
-BiocInstaller
-StanHeaders
-rstan
-rethinking
-loo
-formatR
-shiny
