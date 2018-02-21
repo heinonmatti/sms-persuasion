@@ -3,6 +3,7 @@ Simple and rationale-providing SMS reminders  to promote accelerometer use: A pa
 
 ## Important files
 Data: sms-persuasion-data.csv
+
 Code: sms-persuasion-supplement.Rmd
 
 ## Related material
