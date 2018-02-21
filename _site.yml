@@ -18,8 +18,8 @@ navbar:
   left:
     - text: "About"
       href: index.html
-    - text: "Manuscript"
-      href: manuscript/sms-persuasion-manuscript.pdf
+    - text: "Pre-print"
+      href: https://psyarxiv.com/h4w9a
     - text: "Supplement"
       href: sms-persuasion-supplement.html
 header-includes:
