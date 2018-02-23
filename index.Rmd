@@ -4,7 +4,7 @@ title: "Index of SMS persuasion supplement"
 
 # Welcome!
 
-This site is a supplementary web page to a trial, where we tried to change people's behaviour by simple or rationale-providing (e.g. using the word "because") SMS reminders.
+This site is a supplementary web page to a trial, where we tried to change people's behaviour by simple or rationale-providing (e.g. using the word "because") SMS reminders. The supplement is found [here](https://heinonmatti.github.io/sms-persuasion/sms-persuasion-supplement.html).
 
 The project is based on my master's thesis available under [the OSF page](https://osf.io/7v5my/); manuscript preprint can be found [here](https://psyarxiv.com/h4w9a).
 
