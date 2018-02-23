@@ -68,7 +68,7 @@ lmi$SMSg <- factor(lmi$SMS_group, levels=c(1,2,3,4), labels=c("Reason","Succinct
 
 lmi$SMSg2 <- factor(lmi$SMS_group, levels=c(1,2), labels=c("Reason","Succinct"))
 
-lmi$SMSg3 <- factor(lmi$SMS_group, levels=c(1,2,3), labels=c("Reason (n=133)","Succinct (n=135)","Opt out (n=83)"))
+lmi$SMSg3 <- factor(lmi$SMS_group, levels=c(1,2,3), labels=c("Reason","Succinct","Opt out"))
 
 lmi$SMSg4 <- factor(lmi$SMS_group_optinvsoptout, levels=c(1,2), labels=c("Opt in","Opt out"))
 
@@ -693,6 +693,8 @@ legend("bottom", legend = c(paste("Mean (sd) Reason:", sep=""),
 
 **Compare the wear times between those who received messages, and those who did not**
 
+Figure with text:
+
 ```{r}
 
 lmix <- lmi %>% dplyr::select(H_Weartime.SUM, SMSg4) %>% filter(complete.cases(.))
@@ -720,6 +722,26 @@ legend("bottom", legend = c(paste("Mean (sd) Opt in:", sep=""),
                                  paste("Mean (sd) Opt out:", sep=""),
                                  paste(round(MeanS, 2), " (", round(SdS, 2),")", "; n=", sum(!is.na(lmi$H_Weartime.SUM[which(lmi$SMSg4=="Opt out")])), sep="")), 
        bty = "n", cex=0.5)
+```
+
+Figure without text for BMC Public Health:
+
+```{r}
+
+lmix <- lmi %>% dplyr::select(H_Weartime.SUM, SMSg4) %>% filter(complete.cases(.))
+
+summary(lmix)
+
+set.seed(100) # set random number generator for replicable results.
+
+sm.density.compare2(lmix$H_Weartime.SUM, lmix$SMSg4, xlab="Minutes", col=c(1,2), lty=c(2,1), bandcol='LightGray', model="equal", lwd=(c(2,2)), xlim=c(0,8000))
+
+title(main="")
+
+colfill<-c(1,2)
+
+legend("topleft", inset=.05, levels(lmi$SMSg4), fill=colfill)
+
 ```
 
 ***
@@ -781,10 +803,13 @@ p-value: `r optin$p.value %>% round(., 3)`
 Means and the total wear time distributions of the three groups. Error bars indicate 95% confidence intervals. No differences are detected.
 
 ```{r weartime anova}
-userfriendlyscience::oneway(y=lmi$H_Weartime.SUM,
-       x=lmi$SMSg3,
+lmi_for_anovaplot <- lmi %>% dplyr::select(Minutes = H_Weartime.SUM, Group = SMSg3)
+
+anovaplot_minutes <- userfriendlyscience::oneway(y=lmi_for_anovaplot$Minutes,
+       x=lmi_for_anovaplot$Group,
        means=TRUE, posthoc="holm", plot=TRUE, levene=TRUE)
 
+anovaplot_minutes
 ```
 
 **MANOVA**
