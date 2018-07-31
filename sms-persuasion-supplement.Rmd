@@ -32,7 +32,7 @@ options(scipen=999)
 
 The code block shows all installed packages and the session information of the computer this was run on.
 
-```{r preliminaries, warning = FALSE, message = FALSE, cache = FALSE}
+```{r preliminaries, warning = FALSE, message = FALSE, cache = FALSE, results = "markup"}
 
 if(!require("pacman")) install.packages("pacman")
 library("pacman")
@@ -83,7 +83,7 @@ This section presents supplementary information on the methods section.
 
 ## Interpreting Bayes Factors
 
-In Bayesian philosophy, probabilities are conceived as quantified beliefs, instead of hypothetical long-run frequencies. A Bayes Factor BF10 (BF01) indicates how much prior odds should be shifted towards the alternative (null) hypothesis, in the light of the data: BF10 = $\frac {p(data, given H1)} {p(data, given H0)}$. When prior odds $\frac {p(H1)} {p(H0)}$  are multiplied by the BF, it results as the posterior odds. As an example, take a modestly skeptical scientist, who holds 1:3 odds against the alternative hypothesis, corresponding to a 25% posterior probability. After observing data that indicate a BF10 of 15 (or a BF01 of 1/15), the scientist should shift his or her prior odds to become $\frac {1} {3} * \frac {15} {1}$ = 15:3 or 5:1, now  favoring the alternative hypothesis with a posterior probability of $\frac {5} {6}$ = 83%.   
+In Bayesian philosophy, probabilities are conceived as quantified beliefs, instead of hypothetical long-run frequencies. A Bayes Factor BF10 (BF01) indicates how much prior odds should be shifted towards the alternative (null) hypothesis, in the light of the data: BF10 = $\frac {p(data, given H1)} {p(data, given H0)}$. When prior odds $\frac {p(H1)} {p(H0)}$  are multiplied by the BF, it results as the posterior odds. As an example, take a modestly skeptical scientist, who holds 1:3 odds against the alternative hypothesis, corresponding to a 25% posterior probability. After observing data that indicate a BF10 of 15 (or a BF01 of 1/15), the scientist should shift his or her prior odds to become $\frac {1} {3} * \frac {15} {1}$ = 15:3 or 5:1, now  favoring the alternative hypothesis with a posterior probability of $\frac {5} {6}$ = 83%.
 
 Although considered sufficient in some contexts (e.g. FMRI-studies, where data collection is extremely costly), we share Etz and Vandekerckhove's* concern about a BF of 3 not indicating much evidence. A BF10 of three would lead a scientist from 1:1 odds (or 50% probability) to 3:1 odds (or 75% probability); still with the same probability of erring as drawing a heart from a deck of cards. 
 
@@ -337,6 +337,7 @@ plot2 + geom_hline(yintercept = 10, linetype = "dashed", colour = "darkgrey")
 
 ```
 
+
 ***
 
 ### Discussing the messages
@@ -411,6 +412,11 @@ plot2 <- plot1 + geom_hline(yintercept = 1/10, linetype = "dashed", colour = "da
 plot2 + geom_hline(yintercept = 10, linetype = "dashed", colour = "darkgrey") 
 ```
 
+
+**Interim conclusion:** 
+
+The distributions in answers to opening and reading the SMS, discussing the messages with peers or being satisfied with the messages did not differ among the reason and succinct groups (χ2(4)=1.356, 2.566 and 3.903 respectively; all p’s > 0.4). All Bayes Factors indicated strong support for the null. 
+
 ***
 
 ### Satisfaction with the messages 
@@ -444,6 +450,7 @@ ggplot(satisfaction) +
 ```
 
 **Test for differences in satisfaction:**
+
 ```{r}
 chisq.test(lmi$SMS_satisf, lmi$SMSg2)
 
@@ -481,6 +488,12 @@ plot2 <- plot1 + geom_hline(yintercept = 1/10, linetype = "dashed", colour = "da
 
 plot2 + geom_hline(yintercept = 10, linetype = "dashed", colour = "darkgrey") 
 ```
+
+**Interim conclusion:**
+
+The messages were evaluated positively. Only 3.5% of the participants indicated disagreement with the statement "I was satisfied with the content of the messages". 
+
+Open comments did not reveal unforeseen negative effects. In addition, 13% (9 out of 70) of participants who answered the question explicitly added, that remembering to wear the device was due to receiving the messages. 
 
 ***
 
@@ -848,6 +861,14 @@ summary(ManRes, multivariate=TRUE)
 
 (On Roy's largest root: "Because it is a maximum, it can behave differently from the other three test statistics. In instances where the other three are not significant and Roy's is significant, the effect should be considered insignificant." [source](http://www.ats.ucla.edu/stat/stata/output/Stata_MANOVA.htm))
 
+Some might be tempted to interpret a "trend towards significance" from the MANOVA result, p=0.054. This would be an unjustified conclusion, as p-values are random variables and the only question is whether or not we are studying real phenomena or not – if we are, p-values near zero are always more likely than those near 0.05 (Murdoch, Tsai, & Adcock, 2008). Even if the arbitrary threshold of 0.05 would have been reached, it would have still been weak evidence; at best p=0.05 can indicate, that the H1 is two and a half times more likely than H0 (BF10=2.45 in the optimal case; see (Berger & Sellke, 1987), but also (Mayo & Morey, 2017)).
+
+Berger, J., & Sellke, T. (1987). Testing a Point Null Hypothesis: The Irreconcilability of P Values and Evidence. Journal of the American Statistical Association, 82(397), 112-122. doi:10.2307/2289131
+
+Mayo, D., & Morey, R. D. (2017). A Poor Prognosis for the Diagnostic Screening Critique of Statistical Tests. Open Science Framework. https://doi.org/10.17605/OSF.IO/PS38B
+
+Murdoch, D. J., Tsai, Y-L. & Adcock, J. (2008) P-Values are Random Variables, The American Statistician, 62:3, 242-245, DOI: 10.1198/000313008X332421
+
 ***
 
 ## Equivalence testing (TOST) 
@@ -1011,7 +1032,9 @@ sm.density.compare2(lmi.tracks4$H_Weartime.SUM, lmi.tracks4$track.grp, xlab="Min
 
 ## Bayesian ANOVA  
 
-(NOTE: the prior graph is with BF01 instead of BF10):
+Bayes Factors allowed us to quantify evidence for the null effect. The BF01 of 12.05 from testing equality of weartime means between the three arms (i.e. the Bayesian ANOVA below) is enough to move an impartial observer with 1:1 prior odds to a 7.7% subjective posterior probability of an effect. Equally, a person who had high prior confidence (10 to 1 prior odds, translating to 91% probability) in the arms showing differences in weartimes, should become impartial and be moved to 54.6% probability in favor of an effect – provided that the proponent would agree with our methodology to test the hypothesis. (See above, “Interpreting Bayes Factors”, for more information.)
+
+(NOTE: the prior robustness graph below is with BF01 instead of BF10 -- i.e. representing support for the null against the alternative hypothesis):
 
 ```{r bayesanova1, eval = FALSE}
 summary(aov(lmi$H_Weartime.SUM ~ lmi$SMSg3))
