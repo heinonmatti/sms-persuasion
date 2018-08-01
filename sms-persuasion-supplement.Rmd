@@ -28,9 +28,6 @@ knitr::opts_chunk$set(warning=FALSE,
 options(scipen=999)
 ```
 
-# Session information
-
-The code block shows all installed packages and the session information of the computer this was run on.
 
 ```{r preliminaries, warning = FALSE, message = FALSE, cache = FALSE, results = "markup"}
 
@@ -38,9 +35,6 @@ if(!require("pacman")) install.packages("pacman")
 library("pacman")
 
 p_load(viridis, tidyverse, userfriendlyscience, MASS, BayesFactor, car, mvtnorm, Rcpp, TOSTER, devtools, yarrr, dplyr, RColorBrewer, sm, hypergeo, nlme, pwr, lme4, broom, papaja)
-
-# library(tidyverse)
-devtools::session_info()
 
 ```
 
@@ -1028,6 +1022,48 @@ sm.density.compare2(lmi.tracks4$H_Weartime.SUM, lmi.tracks4$track.grp, xlab="Min
 
 ```
 
+## Gender differences
+
+There was no a priori reason to expect a difference between girls and boys, so testing for them is likely to have low power and result in alpha inflation. We nevertheless include ANOVA results and plot the raw data to satisfy a reviewer query.
+
+The results show no differences in either weartime minutes or number of days with satisfactory amount of data. 
+
+```{r gendertest, warning = FALSE}
+
+lmi.gendertest <- lmi %>% dplyr::select(girl, SMSg, SMSg2, SMSg3, SMSg4, SMSgall, H_Weartime.SUM, H_DaysWornN_over10h) %>% 
+  dplyr::mutate(genderGroup = paste0(girl, SMSg),
+                genderGroup = ifelse(stringr::str_detect(lmi.gendertest$genderGroup, "Failed"), NA, genderGroup), # Make the 7 "failed to send" cases NA
+                genderGroup = ifelse(stringr::str_detect(lmi.gendertest$genderGroup, "NA"), NA, genderGroup), # Make all cells containing NA (e.g. "NANA"), NA
+                genderGroup = stringr::str_replace(lmi.gendertest$genderGroup, "0", "boy_"), # replace 0 with boy
+                genderGroup = stringr::str_replace(lmi.gendertest$genderGroup, "1", "girl_")) # replace 1 with girl
+
+lmi.gendertest$genderGroup %>% table()
+
+# lmi.gendertest %>% dplyr::group_by(girl, SMSg2) %>% dplyr::summarise(mean = mean(H_Weartime.SUM, na.rm = TRUE), n = n()) %>% na.omit()
+# 
+# lmi.gendertest %>% dplyr::group_by(girl, SMSg3) %>% dplyr::summarise(mean = mean(H_Weartime.SUM, na.rm = TRUE), n = n()) %>% na.omit()
+# 
+# lmi.gendertest %>% dplyr::group_by(girl, SMSg4) %>% dplyr::summarise(mean = mean(H_Weartime.SUM, na.rm = TRUE), n = n()) %>% na.omit()
+# 
+# lmi.gendertest %>% dplyr::group_by(girl, SMSgall) %>% dplyr::summarise(mean = mean(H_Weartime.SUM, na.rm = TRUE), n = n()) %>% na.omit()
+
+# sm.density.compare2(lmi.gendertest$H_Weartime.SUM, lmi.gendertest$genderGroup, xlab="Minutes", col=c(1,2,3,4,5,6), lty=c(2,1), bandcol='LightGray', model="equal", lwd=(c(2,2)), xlim=c(0,8000))
+
+anovaplot_genderMinutes <- userfriendlyscience::oneway(y=lmi.gendertest$H_Weartime.SUM,
+       x=lmi.gendertest$genderGroup,
+       means=TRUE, posthoc="holm", plot=TRUE, levene=TRUE)
+
+anovaplot_genderMinutes
+
+anovaplot_genderDays <- userfriendlyscience::oneway(y=lmi.gendertest$H_DaysWornN_over10h,
+       x=lmi.gendertest$genderGroup,
+       means=TRUE, posthoc="holm", plot=TRUE, levene=TRUE)
+
+anovaplot_genderDays
+
+```
+
+
 ***
 
 ## Bayesian ANOVA  
@@ -1483,3 +1519,11 @@ plot2 + geom_hline(yintercept = 10, linetype = "dashed", colour = "darkgrey")
 **Other exploratory analyses:**
 
 In addition, we investigated all bivariate correlations between wear time and questionnaire measures, as well as bioimpedance results, in the hope of creating hypotheses for falsification with new data. We discovered only low, presumably spurious, correlations. All of these were of order tau < 0.15. "Significant" items included doing PA because others say one should do so, self-reported sitting during class and using mnemonic cues to carry out PA plans.
+
+# Session information
+
+The code block shows all installed packages and the session information of the computer this was run on.
+
+```{r}
+devtools::session_info()
+```
