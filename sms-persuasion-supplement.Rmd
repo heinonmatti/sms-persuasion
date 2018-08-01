@@ -1401,7 +1401,7 @@ plot2 + geom_hline(yintercept = 10, linetype = "dashed", colour = "darkgrey")
 
 ***
 
-# Dose dependence
+## Dose dependence
 
 Self-reported opening and reading of messages. Y-axis is total wear time. Boxes represent 95% HDIs for the means, solid lines connect means and dashed lines connect medians. Participants who opted out of reminders are aggregated with those who indicated not having opened the messages even once. Participants who received messages, but did not answer the question on message reading, are excluded.
 
@@ -1465,6 +1465,27 @@ points(x = 1:5, y = means, type = "b", pch = 20)
 points(x = 1:5, y = medians, type = "b", pch = 1, lty = "dashed", cex = 0.8)
 
 ```
+
+***
+
+# Alternative explanations, speculations and rational theory defense
+
+We must be careful not read too much into potential explanations (such as the hidden moderators-argument) for why an effect was not detected here [1]. In the light of the recent “crisis of confidence in the psychological sciences”[2, 3], it is concerning that only a single direct replication of the xerox machine study has been published.  The lack of direct replication and the mixed results from conceptual replications point to a more specific question in the context of current research: when is it rational to defend a theory by coming up with additional auxiliary hypotheses or rejecting the protocol of a falsifying experiment (falsification and corroboration being continuous measures, defined by the strictness of the test). Meehl [4] argues, from a neo-Popperian framework, for the Lakatos principle: it is rational to defend a (seasoned) theory when it has accumulated an impressive track record of strong successes. 
+
+As measured by Bayes Factors, even without accounting for possible publication bias, the Langer, Blank and Chanowitz study does not reach the criterion for strong evidence (see data at https://osf.io/7y25w/). It would thus be quite a leap to consider the Langer, Blank and Chanowitz theory (much less the stronger formulation by Cialdini and others) having accumulated enough credit by strong successes to justify much speculation about e.g. moderating factors. 
+
+We encourage readers, who wishes to speculate on the findings based on dual process theories, to be aware of the related assumptions, which cannot be tested with the current data [5-9]. 
+
+1. Westfall, J., & Yarkoni, T. (2016). Statistically Controlling for Confounding Constructs Is Harder than You Think. PLOS ONE, 11(3), e0152719. https://doi.org/10.1371/journal.pone.0152719
+2. Earp, B. D., & Trafimow, D. (2015). Replication, falsification, and the crisis of confidence in social psychology. Quantitative Psychology and Measurement, 6, 621. https://doi.org/10.3389/fpsyg.2015.00621
+3. https://en.wikipedia.org/wiki/Replication_crisis
+4. Meehl, P. E. (1990). Appraising and amending theories: The strategy of Lakatosian defense and two principles that warrant it. Psychological Inquiry, 1(2), 108–141.
+5. Kruglanski AW. Only One? The Default Interventionist Perspective as a Unimodel—Commentary on Evans & Stanovich (2013). Only One? The Default Interventionist Perspective as a Unimodel—Commentary on Evans & Stanovich (2013). Perspect Psychol Sci. 2013;8:242–7.
+6. Keren G. A tale of two systems: A scientific advance or a theoretical stone soup? Commentary on Evans & Stanovich (2013). Perspect Psychol Sci. 2013;8:257–262.
+7. Bellini-Leite SC. Dual Process Theory: Systems, Types, Minds, Modes, Kinds or Metaphors? A Critical Review. Rev Philos Psychol. 2018;9:213–25.
+8. Evans JSBT, Stanovich KE. Dual-Process Theories of Higher Cognition: Advancing the Debate. Perspect Psychol Sci. 2013;8:223–41.
+9. Mugg J. The dual-process turn: How recent defenses of dual-process theories of reasoning fail. Philos Psychol. 2016;29:300–9.
+
 
 ***
 
