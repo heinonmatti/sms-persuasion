@@ -660,7 +660,7 @@ plot2 &lt;- plot1 + geom_hline(yintercept = 1/10, linetype = &quot;dashed&quot;,
 plot2 + geom_hline(yintercept = 10, linetype = &quot;dashed&quot;, colour = &quot;darkgrey&quot;) </code></pre>
 <p><img src="sms-persuasion-supplement_files/figure-html/discusstests-1.png" width="2100" /></p>
 <p><strong>Interim conclusion:</strong></p>
-<p>The distributions in answers to opening and reading the SMS, discussing the messages with peers or being satisfied with the messages did not differ among the reason and succinct groups (Ï‡2(4)=1.356, 2.566 and 3.903 respectively; all pâ€™s &gt; 0.4). All Bayes Factors indicated strong support for the null.</p>
+<p>The distributions in answers to opening and reading the SMS, discussing the messages with peers or being satisfied with the messages did not differ among the reason and succinct groups (Ï‡2(4)=1.356, 2.566 and 3.903 respectively; all p-values &gt; 0.4). All Bayes Factors indicated strong support for the null.</p>
 <hr />
 </div>
 <div id="satisfaction-with-the-messages" class="section level3">
@@ -1166,7 +1166,7 @@ summary(ManRes, multivariate=TRUE)</code></pre>
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>(On Roy’s largest root: “Because it is a maximum, it can behave differently from the other three test statistics. In instances where the other three are not significant and Roy’s is significant, the effect should be considered insignificant.” <a href="http://www.ats.ucla.edu/stat/stata/output/Stata_MANOVA.htm">source</a>)</p>
-<p>Some might be tempted to interpret a “trend towards significance” from the MANOVA result, p=0.054. This would be an unjustified conclusion, as p-values are random variables and the only question is whether or not we are studying real phenomena or not â€“ if we are, p-values near zero are always more likely than those near 0.05 (Murdoch, Tsai, &amp; Adcock, 2008). Even if the arbitrary threshold of 0.05 would have been reached, it would have still been weak evidence; at best p=0.05 can indicate, that the H1 is two and a half times more likely than H0 (BF10=2.45 in the optimal case; see (Berger &amp; Sellke, 1987), but also (Mayo &amp; Morey, 2017)).</p>
+<p>Some might be tempted to interpret a “trend towards significance” from the MANOVA result, p=0.054. This would be an unjustified conclusion, as p-values are random variables and the only question is whether or not we are studying real phenomena or not – if we are, p-values near zero are always more likely than those near 0.05 (Murdoch, Tsai, &amp; Adcock, 2008). Even if the arbitrary threshold of 0.05 would have been reached, it would have still been weak evidence; at best p=0.05 can indicate, that the H1 is two and a half times more likely than H0 (BF10=2.45 in the optimal case; see (Berger &amp; Sellke, 1987), but also (Mayo &amp; Morey, 2017)).</p>
 <p>Berger, J., &amp; Sellke, T. (1987). Testing a Point Null Hypothesis: The Irreconcilability of P Values and Evidence. Journal of the American Statistical Association, 82(397), 112-122. <a href="doi:10.2307/2289131" class="uri">doi:10.2307/2289131</a></p>
 <p>Mayo, D., &amp; Morey, R. D. (2017). A Poor Prognosis for the Diagnostic Screening Critique of Statistical Tests. Open Science Framework. <a href="https://doi.org/10.17605/OSF.IO/PS38B" class="uri">https://doi.org/10.17605/OSF.IO/PS38B</a></p>
 <p>Murdoch, D. J., Tsai, Y-L. &amp; Adcock, J. (2008) P-Values are Random Variables, The American Statistician, 62:3, 242-245, DOI: 10.1198/000313008X332421</p>
@@ -1532,7 +1532,7 @@ anovaplot_genderDays</code></pre>
 </div>
 <div id="bayesian-anova" class="section level2">
 <h2>Bayesian ANOVA</h2>
-<p>Bayes Factors allowed us to quantify evidence for the null effect. The BF01 of 12.05 from testing equality of weartime means between the three arms (i.e. the Bayesian ANOVA below) is enough to move an impartial observer with 1:1 prior odds to a 7.7% subjective posterior probability of an effect. Equally, a person who had high prior confidence (10 to 1 prior odds, translating to 91% probability) in the arms showing differences in weartimes, should become impartial and be moved to 54.6% probability in favor of an effect â€“ provided that the proponent would agree with our methodology to test the hypothesis. (See above, â€œInterpreting Bayes Factorsâ€, for more information.)</p>
+<p>Bayes Factors allowed us to quantify evidence for the null effect. The BF01 of 12.05 from testing equality of weartime means between the three arms (i.e. the Bayesian ANOVA below) is enough to move an impartial observer with 1:1 prior odds to a 7.7% subjective posterior probability of an effect. Equally, a person who had high prior confidence (10 to 1 prior odds, translating to 91% probability) in the arms showing differences in weartimes, should become impartial and be moved to 54.6% probability in favor of an effect - provided that the proponent would agree with our methodology to test the hypothesis. (See above, “Interpreting Bayes Factors”, for more information.)</p>
 <p>(NOTE: the prior robustness graph below is with BF01 instead of BF10 – i.e. representing support for the null against the alternative hypothesis):</p>
 <pre class="r"><code>summary(aov(lmi$H_Weartime.SUM ~ lmi$SMSg3))
 
@@ -1784,9 +1784,8 @@ plot2 + geom_hline(yintercept = 10, linetype = &quot;dashed&quot;, colour = &quo
 </div>
 </div>
 </div>
-</div>
-<div id="dose-dependence" class="section level1">
-<h1>Dose dependence</h1>
+<div id="dose-dependence" class="section level2">
+<h2>Dose dependence</h2>
 <p>Self-reported opening and reading of messages. Y-axis is total wear time. Boxes represent 95% HDIs for the means, solid lines connect means and dashed lines connect medians. Participants who opted out of reminders are aggregated with those who indicated not having opened the messages even once. Participants who received messages, but did not answer the question on message reading, are excluded.</p>
 <pre class="r"><code>dosedf &lt;- lmi %&gt;% 
     dplyr::select(SMS_read, SMSgall, H_Weartime.SUM) %&gt;% 
@@ -1847,6 +1846,25 @@ pirateplot(formula = weartime ~ grouping,
 points(x = 1:5, y = means, type = &quot;b&quot;, pch = 20)
 points(x = 1:5, y = medians, type = &quot;b&quot;, pch = 1, lty = &quot;dashed&quot;, cex = 0.8)</code></pre>
 <p><img src="sms-persuasion-supplement_files/figure-html/dosedependence-1.png" width="2100" /></p>
+<hr />
+</div>
+</div>
+<div id="alternative-explanations-speculations-and-rational-theory-defense" class="section level1">
+<h1>Alternative explanations, speculations and rational theory defense</h1>
+<p>We must be careful not read too much into potential explanations (such as the hidden moderators-argument) for why an effect was not detected here [1]. In the light of the recent&quot; “”crisis of confidence in the psychological sciences&quot; [2, 3], it is concerning that only a single direct replication of the xerox machine study has been published. The lack of direct replication and the mixed results from conceptual replications point to a more specific question in the context of current research: when is it rational to defend a theory by coming up with additional auxiliary hypotheses or rejecting the protocol of a falsifying experiment (falsification and corroboration being continuous measures, defined by the strictness of the test). Meehl [4] argues, from a neo-Popperian framework, for the Lakatos principle: it is rational to defend a (seasoned) theory when it has accumulated an impressive track record of strong successes.</p>
+<p>As measured by Bayes Factors, even without accounting for possible publication bias, the Langer, Blank and Chanowitz study does not reach the criterion for strong evidence (see data at <a href="https://osf.io/7y25w/" class="uri">https://osf.io/7y25w/</a>). It would thus be quite a leap to consider the Langer, Blank and Chanowitz theory (much less the stronger formulation by Cialdini and others) having accumulated enough credit by strong successes to justify much speculation about e.g. moderating factors.</p>
+<p>We encourage readers, who wishes to speculate on the findings based on dual process theories, to be aware of the related assumptions, which cannot be tested with the current data [5-9].</p>
+<ol style="list-style-type: decimal">
+<li>Westfall, J., &amp; Yarkoni, T. (2016). Statistically Controlling for Confounding Constructs Is Harder than You Think. PLOS ONE, 11(3), e0152719. <a href="https://doi.org/10.1371/journal.pone.0152719" class="uri">https://doi.org/10.1371/journal.pone.0152719</a></li>
+<li>Earp, B. D., &amp; Trafimow, D. (2015). Replication, falsification, and the crisis of confidence in social psychology. Quantitative Psychology and Measurement, 6, 621. <a href="https://doi.org/10.3389/fpsyg.2015.00621" class="uri">https://doi.org/10.3389/fpsyg.2015.00621</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Replication_crisis" class="uri">https://en.wikipedia.org/wiki/Replication_crisis</a></li>
+<li>Meehl, P. E. (1990). Appraising and amending theories: The strategy of Lakatosian defense and two principles that warrant it. Psychological Inquiry, 1(2), 108-141.</li>
+<li>Kruglanski AW. Only One? The Default Interventionist Perspective as a Unimodel – Commentary on Evans &amp; Stanovich (2013). Perspect Psychol Sci. 2013;8:242-7.</li>
+<li>Keren G. A tale of two systems: A scientific advance or a theoretical stone soup? Commentary on Evans &amp; Stanovich (2013). Perspect Psychol Sci. 2013;8:257-262.</li>
+<li>Bellini-Leite SC. Dual Process Theory: Systems, Types, Minds, Modes, Kinds or Metaphors? A Critical Review. Rev Philos Psychol. 2018;9:213-25.</li>
+<li>Evans JSBT, Stanovich KE. Dual-Process Theories of Higher Cognition: Advancing the Debate. Perspect Psychol Sci. 2013;8:223-41.</li>
+<li>Mugg J. The dual-process turn: How recent defenses of dual-process theories of reasoning fail. Philos Psychol. 2016;29:300-9.</li>
+</ol>
 <hr />
 </div>
 <div id="additional-analyses" class="section level1">
