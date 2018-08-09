@@ -38,7 +38,7 @@ p_load(viridis, tidyverse, userfriendlyscience, MASS, BayesFactor, car, mvtnorm,
 
 ```
 
-# Creating the analysis data
+# Preprocessing the analysis data
 
 The code block loads data and creates the relevant variables.
 
