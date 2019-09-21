@@ -7,11 +7,12 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
-<title></title>
+<title>sms-persuasion-supplement.utf8.md</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -73,9 +74,7 @@ h6 {
 </style>
 
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -89,7 +88,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -99,6 +97,9 @@ img {
 }
 button.code-folding-btn:focus {
   outline: none;
+}
+summary {
+  display: list-item;
 }
 </style>
 
@@ -114,7 +115,6 @@ body {
   padding-top: 71px;
   margin-top: -71px;
 }
-
 .section h2 {
   padding-top: 71px;
   margin-top: -71px;
@@ -134,6 +134,43 @@ body {
 .section h6 {
   padding-top: 71px;
   margin-top: -71px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
@@ -155,55 +192,68 @@ $(document).ready(function () {
 });
 </script>
 
-
-<div class="container-fluid main-container">
-
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 <style type="text/css">
 .code-folding-btn { margin-bottom: 4px; }
 </style>
-<script>
-$(document).ready(function () {
-  window.initializeCodeFolding("hide" === "show");
-});
-</script>
 
 
-
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3,h4",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <style type="text/css">
 
@@ -252,8 +302,6 @@ div.tocify {
 
 .tocify-subheader .tocify-item {
   font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
 }
 
 .tocify .list-group-item {
@@ -262,6 +310,16 @@ div.tocify {
 
 
 </style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
 <div class="row-fluid">
@@ -328,6 +386,7 @@ div.tocify {
 <li><p><a href="https://heinonmatti.github.io/sms-persuasion/index.html">Index page for this small site</a></p></li>
 <li><p><a href="https://github.com/heinonmatti/sms-persuasion/">Github repository</a></p></li>
 <li><p><a href="https://psyarxiv.com/h4w9a">Manuscript preprint</a></p></li>
+<li><p><a href="https://doi.org/10.1186/s12889-018-6121-2">Published manuscript (Open access at BMC Public Health)</a></p></li>
 <li><p><a href="https://osf.io/7v5my/">OSF page</a></p></li>
 </ul>
 <p>Open code blocks by clicking the “code”-buttons on the right hand side.</p>
@@ -335,8 +394,8 @@ div.tocify {
 library(&quot;pacman&quot;)
 
 p_load(viridis, tidyverse, userfriendlyscience, MASS, BayesFactor, car, mvtnorm, Rcpp, TOSTER, devtools, yarrr, dplyr, RColorBrewer, sm, hypergeo, nlme, pwr, lme4, broom, papaja)</code></pre>
-<div id="creating-the-analysis-data" class="section level1">
-<h1>Creating the analysis data</h1>
+<div id="preprocessing-the-analysis-data" class="section level1">
+<h1>Preprocessing the analysis data</h1>
 <p>The code block loads data and creates the relevant variables.</p>
 <pre class="r"><code>lmi &lt;- read_csv(&quot;./sms-persuasion-data.csv&quot;)
 
@@ -383,7 +442,7 @@ lmi$SMSgall &lt;- factor(lmi$SMS_group, levels=c(1,2,3,4), labels=c(&quot;Reason
 <h3>Statistical Power</h3>
 <p>Our final sample size was unknown, as well as (in the absence of similar studies) the true effect size, so sample size planning according to the expected effect was out of the question. Our aim was to collect as many participants as possible during the available time during the two recruitment waves. We defined a clinically significant effect size by calculating, how big an effect would bring a person from 9.5 hours of daily data to reach the cutoff of 10 hours. This was defined as following<span class="math inline">\(^{(1)}\)</span>: <span class="math display">\[d=\frac{M1 - M2} {\sqrt{\frac {s_1^2+s_2^2} {2}}}\]</span> with standard deviations estimated from feasibility study<span class="math inline">\(^{(2)}\)</span> data to be 72 minutes for both groups, resulting in a d=0.42. For our purposes, we decided to consider effect sizes between -0.3 and 0.3 as equivalent to zero.</p>
 <p><span class="math inline">\(^{(1)}\)</span> Cohen J. A power primer. Psychol Bull. 1992 Jul;112(1):155-9.<br />
-<span class="math inline">\(^{(2)}\)</span> Hankonen N, Heino MTJ, Hynynen S-T, Laine H, Araujo-Soares V, Sniehotta FF, et al. Randomised controlled feasibility study of a school-based multi-level intervention to increase physical activity and decrease sedentary behaviour among vocational school students. Int J Behav Nutr Phys Act. Available from: <a href="http://ijbnpa.biomedcentral.com/articles/10.1186/s12966-017-0484-0" class="uri">http://ijbnpa.biomedcentral.com/articles/10.1186/s12966-017-0484-0</a></p>
+<span class="math inline">\(^{(2)}\)</span> Hankonen N, Heino MTJ, Hynynen S-T, Laine H, Araujo-Soares V, Sniehotta FF, et al. Randomised controlled feasibility study of a school-based multi-level intervention to increase physical activity and decrease sedentary behaviour among vocational school students. Int J Behav Nutr Phys Act. Available from: <a href="http://ijbnpa.biomedcentral.com/articles/10.1186/s12966-017-0484-0" class="uri">http://ijbnpa.biomedcentral.com/articles/10.1186/s12966-017-0484-0</a></p>
 <pre class="r"><code>xax &lt;- seq(from = 0.01, to = 1, by = 0.01)
 
 graafi &lt;- pwr.t.test(n = (133 + 129)/2, d = xax, sig.level = 0.05, power = NULL, type = &quot;two.sample&quot;, alternative = &quot;two.sided&quot;)
@@ -660,7 +719,7 @@ plot2 &lt;- plot1 + geom_hline(yintercept = 1/10, linetype = &quot;dashed&quot;,
 plot2 + geom_hline(yintercept = 10, linetype = &quot;dashed&quot;, colour = &quot;darkgrey&quot;) </code></pre>
 <p><img src="sms-persuasion-supplement_files/figure-html/discusstests-1.png" width="2100" /></p>
 <p><strong>Interim conclusion:</strong></p>
-<p>The distributions in answers to opening and reading the SMS, discussing the messages with peers or being satisfied with the messages did not differ among the reason and succinct groups (Ï‡2(4)=1.356, 2.566 and 3.903 respectively; all p-values &gt; 0.4). All Bayes Factors indicated strong support for the null.</p>
+<p>The distributions in answers to opening and reading the SMS, discussing the messages with peers or being satisfied with the messages did not differ among the reason and succinct groups (χ2(4)=1.356, 2.566 and 3.903 respectively; all p-values &gt; 0.4). All Bayes Factors indicated strong support for the null.</p>
 <hr />
 </div>
 <div id="satisfaction-with-the-messages" class="section level3">
@@ -933,7 +992,7 @@ legend(&quot;bottom&quot;, legend = c(paste(&quot;Mean (sd) Reason:&quot;, sep=&
 <p><img src="sms-persuasion-supplement_files/figure-html/unnamed-chunk-6-1.png" width="2100" /></p>
 <hr />
 </div>
-<div id="opt-in-vs.opt-out" class="section level3">
+<div id="opt-in-vs.-opt-out" class="section level3">
 <h3>Opt in vs. opt out</h3>
 <p><strong>Compare the wear times between those who received messages, and those who did not</strong></p>
 <p>Figure with text:</p>
@@ -1178,7 +1237,7 @@ summary(ManRes, multivariate=TRUE)</code></pre>
 <p>Lakens, Daniel. “Equivalence Tests: A Practical Primer for t Tests, Correlations, and Meta-Analyses.” Social Psychological and Personality Science 8, no. 4 (May 1, 2017): 355-62. <a href="https://doi.org/10.1177/1948550617697177" class="uri">https://doi.org/10.1177/1948550617697177</a>.</p>
 <p><span class="math inline">\(\\\)</span> <span class="math inline">\(\\\)</span></p>
 <hr />
-<div id="minutes-reason-vs.succinct" class="section level3">
+<div id="minutes-reason-vs.-succinct" class="section level3">
 <h3>Minutes; Reason vs. succinct</h3>
 <pre class="r"><code>lmi.tost &lt;- lmi %&gt;% dplyr::select(H_Weartime.SUM, 
                            H_DaysWornN_over10h, 
@@ -1219,7 +1278,7 @@ m.minutes</code></pre>
 <p>The graph above indicates that the effect of SMS type on total wear minutes was statistically significantly closer to zero than |0.3|.</p>
 <hr />
 </div>
-<div id="minutes-opt-in-vs.opt-out" class="section level3">
+<div id="minutes-opt-in-vs.-opt-out" class="section level3">
 <h3>Minutes; Opt in vs. opt out</h3>
 <pre class="r"><code>lmi.tost &lt;- lmi %&gt;% dplyr::select(H_Weartime.SUM, 
                            H_DaysWornN_over10h, 
@@ -1258,7 +1317,7 @@ m.minutes</code></pre>
 <p>The effect of opting in / out on total wear time minutes was statistically significantly closer to zero than |0.3|.</p>
 <hr />
 </div>
-<div id="days-w-valid-data-reason-vs.succinct" class="section level3">
+<div id="days-w-valid-data-reason-vs.-succinct" class="section level3">
 <h3>Days w/ valid data; Reason vs. succinct</h3>
 <pre class="r"><code>lmi.tost &lt;- lmi %&gt;% dplyr::select(H_Weartime.SUM, 
                            H_DaysWornN_over10h, 
@@ -1299,7 +1358,7 @@ m.minutes</code></pre>
 <p>The effect of SMS type on days with equal to or less than 10 hours of recorded data was statistically significantly closer to zero than |0.3|.</p>
 <hr />
 </div>
-<div id="days-w-valid-data-opt-in-vs.opt-out" class="section level3">
+<div id="days-w-valid-data-opt-in-vs.-opt-out" class="section level3">
 <h3>Days w/ valid data; Opt in vs. opt out</h3>
 <pre class="r"><code>lmi.tost &lt;- lmi %&gt;% dplyr::select(H_Weartime.SUM, 
                            H_DaysWornN_over10h, 
@@ -1851,7 +1910,7 @@ points(x = 1:5, y = medians, type = &quot;b&quot;, pch = 1, lty = &quot;dashed&q
 </div>
 <div id="alternative-explanations-speculations-and-rational-theory-defense" class="section level1">
 <h1>Alternative explanations, speculations and rational theory defense</h1>
-<p>We must be careful not read too much into potential explanations (such as the hidden moderators-argument) for why an effect was not detected here [1]. In the light of the recent&quot; “”crisis of confidence in the psychological sciences&quot; [2, 3], it is concerning that only a single direct replication of the xerox machine study has been published. The lack of direct replication and the mixed results from conceptual replications point to a more specific question in the context of current research: when is it rational to defend a theory by coming up with additional auxiliary hypotheses or rejecting the protocol of a falsifying experiment (falsification and corroboration being continuous measures, defined by the strictness of the test). Meehl [4] argues, from a neo-Popperian framework, for the Lakatos principle: it is rational to defend a (seasoned) theory when it has accumulated an impressive track record of strong successes.</p>
+<p>We must be careful not read too much into potential explanations (such as the hidden moderators-argument) for why an effect was not detected here [1]. In the light of the recent" "“crisis of confidence in the psychological sciences” [2, 3], it is concerning that only a single direct replication of the xerox machine study has been published. The lack of direct replication and the mixed results from conceptual replications point to a more specific question in the context of current research: when is it rational to defend a theory by coming up with additional auxiliary hypotheses or rejecting the protocol of a falsifying experiment (falsification and corroboration being continuous measures, defined by the strictness of the test). Meehl [4] argues, from a neo-Popperian framework, for the Lakatos principle: it is rational to defend a (seasoned) theory when it has accumulated an impressive track record of strong successes.</p>
 <p>As measured by Bayes Factors, even without accounting for possible publication bias, the Langer, Blank and Chanowitz study does not reach the criterion for strong evidence (see data at <a href="https://osf.io/7y25w/" class="uri">https://osf.io/7y25w/</a>). It would thus be quite a leap to consider the Langer, Blank and Chanowitz theory (much less the stronger formulation by Cialdini and others) having accumulated enough credit by strong successes to justify much speculation about e.g. moderating factors.</p>
 <p>We encourage readers, who wishes to speculate on the findings based on dual process theories, to be aware of the related assumptions, which cannot be tested with the current data [5-9].</p>
 <ol style="list-style-type: decimal">
@@ -1923,7 +1982,7 @@ plot2 &lt;- plot1 + geom_hline(yintercept = 1/10, linetype = &quot;dashed&quot;,
 plot2 + geom_hline(yintercept = 10, linetype = &quot;dashed&quot;, colour = &quot;darkgrey&quot;) </code></pre>
 <p><img src="sms-persuasion-supplement_files/figure-html/weardays.optinoptout-1.png" width="2100" /></p>
 <p><strong>Other exploratory analyses:</strong></p>
-<p>In addition, we investigated all bivariate correlations between wear time and questionnaire measures, as well as bioimpedance results, in the hope of creating hypotheses for falsification with new data. We discovered only low, presumably spurious, correlations. All of these were of order tau &lt; 0.15. “Significant” items included doing PA because others say one should do so, self-reported sitting during class and using mnemonic cues to carry out PA plans.</p>
+<p>In addition, we investigated all bivariate correlations between wear time and questionnaire measures, as well as bioimpedance results, in the hope of creating hypotheses for falsification with new data. We discovered only low, presumably spurious, correlations. All of these were of order tau &lt; 0.15. “Significant” items included doing PA because others say one should do so, self-reported sitting during class and using memory cues to carry out PA plans.</p>
 </div>
 <div id="session-information" class="section level1">
 <h1>Session information</h1>
@@ -2246,6 +2305,54 @@ $(document).ready(function () {
 });
 
 
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

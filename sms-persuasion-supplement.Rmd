@@ -12,6 +12,8 @@ Links:
 
 * [Manuscript preprint](https://psyarxiv.com/h4w9a)
 
+* [Published manuscript (Open access at BMC Public Health)](https://doi.org/10.1186/s12889-018-6121-2)
+
 * [OSF page](https://osf.io/7v5my/)
   
 Open code blocks by clicking the "code"-buttons on the right hand side.
@@ -1539,7 +1541,7 @@ plot2 + geom_hline(yintercept = 10, linetype = "dashed", colour = "darkgrey")
 
 **Other exploratory analyses:**
 
-In addition, we investigated all bivariate correlations between wear time and questionnaire measures, as well as bioimpedance results, in the hope of creating hypotheses for falsification with new data. We discovered only low, presumably spurious, correlations. All of these were of order tau < 0.15. "Significant" items included doing PA because others say one should do so, self-reported sitting during class and using mnemonic cues to carry out PA plans.
+In addition, we investigated all bivariate correlations between wear time and questionnaire measures, as well as bioimpedance results, in the hope of creating hypotheses for falsification with new data. We discovered only low, presumably spurious, correlations. All of these were of order tau < 0.15. "Significant" items included doing PA because others say one should do so, self-reported sitting during class and using memory cues to carry out PA plans.
 
 # Session information
 
